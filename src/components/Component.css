@@ -1,0 +1,106 @@
+body {
+   background-color:#999;
+}
+.status {
+    position: absolute;
+    top: 0px;
+    left: 210px;
+    right: 60px;
+    height:30px;
+    background-color:#fff;
+}
+.status ul {
+    padding:0px;
+    margin:0px;
+    float:right;
+}
+
+.status ul li {
+    display:inline;
+    margin:10px;
+}
+
+.left-menu {
+    position: absolute;
+    left:40px;
+    top:00px;
+    width:170px;
+    background-color:#333;
+    bottom:0px;
+}
+
+.main-board {
+    position: absolute;
+    top:180px;
+    bottom: 10px;
+    background-color: #aaa;
+    right:60px;
+    left:210px;
+    background-image:
+      repeating-linear-gradient(#ccc 0 1px, transparent 1px 100%),
+      repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
+    background-size: 6px 6px;
+}
+
+.thumbnail {
+    position: absolute;
+    top:80px;
+    height:100px;
+    background-color: #aaa;
+    right:60px;
+    left:210px;
+    background-size: auto 100%;
+    background-image: url("./pixel-punk-city.jpeg");
+    background-repeat: repeat-x;
+}
+
+.thumbnail .focus {
+    height:98px;
+    width:150px;
+    margin:auto;
+    border-top:1px solid white;
+    border-bottom:1px solid white;
+    border-left:5px solid white;
+    border-right:5px solid white;
+    background-size: auto 100%;
+    background-image: url("./pixel-punk-city.jpeg");
+    background-repeat: repeat-x;
+    -webkit-filter: none;
+}
+
+.tool-bar {
+    position: absolute;
+    top:30px;
+    height:50px;
+    background-color: #ddd;
+    right:60px;
+    left:210px;
+}
+
+.tool-bar ul {
+    padding:0px;
+    margin:0px;
+}
+
+.tool-bar ul li {
+    display:inline;
+    margin:10px;
+}
+
+
+
+.left-menu .padding-top {
+    height: 20px;
+    display: block;
+    clear: both;
+}
+.left-menu button {
+    height: 60px;
+    margin: 10px;
+    width: 150px;
+    display: block;
+    font-size: 20px;
+    font-family: "Impact";
+    font-weight: bold;
+    clear: both;
+}
