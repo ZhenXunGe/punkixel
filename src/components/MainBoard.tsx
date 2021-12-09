@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import {
+  action,
+  selectEnergy,
+} from './statusSlice';
 import styles from './Counter.module.css';
 
+
 export function MainBoard () {
+  const dispatch = useAppDispatch();
   return (
-    <div className="main-board">
+    <div onClick={() => dispatch(action())} className="main-board">
     </div>
   );
 }

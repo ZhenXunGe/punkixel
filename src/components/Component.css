@@ -32,14 +32,23 @@ body {
 .main-board {
     position: absolute;
     top:180px;
-    bottom: 10px;
-    background-color: #aaa;
+    height:400px;
+    background-color: #fff;
     right:60px;
     left:210px;
     background-image:
       repeating-linear-gradient(#ccc 0 1px, transparent 1px 100%),
       repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
-    background-size: 6px 6px;
+    background-size: 5px 5px;
+}
+
+.world-board {
+    position: absolute;
+    top:180px;
+    bottom: 10px;
+    background-color: #aaa;
+    right:60px;
+    left:210px;
 }
 
 .thumbnail {
@@ -87,10 +96,14 @@ body {
     margin:10px;
 }
 
+.inline-brick {
+    display:inline;
+}
+
 
 
 .left-menu .padding-top {
-    height: 20px;
+    height: 0px;
     display: block;
     clear: both;
 }
@@ -103,4 +116,47 @@ body {
     font-family: "Impact";
     font-weight: bold;
     clear: both;
+}
+
+.left-menu div.staking {
+    display:block;
+    width:150px;
+    height:200px;
+    margin:20px 10px 10px 10px;
+    border:1px solid black;
+    background-color:#bbb;
+}
+
+.ranking-list {
+    position: absolute;
+    top:30px;
+    bottom: 10px;
+    background-color: #aaa;
+    right:60px;
+    left:210px;
+}
+
+
+.ranking-list ul{
+    list-style-type: none;
+    padding:0px;
+    margin:0px;
+}
+
+.ranking-list li {
+    height:100px;
+    border: 1px solid black;
+    margin: 10px;
+}
+
+.world-board {
+    position: absolute;
+    top:180px;
+    height:400px;
+    background-color: #aaa;
+    right:60px;
+    left:210px;
+    background-size: auto 100%;
+    background-image: url("./pixel-punk-city.jpeg");
+    background-repeat: repeat-x;
 }

@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
+
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import {
+  home,
+  world,
+  vote,
+  market,
+  selectPanel,
+} from '../layout/layoutSlice';
+
 import './Component.css';
 
 export function LeftMenu() {
+  const dispatch = useAppDispatch();
   return (
     <div className="left-menu">
         <div className="padding-top"></div>
-        <button> Home </button>
-        <button> World </button>
-        <button> Vote </button>
-        <button> Monster List </button>
-        <button> Chest </button>
+        <div className="staking"></div>
+        <button onClick={() => dispatch(home())}> Home </button>
+        <button onClick={() => dispatch(world())}> World </button>
+        <button onClick={() => dispatch(vote())}> Ranking </button>
+        <button onClick={() => dispatch(market())}> Market Place </button>
     </div>
   );
 }
