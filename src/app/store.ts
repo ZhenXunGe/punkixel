@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import panelReducer from '../layout/layoutSlice';
-import statusReducer from '../components/statusSlice';
+import statusReducer from '../data/statusSlice';
 
 export const store = configureStore({
   reducer: {

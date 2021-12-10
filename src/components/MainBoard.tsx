@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import {
   action,
   selectEnergy,
-} from './statusSlice';
+} from '../data/statusSlice';
 import styles from './Counter.module.css';
 
 

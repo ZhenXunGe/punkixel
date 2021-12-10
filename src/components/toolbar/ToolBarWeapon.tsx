@@ -1,9 +1,21 @@
 import React, { useState } from 'react';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import '../Component.css';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import {
+    action,
+    selectWeapons,
+    selectWeaponFocus,
+} from '../../data/statusSlice';
+
+
+
 export function ToolBarWeapon() {
+  const weapons = useAppSelector(selectWeapons);
+  const weapon_focus = useAppSelector(selectWeaponFocus);
+
   return (
     <div className="tool-bar">
         <ul>
@@ -11,28 +23,22 @@ export function ToolBarWeapon() {
                 <ul className="inline-brick">
                     <li>Weapon</li>
                     <li>
-                <Dropdown className="inline-brick">
-                  <Dropdown.Toggle variant="success" id="dropdown-basic">
-                   Basic Set
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Drop By Monstar A</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Drop By Monstar A</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Drop By Monstar A</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                    <DropdownButton
+                        title = {weapon_focus.name}
+                    >
+                    { weapons.map(w =>
+                        <Dropdown.Item href="#/action-1">{w.name}</Dropdown.Item>
+                      )
+                    }
+                    </DropdownButton>
                     </li>
-                    <li>c1</li>
-                    <li>c2</li>
-                    <li>c3</li>
-                    <li>c4</li>
-                    <li>c5</li>
-                    <li>c6</li>
-                    <li>c7</li>
-                    <li>c8</li>
+                    { weapon_focus.weapon.map(w =>
+                        <li>weapon icon {w.code}</li>
+                      )
+                    }
+                    <li>{weapon_focus.damage} Damage Per Hit </li>
                 </ul>
             </li>
-            <li> damage per hit: 100 </li>
         </ul>
     </div>
   );
