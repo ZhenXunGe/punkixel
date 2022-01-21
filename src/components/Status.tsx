@@ -7,6 +7,7 @@ import {
   selectRanking,
   selectVoucher,
   selectContribution,
+  selectReward,
   selectPPH,
 } from '../data/statusSlice';
 
@@ -20,6 +21,7 @@ export function Status () {
     const pph = useAppSelector(selectPPH);
     const voucher = useAppSelector(selectVoucher);
     const contribution = useAppSelector(selectContribution);
+    const reward = useAppSelector(selectReward);
   return (
     <div className="status">
         <ul>
@@ -28,6 +30,7 @@ export function Status () {
         <li>Ranking: {ranking}</li>
         <li>Voucher: {voucher}</li>
         <li>Contribution: {contribution}</li>
+        <li>Reward: {reward}</li>
         <li>PPH: {pph}</li>
         </ul>
     </div>

@@ -12,6 +12,7 @@ export interface StatusState {
     pph: number;
     voucher: number;
     contribution: number;
+    reward: number;
     palettes: Array<Palette>;
     palette_focus: number;
     dye_focus: number;
@@ -34,10 +35,11 @@ const initialState: StatusState = {
     palette_focus: 0,
     dye_focus: 0,
     contribution: 0,
+    reward: 0,
     inventory: [weapon_01, weapon_02],
     weapon_focus: weapon_01,
     world: new World(0),
-    homeIndex: 2,
+    homeIndex: 1,
     viewIndex: 0,
     alien: {alienId: 0, pos:0},
     sketchSignal: 0,
@@ -76,7 +78,11 @@ export const statusSlice = createSlice({
     },
 
     contribute: (state) => {
-      state.contribution += 1;
+      if (state.homeIndex != state.viewIndex) {
+        state.contribution += 1;
+      } else {
+        state.reward += 1;
+      }
     },
 
     switchView: (state, d) => {
@@ -108,6 +114,7 @@ export const selectRanking = (state: RootState) => state.status.ranking;
 export const selectPPH = (state: RootState) => state.status.pph;
 export const selectVoucher = (state: RootState) => state.status.voucher;
 export const selectContribution = (state: RootState) => state.status.contribution;
+export const selectReward = (state: RootState) => state.status.reward;
 export const selectDye = (state: RootState) => state.status.dye_focus;
 
 export const selectPalettes = (state: RootState) => state.status.palettes;

@@ -14,7 +14,7 @@ export function sketch(w:number, h:number, n:number) {
   let start = 5;
   let base_width = 20;
   let base_height = 10;
-  let ceil_height = 60;
+  let ceil_height = 75;
   let gap = 5;
   let sy = 10;
   for (var i=0; i<n; i++) {

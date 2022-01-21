@@ -3,12 +3,14 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 
 import {
   selectWorld,
+  selectSketchSignal,
 } from '../data/statusSlice';
 
 export function Thumbnail() {
   const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
   const world = useAppSelector(selectWorld);
+  const sketchSignal = useAppSelector(selectSketchSignal);
   useEffect(() => {
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
@@ -18,6 +20,18 @@ export function Thumbnail() {
     };
     world.rend(render, 4);
   }, [])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const context = canvas.getContext('2d')
+    const render = (x:number, y:number, c:string) => {
+      context.fillStyle = c;
+      context.fillRect(x, (100-y), 1, 1);
+    };
+    world.rend(render, 4);
+  }, [sketchSignal])
+
+
 
   return (
     <div className="thumbnail">
