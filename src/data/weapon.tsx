@@ -1,9 +1,9 @@
 export interface Weapon {
     code: string;
 }
-export interface Palette {
+export interface Weapons {
     name: string;
-    damange: number;
+    damage: number;
     weapon: Array<Weapon>;
 }
 

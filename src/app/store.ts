@@ -3,6 +3,20 @@ import panelReducer from '../layout/layoutSlice';
 import statusReducer from '../data/statusSlice';
 
 export const store = configureStore({
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these action types
+        ignoredActions: [
+        ],
+        // Ignore these field paths in all actions
+        ignoredActionPaths: ['status.world'],
+        // Ignore these paths in the state
+        ignoredPaths: [
+            'status.world'
+        ],
+      },
+    }),
   reducer: {
     panel: panelReducer,
     status: statusReducer,

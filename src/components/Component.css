@@ -20,6 +20,19 @@ body {
     margin:10px;
 }
 
+.tool-bar ul li .weapon-item {
+    display: inline-block;
+}
+
+.tool-bar ul li .dye-item {
+    display: inline-block;
+    border: 1px solid gray;
+    width:15px;
+    height:15px;
+}
+
+
+
 .left-menu {
     position: absolute;
     left:40px;
@@ -33,34 +46,39 @@ body {
     position: absolute;
     top:180px;
     height:400px;
-    background-color: #fff;
+    background-color: #eee;
     right:60px;
     left:210px;
+}
+
+.drawer {
+    height: 400px;
+    width: 900px;
     background-image:
       repeating-linear-gradient(#ccc 0 1px, transparent 1px 100%),
       repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
     background-size: 5px 5px;
+    margin: auto;
 }
 
-.world-board {
-    position: absolute;
-    top:180px;
-    bottom: 10px;
-    background-color: #aaa;
-    right:60px;
-    left:210px;
+.main-board .drawer cavans {
+    height:400px;
+    width: 900px;
 }
 
 .thumbnail {
     position: absolute;
     top:80px;
     height:100px;
-    background-color: #aaa;
     right:60px;
     left:210px;
-    background-size: auto 100%;
-    background-image: url("./pixel-punk-city.jpeg");
-    background-repeat: repeat-x;
+    border-bottom: 1px solid gray;
+}
+
+.thumbnail .content {
+    margin:auto;
+    width: 900px;
+    height: 100px;
 }
 
 .thumbnail .focus {
@@ -176,21 +194,23 @@ body {
     left:690px;
 }
 
-.alien .body {
+.alien {
     position:absolute;
-    top:450px;
+    top:430px;
+    left:300px;
+}
+
+.alien .body {
     height:100px;
     width:95px;
-    left:300px;
+    margin-top:20px;
     background-size: auto 100%;
     background-image: url("./alien-01.png");
 }
 
 .alien .health {
-    position:absolute;
     top:430px;
     height:10px;
     width:65px;
-    left:300px;
     background-color: red;
 }

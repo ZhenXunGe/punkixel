@@ -4,13 +4,16 @@ import {
   action,
   selectEnergy,
 } from '../data/statusSlice';
-import styles from './Counter.module.css';
-
+import { PunkxielDrawer } from "./Drawer";
+import { World } from "../data/draw";
 
 export function MainBoard () {
+
+
   const dispatch = useAppDispatch();
   return (
-    <div onClick={() => dispatch(action())} className="main-board">
+    <div className="main-board">
+        <PunkxielDrawer></PunkxielDrawer>
     </div>
   );
 }

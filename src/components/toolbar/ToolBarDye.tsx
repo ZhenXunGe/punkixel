@@ -8,11 +8,17 @@ import {
     action,
     selectPalettes,
     selectPaletteFocus,
+    selectDye,
+    pickColor,
+    pickPalette,
+    signalSketch,
 } from '../../data/statusSlice';
 
 export function ToolBarDye() {
-    const palettes = useAppSelector(selectPalettes);
-    const palette_focus = useAppSelector(selectPaletteFocus);
+  const palettes = useAppSelector(selectPalettes);
+  const pickedPalette = useAppSelector(selectPaletteFocus);
+  const dispatch = useAppDispatch();
+  const pickedDye = useAppSelector(selectDye);
   return (
     <div className="tool-bar">
         <ul>
@@ -21,22 +27,28 @@ export function ToolBarDye() {
                     <li>Dye</li>
                     <li>
                     <DropdownButton
-                        title = {palette_focus.name}
+                        title = {palettes[pickedPalette].name}
                     >
-                    { palettes.map(p =>
-                        <Dropdown.Item href="#/action-1">{p.name}</Dropdown.Item>
+                    { palettes.map((p,idx) =>
+                        <Dropdown.Item onClick={() => dispatch(pickPalette(idx))}>{p.name}</Dropdown.Item>
                       )
                     }
                     </DropdownButton>
                     </li>
-                    { palette_focus.dye.map(d =>
-                        <li>{d.color}</li>
+                    { palettes[pickedPalette].dye.map((d,idx) =>
+                        <li>
+                        <div className="dye-item" style= {{
+                            backgroundColor: d.color,
+                            border: d.color == palettes[pickedPalette].dye[pickedDye].color ? '1px solid red' : '1px solid gray',
+                        }} onClick={() => dispatch(pickColor(idx))}>
+                        </div>
+                        </li>
                       )
                     }
-                    <li>{palette_focus.pph} PPH Per Pixel</li>
+                    <li>{palettes[pickedPalette].pph} PPH Per Pixel</li>
                 </ul>
             </li>
-            <li> shrink </li>
+            <li onClick={() => dispatch(signalSketch())}> sketch </li>
             <li> undo </li>
             <li> reclaim </li>
         </ul>

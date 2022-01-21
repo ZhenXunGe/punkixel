@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import '../Component.css';
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
+import { WeaponItem } from './Weapon';
+import { Weapon, Weapons } from "../../data/weapon";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {
@@ -10,11 +12,9 @@ import {
     selectWeaponFocus,
 } from '../../data/statusSlice';
 
-
-
 export function ToolBarWeapon() {
-  const weapons = useAppSelector(selectWeapons);
-  const weapon_focus = useAppSelector(selectWeaponFocus);
+  const inventory = useAppSelector(selectWeapons);
+  const weapons_focus:Weapons = useAppSelector(selectWeaponFocus);
 
   return (
     <div className="tool-bar">
@@ -24,19 +24,19 @@ export function ToolBarWeapon() {
                     <li>Weapon</li>
                     <li>
                     <DropdownButton
-                        title = {weapon_focus.name}
+                        title = {weapons_focus.name}
                     >
-                    { weapons.map(w =>
+                    { inventory.map((w:Weapons) =>
                         <Dropdown.Item href="#/action-1">{w.name}</Dropdown.Item>
                       )
                     }
                     </DropdownButton>
                     </li>
-                    { weapon_focus.weapon.map(w =>
-                        <li>weapon icon {w.code}</li>
+                    { weapons_focus.weapon.map((w:Weapon) =>
+                        <li><WeaponItem weapon={w}></WeaponItem></li>
                       )
                     }
-                    <li>{weapon_focus.damage} Damage Per Hit </li>
+                    <li>{weapons_focus.damage} Damage Per Hit </li>
                 </ul>
             </li>
         </ul>
