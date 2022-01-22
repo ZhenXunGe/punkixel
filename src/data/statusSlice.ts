@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { Palette, Dye, basic, red_palette } from  './palette';
+import { Palette, Dye, basic, red_palette, shine_palette } from  './palette';
 import { Weapon, Weapons, weapon_01, weapon_02} from  './weapon';
-import { Drawer, World } from "./draw"
+import { Drawer, World, individualWidth } from "./draw"
 import { Alien } from "./alien"
 
 export interface StatusState {
@@ -21,8 +21,9 @@ export interface StatusState {
     world: World;
     viewIndex: number;
     homeIndex: number;
-    alien: Alien;
     sketchSignal: number;
+    alien: Alien;
+    timeClock: number;
 }
 
 const initialState: StatusState = {
@@ -31,7 +32,7 @@ const initialState: StatusState = {
     ranking: 9999,
     pph: 0,
     voucher: 1,
-    palettes: [basic, red_palette],
+    palettes: [basic, red_palette, shine_palette],
     palette_focus: 0,
     dye_focus: 0,
     contribution: 0,
@@ -43,6 +44,7 @@ const initialState: StatusState = {
     viewIndex: 0,
     alien: {alienId: 0, pos:0},
     sketchSignal: 0,
+    timeClock: 0,
 };
 
 function timeout(ms:number) {
@@ -57,6 +59,16 @@ export const updateAlienAsync = createAsyncThunk(
     return 1;
   }
 )
+
+export const updateTimeClockAsync = createAsyncThunk(
+  'timer/updateTimeClockAsync',
+  async (timerId:number, thunkAPI) => {
+    await timeout(1000);
+    return 1;
+  }
+)
+
+
 
 export const statusSlice = createSlice({
   name: 'status',
@@ -97,6 +109,12 @@ export const statusSlice = createSlice({
     builder
       .addCase(updateAlienAsync.fulfilled, (meta: StatusState, c) => {
         meta.alien.pos += 5;
+        if (meta.alien.pos >= individualWidth * meta.world.instances.length) {
+          meta.alien.pos = 0;
+        }
+      })
+      .addCase(updateTimeClockAsync.fulfilled, (meta: StatusState, c) => {
+        meta.timeClock += 1;
       })
   },
 
@@ -126,6 +144,7 @@ export const selectWeaponFocus= (state: RootState) => state.status.weapon_focus;
 export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
 export const selectWorld = (state: RootState) => state.status.world;
 export const selectAlien = (state: RootState) => state.status.alien;
+export const selectTimeClock = (state: RootState) => state.status.timeClock;
 export const selectViewIndex = (state: RootState) => state.status.viewIndex;
 
 export const selectSketchSignal = (state: RootState) => state.status.sketchSignal;

@@ -4,6 +4,8 @@ import '../Component.css';
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { individualWidth } from "../../data/draw";
+
 import {
     action,
     selectPalettes,
@@ -12,6 +14,8 @@ import {
     pickColor,
     pickPalette,
     signalSketch,
+    selectHomeIndex,
+    selectWorld,
 } from '../../data/statusSlice';
 
 export function ToolBarDye() {
@@ -19,6 +23,13 @@ export function ToolBarDye() {
   const pickedPalette = useAppSelector(selectPaletteFocus);
   const dispatch = useAppDispatch();
   const pickedDye = useAppSelector(selectDye);
+  const homeIndex = useAppSelector(selectHomeIndex);
+  const world = useAppSelector(selectWorld);
+  const onSketch = () => {
+    let d = world.getInstance(homeIndex*individualWidth).drawer;
+    d.resetSketch();
+    dispatch(signalSketch())
+  }
   return (
     <div className="tool-bar">
         <ul>
@@ -48,7 +59,7 @@ export function ToolBarDye() {
                     <li>{palettes[pickedPalette].pph} PPH Per Pixel</li>
                 </ul>
             </li>
-            <li onClick={() => dispatch(signalSketch())}> sketch </li>
+            <li onClick={() => onSketch()}> sketch </li>
             <li> undo </li>
             <li> reclaim </li>
         </ul>

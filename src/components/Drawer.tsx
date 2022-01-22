@@ -1,8 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Dye, ofDyeIndex, IsNillDye, toDyeColor } from "../data/palette";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Drawer, EmptyInstance, World, individualWidth } from "../data/draw"
+import {
+    Drawer,
+    EmptyInstance,
+    World,
+    individualWidth,
+    getCorIndex, ofCorIndex,
+} from "../data/draw"
+
+import {
+  toDyeIndex,
+} from "../data/palette"
+
+
 
 import {
     action,
@@ -11,8 +24,10 @@ import {
     selectDye,
     paintColor,
     selectHomeIndex,
+    selectTimeClock,
     selectWorld,
     selectSketchSignal,
+    signalSketch,
 } from '../data/statusSlice';
 
 interface IProps {
@@ -27,24 +42,22 @@ export function PunkxielDrawer(props: IProps) {
   const [drawer, setDrawer] = React.useState<Drawer>();
   const world = useAppSelector(selectWorld);
   const homeIndex = useAppSelector(selectHomeIndex);
+  const timeClock = useAppSelector(selectTimeClock);
   const sketchSignal = useAppSelector(selectSketchSignal);
 
   function drawEvent(e:any) {
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext('2d');
-    context.fillStyle = palettes[pickedPalette].dye[pickedDye].color;
-    console.log(e.nativeEvent.offsetX/4, e.nativeEvent.offsetY/4);
     var x = Math.floor(e.nativeEvent.offsetX/4);
     var y = Math.floor(e.nativeEvent.offsetY/4);
-    context.fillRect(x * 4, y * 4, 4, 4);
-    dispatch(paintColor(pickedDye));
+    var dyeIndex = toDyeIndex(palettes[pickedPalette].idx, pickedDye);
+    drawer?.pushPixelDelta(getCorIndex(x,100-y), dyeIndex);
+    dispatch(signalSketch());
   }
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    let painter = (x:number, y:number, c:string) => {
-      context.fillStyle = c;
+    let painter = (x:number, y:number, c:number) => {
+      context.fillStyle = toDyeColor(c, timeClock);
       context.fillRect(x*4, (100-y)*4, 4, 4);
     };
     //Our first draw
@@ -66,14 +79,13 @@ export function PunkxielDrawer(props: IProps) {
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    let painter = (x:number, y:number, c:string) => {
-      context.fillStyle = c;
+    let painter = (x:number, y:number, c:number) => {
+      context.fillStyle = toDyeColor(c, timeClock);
       context.fillRect(x*4, (100-y)*4, 4, 4);
     };
 
-    drawer?.resetSketch();
     drawer?.draw(painter, homeIndex*individualWidth);
-  }, [sketchSignal])
+  }, [sketchSignal, timeClock])
 
   return (
     <div className="drawer" onClick={(e) => {drawEvent(e);}}>

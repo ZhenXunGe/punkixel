@@ -26,17 +26,17 @@ interface Delta {
 }
 
 
-function getCorIndex(x:number, y:number) {
+export function getCorIndex(x:number, y:number) {
   return (y + x * individualHeight);
 }
 
-function ofCorIndex(idx: number) {
+export function ofCorIndex(idx: number) {
   const y = idx % individualHeight;
   const x = (idx - idx % individualHeight) / individualHeight;
   return [x,y]
 }
 
-export type Painter = (x:number, y:number, c:string) => void
+export type Painter = (x:number, y:number, c:number) => void
 
 export class Drawer {
     pixels: Array<Array<DyeIndex>>;
@@ -73,7 +73,9 @@ export class Drawer {
         }
       }
       if (!IsNillDye(dye)) {
-        paint(x + this.offset - cursor, y, ofDyeIndex(dye).color);
+        paint(x + this.offset - cursor, y, dye);
+      } else {
+        paint(x + this.offset - cursor, y, (x + y) %2);
       }
     }
 
@@ -121,18 +123,29 @@ export class Drawer {
         let idbottom = getCorIndex(x+i, y+h-1);
         this.setPixel(idtop, dye);
         this.setPixel(idbottom, dye);
+        for (var j=1; j<h-1; j++) {
+          let id = getCorIndex(x+i, y+j);
+          this.setPixel(id, 0);
+        }
       }
       for (var j=1; j<h-1; j++) {
         let idleft = getCorIndex(x, y+j);
-        let idright = getCorIndex(x+w, y+j);
+        let idright = getCorIndex(x+w-1, y+j);
         this.setPixel(idleft, dye);
         this.setPixel(idright, dye);
       }
     }
 
     resetSketch() {
-      let items = sketch(individualWidth, individualHeight, 30);
-      for (var item of items) {
+      for (var i=0; i<content_size; i++) {
+        this.setPixel(i, 0);
+      }
+      let items_front = sketch(individualWidth, individualHeight, 30);
+      let items_back = sketch(individualWidth, individualHeight, 30);
+      for (var item of items_front) {
+        this.drawPolygon(sketchLayer, 1*16 + 2, item.x, item.y, item.h, item.w);
+      }
+      for (var item of items_back) {
         this.drawPolygon(sketchLayer, 1*16 + 2, item.x, item.y, item.h, item.w);
       }
     }
@@ -169,7 +182,7 @@ function BuildTestInstances(
     cursor: () => number,
     ) {
   let instance_list = new Array<Instance>();
-  for (var i=0; i<30; i++) {
+  for (var i=0; i<10; i++) {
     let instance = EmptyInstance();
     let d = new Drawer(instance.content, i*individualWidth, cursor);
     d.resetSketch();

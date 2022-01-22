@@ -9,6 +9,7 @@ import {
   selectContribution,
   selectReward,
   selectPPH,
+  selectViewIndex,
 } from '../data/statusSlice';
 
 
@@ -22,9 +23,11 @@ export function Status () {
     const voucher = useAppSelector(selectVoucher);
     const contribution = useAppSelector(selectContribution);
     const reward = useAppSelector(selectReward);
+    const viewIndex = useAppSelector(selectViewIndex);
   return (
     <div className="status">
         <ul>
+        <li>View: {viewIndex}</li>
         <li>Energy: {energy}</li>
         <li>Punkixel: {punkixel}</li>
         <li>Ranking: {ranking}</li>
