@@ -39,17 +39,6 @@ export function WorldBoard (props: IProps) {
       context.fillStyle = toDyeColor(c, timeClock);
       context.fillRect(x*4, (100-y)*4, 4, 4);
     };
-    //Our first draw
-    for (var i=0; i<900; i=i+4) {
-        for (var j=0; j<400; j=j+4) {
-            if ((i + j)%8 == 0) {
-                context.fillStyle = '#eee';
-            } else {
-                context.fillStyle = '#ffffff';
-            }
-            context.fillRect(i, j, 4, 4);
-        }
-    }
     let d = world.getInstance(viewIndex*individualWidth).drawer;
     setDrawer(d);
     d.draw(painter, viewIndex*individualWidth);

@@ -8,6 +8,7 @@ import {
     EmptyInstance,
     World,
     individualWidth,
+    individualHeight,
     getCorIndex, ofCorIndex,
 } from "../data/draw"
 
@@ -34,12 +35,14 @@ interface IProps {
 }
 
 export function PunkxielDrawer(props: IProps) {
+
+  let ratio = 4;
+
   const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
   const palettes = useAppSelector(selectPalettes);
   const pickedPalette = useAppSelector(selectPaletteFocus);
   const pickedDye = useAppSelector(selectDye);
-  const [drawer, setDrawer] = React.useState<Drawer>();
   const world = useAppSelector(selectWorld);
   const homeIndex = useAppSelector(selectHomeIndex);
   const timeClock = useAppSelector(selectTimeClock);
@@ -49,42 +52,55 @@ export function PunkxielDrawer(props: IProps) {
     var x = Math.floor(e.nativeEvent.offsetX/4);
     var y = Math.floor(e.nativeEvent.offsetY/4);
     var dyeIndex = toDyeIndex(palettes[pickedPalette].idx, pickedDye);
-    drawer?.pushPixelDelta(getCorIndex(x,100-y), dyeIndex);
+    let drawer = world.getInstance(homeIndex*individualWidth).drawer;
+    drawer.pushPixelDelta(getCorIndex(x,100-y), dyeIndex);
     dispatch(signalSketch());
   }
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    const image = context.getImageData(0, 0, individualWidth*ratio, individualHeight*ratio)
     let painter = (x:number, y:number, c:number) => {
-      context.fillStyle = toDyeColor(c, timeClock);
-      context.fillRect(x*4, (100-y)*4, 4, 4);
-    };
-    //Our first draw
-    for (var i=0; i<900; i=i+4) {
-        for (var j=0; j<400; j=j+4) {
-            if ((i + j)%8 == 0) {
-                context.fillStyle = '#eee';
-            } else {
-                context.fillStyle = '#ffffff';
-            }
-            context.fillRect(i, j, 4, 4);
+      let sx = x * ratio;
+      let sy = y * ratio;
+      let color = toDyeColor(c, timeClock);
+      for (var px=sx; px<sx+ratio; px++) {
+        for (var py=sy; py<sy+ratio; py++) {
+          let index = ((100 * ratio - py) * individualWidth * ratio + px) * 4;
+            image.data[index] = color[0];
+            image.data[index+1] = color[1];
+            image.data[index+2] = color[2];
+            image.data[index+3] = 255;
         }
-    }
-    let d = world.getInstance(homeIndex*individualWidth).drawer;
-    setDrawer(d);
-    d.draw(painter, homeIndex*individualWidth);
+      }
+    };
+    let drawer = world.getInstance(homeIndex*individualWidth).drawer;
+    drawer.draw(painter, homeIndex*individualWidth);
+    context.putImageData(image,0,0);
   }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    const image = context.getImageData(0, 0, individualWidth*ratio, individualHeight*ratio)
     let painter = (x:number, y:number, c:number) => {
-      context.fillStyle = toDyeColor(c, timeClock);
-      context.fillRect(x*4, (100-y)*4, 4, 4);
+      let sx = x * ratio;
+      let sy = y * ratio;
+      let color = toDyeColor(c, timeClock);
+      for (var px=sx; px<sx+ratio; px++) {
+        for (var py=sy; py<sy+ratio; py++) {
+          let index = ((100 * ratio - py) * individualWidth * ratio + px) * 4;
+            image.data[index] = color[0];
+            image.data[index+1] = color[1];
+            image.data[index+2] = color[2];
+            image.data[index+3] = 255;
+        }
+      }
     };
-
-    drawer?.draw(painter, homeIndex*individualWidth);
+    let drawer = world.getInstance(homeIndex*individualWidth).drawer;
+    drawer.draw(painter, homeIndex*individualWidth);
+    context.putImageData(image,0,0);
   }, [sketchSignal, timeClock])
 
   return (

@@ -20,7 +20,7 @@ export function LeftMenu() {
         <button onClick={() => dispatch(home())}> Home </button>
         <button onClick={() => dispatch(world())}> World </button>
         <button onClick={() => dispatch(vote())}> Ranking </button>
-        <button onClick={() => dispatch(market())}> Market Place </button>
+        <button onClick={() => dispatch(market())}> Market </button>
     </div>
   );
 }

@@ -49,7 +49,7 @@ export function ToolBarDye() {
                     { palettes[pickedPalette].dye.map((d,idx) =>
                         <li>
                         <div className="dye-item" style= {{
-                            backgroundColor: d.color,
+                            backgroundColor: `rgb($(d.color[0]), $(d.color[1]), $(d.color[2]))`,
                             border: d.color == palettes[pickedPalette].dye[pickedDye].color ? '1px solid red' : '1px solid gray',
                         }} onClick={() => dispatch(pickColor(idx))}>
                         </div>

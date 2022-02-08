@@ -1,5 +1,5 @@
 export interface Dye {
-    color: string;
+    color: Array<number>;
     weight: number;
 }
 export interface Palette {
@@ -10,10 +10,29 @@ export interface Palette {
     rotation: number;
 }
 
-const color_trans = [{color:"#eee", weight:1}, {color:"#fff", weight:1}];
-const color_gray = [{color:"#fff", weight:1}, {color:"#ddd", weight:1}, {color:"#bbb", weight:1}, {color:"#999", weight:1}, {color:"#777", weight:1}];
-const color_red = [{color:"#f00", weight:1}, {color:"#d00", weight:1}, {color:"#b00", weight:1}];
-const color_shine = [{color:"#0f0", weight:1}, {color:"#0cc", weight:1}, {color:"#bbb", weight:1}];
+const color_trans = [
+    {color:[0xee, 0xee, 0xee], weight:1},
+    {color:[0xff, 0xff, 0xff], weight:1}
+];
+const color_gray = [
+    {color:[0xff, 0xff, 0xff], weight:1},
+    {color:[0xdd, 0xdd, 0xdd], weight:1},
+    {color:[0xbb, 0xbb, 0xbb], weight:1},
+    {color:[0x99, 0x99, 0x99], weight:1},
+    {color:[0x77, 0x77, 0x77], weight:1}
+];
+
+const color_red = [
+    {color:[0xff, 0x0, 0x0], weight:1},
+    {color:[0xdd, 0x0, 0x0], weight:1},
+    {color:[0xbb, 0x0, 0x0], weight:1}
+];
+
+const color_shine = [
+    {color:[0x0, 0xff, 0x00], weight:1},
+    {color:[0x0, 0xcc, 0xcc], weight:1},
+    {color:[0x0, 0xbb, 0xbb], weight:1}
+];
 
 export const transparent =  {name: "nil", dye: color_trans, pph:0, idx:0, rotation:0};
 export const basic =  {name: "Basic Pallette", dye: color_gray, pph:1, idx:1, rotation:0};
