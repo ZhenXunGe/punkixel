@@ -1,5 +1,5 @@
 import { Dye, basic, DyeIndex, ofDyeIndex, IsNillDye } from "./palette";
-import { Minion } from "./minion";
+import { Minion, randomMinion } from "./minion";
 import { sketch } from "./sketch";
 
 /* Size of the individual home */
@@ -15,8 +15,10 @@ const minionLayer = 2;
 
 
 export interface InstanceInfo {
+  id: string;
   content: Array<Array<DyeIndex>>;
   minions: Array<Minion>;
+  drops: Array<number>;
 }
 
 interface Delta {
@@ -109,7 +111,7 @@ export class Drawer {
     }
 
     draw(paint: Painter, pos:number=0) {
-      console.log("pos, offset", pos, this.offset);
+      //console.log("pos, offset", pos, this.offset);
       for (var i=0; i<2; i++) {
         for (var idx=0; idx<content_size; idx++) {
           this.paintPixel(paint, idx, pos);
@@ -151,6 +153,7 @@ export class Drawer {
     }
 }
 
+
 export class Instance {
   drawer: Drawer;
   info: InstanceInfo;
@@ -161,9 +164,12 @@ export class Instance {
   setDry(d: boolean) {
     this.drawer.setDry(d);
   }
+  addMinion(m: Minion) {
+    this.info.minions.push(m);
+  }
 }
 
-export function EmptyInstance() {
+export function EmptyInstance(id: string) {
   let content = [
     new Array(individualHeight * individualWidth),
     new Array(individualHeight * individualWidth),
@@ -174,7 +180,7 @@ export function EmptyInstance() {
       content[1][i] = 0;
       content[2][i] = 0;
   }
-  let instance = {content: content, minions: []};
+  let instance = {content: content, minions: [randomMinion(), randomMinion(), randomMinion()], drops:[], id:id};
   return instance;
 }
 
@@ -182,8 +188,8 @@ function BuildTestInstances(
     cursor: () => number,
     ) {
   let instance_list = new Array<Instance>();
-  for (var i=0; i<10; i++) {
-    let instance = EmptyInstance();
+  for (var i=0; i<5; i++) {
+    let instance = EmptyInstance(`instance_${i}`);
     let d = new Drawer(instance.content, i*individualWidth, cursor);
     d.resetSketch();
     instance_list.push(new Instance(d, instance));
@@ -201,6 +207,9 @@ export class World {
   }
   getInstance(center_position: number) {
     return this.instances[Math.floor(center_position / individualWidth)];
+  }
+  getInstanceById(id: number) {
+    return this.instances[id];
   }
   rend(painter: Painter, pos: number) {
     let center = Math.floor(pos/individualWidth);

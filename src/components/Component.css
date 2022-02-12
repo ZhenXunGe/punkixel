@@ -54,10 +54,7 @@ body {
 .drawer {
     height: 400px;
     width: 900px;
-    background-image:
-      repeating-linear-gradient(#ccc 0 1px, transparent 1px 100%),
-      repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
-    background-size: 5px 5px;
+    background-color: #333;
     margin: auto;
 }
 
@@ -72,7 +69,6 @@ body {
     height:100px;
     right:60px;
     left:210px;
-    border-bottom: 1px solid gray;
 }
 
 .thumbnail .content {
@@ -90,8 +86,6 @@ body {
     border-left:5px solid white;
     border-right:5px solid white;
     background-size: auto 100%;
-    background-image: url("./pixel-punk-city.jpeg");
-    background-repeat: repeat-x;
     -webkit-filter: none;
 }
 
@@ -182,9 +176,6 @@ body {
     background-color: #aaa;
     right:60px;
     left:210px;
-    background-size: auto 100%;
-    background-image: url("./pixel-punk-city.jpeg");
-    background-repeat: repeat-x;
 }
 
 .alarm {
@@ -194,23 +185,58 @@ body {
     left:690px;
 }
 
-.alien {
+.animation {
     position:absolute;
-    top:430px;
-    left:300px;
+    top:180px;
+    height:400px;
+    right:60px;
+    left:210px;
+}
+.animation .body {
+    margin:auto;
+    right:60px;
+    left:210px;
+    width:900px;
 }
 
-.alien .body {
-    height:100px;
-    width:95px;
-    margin-top:20px;
-    background-size: auto 100%;
-    background-image: url("./alien-01.png");
+div.hide {
+    display:none;
 }
 
-.alien .health {
-    top:430px;
-    height:10px;
-    width:65px;
-    background-color: red;
+div.drop {
+    position:absolute;
+    top:550px;
+    height:40px;
+    right:60px;
+    left:210px;
+}
+
+.drop .body {
+    margin:auto;
+    right:60px;
+    left:210px;
+    width:900px;
+}
+
+div.minion {
+    position:absolute;
+    top:280px;
+    height:30px;
+    right:60px;
+    left:210px;
+}
+
+.minion .body {
+    margin:auto;
+    right:60px;
+    left:210px;
+    width:900px;
+}
+
+div.drop img {
+    position:relative;
+}
+
+div.minion.img {
+    position:relative;
 }

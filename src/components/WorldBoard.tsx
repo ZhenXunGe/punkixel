@@ -2,7 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Drawer, EmptyInstance, World, individualWidth } from "../data/draw"
+import {
+    EmptyInstance,
+    World,
+    individualWidth,
+    individualHeight,
+    getCorIndex, ofCorIndex,
+} from "../data/draw"
 import { toDyeColor } from "../data/palette"
 
 import {
@@ -11,21 +17,25 @@ import {
     paintColor,
     selectHomeIndex,
     selectWorld,
-    selectTimeClock,
     selectViewIndex,
 } from '../data/statusSlice';
+
+import {
+  selectTimeClock
+} from '../timer/timeSlice';
+
 
 interface IProps {
 }
 
 export function WorldBoard (props: IProps) {
+
+  let ratio = 4;
+
   const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
-  const pickedDye = useAppSelector(selectDye);
-  const [drawer, setDrawer] = React.useState<Drawer>();
   const world = useAppSelector(selectWorld);
   const timeClock = useAppSelector(selectTimeClock);
-  const homeIndex = useAppSelector(selectHomeIndex);
   const viewIndex = useAppSelector(selectViewIndex);
 
   function clickEvent(e:any) {
@@ -35,13 +45,24 @@ export function WorldBoard (props: IProps) {
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    const image = context.getImageData(0, 0, individualWidth*ratio, individualHeight*ratio)
     let painter = (x:number, y:number, c:number) => {
-      context.fillStyle = toDyeColor(c, timeClock);
-      context.fillRect(x*4, (100-y)*4, 4, 4);
+      let sx = x * ratio;
+      let sy = y * ratio;
+      let color = toDyeColor(c, timeClock);
+      for (var px=sx; px<sx+ratio; px++) {
+        for (var py=sy; py<sy+ratio; py++) {
+          let index = ((100 * ratio - py) * individualWidth * ratio + px) * 4;
+            image.data[index] = color[0];
+            image.data[index+1] = color[1];
+            image.data[index+2] = color[2];
+            image.data[index+3] = 255;
+        }
+      }
     };
-    let d = world.getInstance(viewIndex*individualWidth).drawer;
-    setDrawer(d);
-    d.draw(painter, viewIndex*individualWidth);
+    let drawer = world.getInstance(viewIndex*individualWidth).drawer;
+    drawer.draw(painter, viewIndex*individualWidth);
+    context.putImageData(image,0,0);
   }, [viewIndex, timeClock])
 
   return (

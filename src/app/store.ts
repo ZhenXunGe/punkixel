@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import panelReducer from '../layout/layoutSlice';
 import statusReducer from '../data/statusSlice';
+import timerReducer from '../timer/timeSlice';
 
 export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
@@ -20,6 +21,7 @@ export const store = configureStore({
   reducer: {
     panel: panelReducer,
     status: statusReducer,
+    timer: timerReducer,
   },
 });
 

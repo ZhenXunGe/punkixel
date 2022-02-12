@@ -4,7 +4,6 @@ import { toDyeColor } from '../data/palette';
 
 import {
   selectWorld,
-  selectTimeClock,
   selectSketchSignal,
   selectViewIndex,
 } from '../data/statusSlice';
@@ -20,7 +19,6 @@ export function Thumbnail() {
   const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
   const world = useAppSelector(selectWorld);
-  const timeClock = useAppSelector(selectTimeClock);
   const sketchSignal = useAppSelector(selectSketchSignal);
   const viewIndex = useAppSelector(selectViewIndex);
   useEffect(() => {
@@ -30,7 +28,7 @@ export function Thumbnail() {
     let painter = (x:number, y:number, c:number) => {
       let sx = x * ratio;
       let sy = y * ratio;
-      let color = toDyeColor(c, timeClock);
+      let color = toDyeColor(c, 0);
       for (var px=sx; px<sx+ratio; px++) {
         for (var py=sy; py<sy+ratio; py++) {
           let index = ((100 * ratio - py) * canvas.width + px) * 4;

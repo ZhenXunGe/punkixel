@@ -1,37 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { useAppDispatch } from '../app/hooks';
 import './Component.css';
-import { individualWidth } from "../data/draw"
-
 import {
-    contribute,
-    selectAlien,
-    switchView,
-    selectViewIndex,
-    updateAlienAsync,
+  contribute, signalAlien,
 } from '../data/statusSlice';
-
+import Frame from '../sprite/Frame';
+import { Sprite, LoadSprite } from '../sprite/sprite';
+import { clips as MonsterClips} from "../sprite/monster/sprite";
+import { clips as UFOClips} from "../sprite/ufo/sprite";
 export function AlienItem() {
   const dispatch = useAppDispatch();
-  const alien = useAppSelector(selectAlien);
-  const viewIndex = useAppSelector(selectViewIndex);
   function attackEvent(e:any) {
+    dispatch(signalAlien("dizzle"));
     dispatch(contribute());
   }
-
-  useEffect(() => {
-    dispatch(updateAlienAsync(0));
-    let idx = Math.floor(alien.pos / individualWidth);
-    dispatch(switchView(idx));
-    console.log("alien pos:", alien.pos, idx);
-  }, [alien])
+  const imageEls = new Array(13);
+  const canvasRef = useRef<HTMLCanvasElement>();
+  const spriteMonster = new Sprite(2, 100, 80, 13, 0, 0, "run");
+  const spriteUFO = new Sprite(2, 40, 40, 1, 0, 0, "default");
   return (
-    <div className="alien" style={{left: (4 * (alien.pos % individualWidth) + 300) + "px"}}>
-        <div className="health">
-        </div>
-        <div className="body" onClick={(e) => {attackEvent(e);}} >
+  <>
+    <LoadSprite sprite={spriteMonster} height={100} width={80} clips={MonsterClips}></LoadSprite>
+    <LoadSprite sprite={spriteUFO} height={40} width={40} clips={UFOClips}></LoadSprite>
+    <Frame monster={spriteMonster} minion={spriteUFO} canvasRef={canvasRef}></Frame>
+    <div className="animation" >
+        <div className="body">
+        <canvas onClick={(e) => {attackEvent(e);}} height="400" width="900" ref={e => {
+          console.log("canvanref");
+          canvasRef.current = e!
+          }}>
+            Drawer Drawer
+        </canvas>
         </div>
     </div>
+  </>
   );
 }
+
 

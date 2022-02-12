@@ -17,10 +17,9 @@ import { MarketPanel } from '../components/MarketPanel';
 
 export function RightPanel() {
   const panel = useAppSelector(selectPanel);
-  const dispatch = useAppDispatch();
   return (
     <>
-    { panel == "home" && <HomePanel></HomePanel>}
+    { panel == "home" && <HomePanel key="home-panel" ></HomePanel>}
     { panel == "world" && <WorldPanel></WorldPanel>}
     { panel == "vote" && <VotePanel></VotePanel>}
     { panel == "market" && <MarketPanel></MarketPanel>}

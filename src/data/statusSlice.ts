@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { Palette, Dye, basic, red_palette, shine_palette } from  './palette';
 import { Weapon, Weapons, weapon_01, weapon_02} from  './weapon';
-import { Drawer, World, individualWidth } from "./draw"
+import { World, individualWidth } from "./draw"
 import { Alien } from "./alien"
 
 export interface StatusState {
@@ -23,7 +23,6 @@ export interface StatusState {
     homeIndex: number;
     sketchSignal: number;
     alien: Alien;
-    timeClock: number;
 }
 
 const initialState: StatusState = {
@@ -42,32 +41,13 @@ const initialState: StatusState = {
     world: new World(0),
     homeIndex: 1,
     viewIndex: 0,
-    alien: {alienId: 0, pos:0},
+    alien: {alienId: 0, pos:0, status:"run", dizzle:0},
     sketchSignal: 0,
-    timeClock: 0,
 };
 
 function timeout(ms:number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-// First, create the thunk
-export const updateAlienAsync = createAsyncThunk(
-  'alien/updateAlienAsync',
-  async (alienId:number, thunkAPI) => {
-    await timeout(1000);
-    return 1;
-  }
-)
-
-export const updateTimeClockAsync = createAsyncThunk(
-  'timer/updateTimeClockAsync',
-  async (timerId:number, thunkAPI) => {
-    await timeout(1000);
-    return 1;
-  }
-)
-
 
 
 export const statusSlice = createSlice({
@@ -103,19 +83,34 @@ export const statusSlice = createSlice({
 
     signalSketch: (state) => {
       state.sketchSignal ++;
+    },
+
+    signalAlien: (state, d) => {
+      let status = d.payload;
+      let def = "run";
+      if (status == "run") {
+        state.alien.pos += 1;
+        if (state.alien.pos >= individualWidth * state.world.instances.length) {
+          state.alien.pos = 0;
+        }
+      }
+      if (status == "dizzle") {
+        if (state.alien.status!="dizzle") {
+          let instance = state.world.getInstanceById(state.viewIndex);
+          console.log("drop...", state.viewIndex, instance.info.id);
+          instance.info.drops.push(state.alien.pos % individualWidth);
+          state.alien.dizzle = 20;
+        } else {
+          state.alien.dizzle -= 1;
+        }
+        if (state.alien.dizzle == 0) {
+          status = def;
+        }
+      }
+      state.alien.status = status;
     }
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(updateAlienAsync.fulfilled, (meta: StatusState, c) => {
-        meta.alien.pos += 5;
-        if (meta.alien.pos >= individualWidth * meta.world.instances.length) {
-          meta.alien.pos = 0;
-        }
-      })
-      .addCase(updateTimeClockAsync.fulfilled, (meta: StatusState, c) => {
-        meta.timeClock += 1;
-      })
   },
 
 
@@ -123,7 +118,7 @@ export const statusSlice = createSlice({
 
 export const { paintColor, pickColor, pickPalette,
     action, contribute, switchView,
-    signalSketch
+    signalSketch, signalAlien,
 } = statusSlice.actions;
 
 export const selectEnergy = (state: RootState) => state.status.energy;
@@ -144,7 +139,6 @@ export const selectWeaponFocus= (state: RootState) => state.status.weapon_focus;
 export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
 export const selectWorld = (state: RootState) => state.status.world;
 export const selectAlien = (state: RootState) => state.status.alien;
-export const selectTimeClock = (state: RootState) => state.status.timeClock;
 export const selectViewIndex = (state: RootState) => state.status.viewIndex;
 
 export const selectSketchSignal = (state: RootState) => state.status.sketchSignal;

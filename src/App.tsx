@@ -9,21 +9,20 @@ import './App.css';
 import {
     selectTimeClock,
     updateTimeClockAsync,
-} from './data/statusSlice';
+} from './timer/timeSlice';
 
 
 
 function App() {
   const dispatch = useAppDispatch();
-  const timeclock = useAppSelector(selectTimeClock);
   useEffect(() => {
-    dispatch(updateTimeClockAsync(0));
-  }, [timeclock])
+    setInterval(function () {dispatch(updateTimeClockAsync(0))}, 80);
+  }, [])
 
   return (
     <>
     <LeftMenu></LeftMenu>
-    <RightPanel></RightPanel>
+    <RightPanel key="right-panel"></RightPanel>
     </>
   );
 }

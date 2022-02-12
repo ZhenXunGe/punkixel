@@ -4,7 +4,6 @@ import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import { Dye, ofDyeIndex, IsNillDye, toDyeColor } from "../data/palette";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-    Drawer,
     EmptyInstance,
     World,
     individualWidth,
@@ -25,11 +24,14 @@ import {
     selectDye,
     paintColor,
     selectHomeIndex,
-    selectTimeClock,
     selectWorld,
     selectSketchSignal,
     signalSketch,
 } from '../data/statusSlice';
+
+import {
+  selectTimeClock,
+} from '../timer/timeSlice';
 
 interface IProps {
 }
@@ -100,12 +102,11 @@ export function PunkxielDrawer(props: IProps) {
     };
     let drawer = world.getInstance(homeIndex*individualWidth).drawer;
     drawer.draw(painter, homeIndex*individualWidth);
-    context.putImageData(image,0,0);
   }, [sketchSignal, timeClock])
 
   return (
     <div className="drawer" onClick={(e) => {drawEvent(e);}}>
-    <canvas height="400" width="900" ref={canvasRef}>
+    <canvas key="home-drawer" height="400" width="900" ref={canvasRef}>
         Drawer Drawer
     </canvas>
     </div>
