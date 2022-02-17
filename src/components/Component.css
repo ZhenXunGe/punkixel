@@ -1,11 +1,31 @@
 body {
    background-color:#999;
 }
+
+div.screen {
+  position:absolute;
+  top:0px;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  background-color:#666;
+}
+
+div.application {
+  position:relative;
+  height:800px;
+  width:1180px;
+  margin:auto;
+  border:1px solid gray;
+  top:50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
 .status {
     position: absolute;
     top: 0px;
-    left: 210px;
-    right: 60px;
+    left: 170px;
+    right: 0px;
     height:30px;
     background-color:#fff;
 }
@@ -31,12 +51,36 @@ body {
     height:15px;
 }
 
+.tool-bar {
+    position: absolute;
+    top:30px;
+    height:50px;
+    background-color: #ddd;
+    right:0px;
+    left:170px;
+}
+
+.tool-bar ul {
+    padding:5px;
+    margin:0px;
+}
+
+.tool-bar ul div.dropdown {
+    display:inline;
+}
+
+
+
+.tool-bar ul li {
+    display:inline;
+    margin:5px;
+}
 
 
 .left-menu {
     position: absolute;
-    left:40px;
-    top:00px;
+    left:00px;
+    top:0px;
     width:170px;
     background-color:#333;
     bottom:0px;
@@ -44,17 +88,17 @@ body {
 
 .main-board {
     position: absolute;
-    top:180px;
+    top:190px;
     height:400px;
-    background-color: #eee;
-    right:60px;
-    left:210px;
+    background-color: white;
+    right:0px;
+    left:170px;
 }
 
 .drawer {
     height: 400px;
     width: 900px;
-    background-color: #333;
+    background-color: transparent;
     margin: auto;
 }
 
@@ -62,13 +106,23 @@ body {
     height:400px;
     width: 900px;
 }
+.guest-info {
+    position:absolute;
+    padding:10px;
+    top:598px;
+    height:200px;
+    left:170px;
+    right:0px;
+    background-color:white;
+}
 
 .thumbnail {
     position: absolute;
-    top:80px;
+    top:85px;
     height:100px;
-    right:60px;
-    left:210px;
+    right:0px;
+    background-color:white;
+    left:170px;
 }
 
 .thumbnail .content {
@@ -89,30 +143,7 @@ body {
     -webkit-filter: none;
 }
 
-.tool-bar {
-    position: absolute;
-    top:30px;
-    height:50px;
-    background-color: #ddd;
-    right:60px;
-    left:210px;
-}
 
-.tool-bar ul {
-    padding:0px;
-    margin:0px;
-}
-
-.tool-bar ul div.dropdown {
-    display:inline;
-}
-
-
-
-.tool-bar ul li {
-    display:inline;
-    margin:10px;
-}
 
 .inline-brick {
     display:inline;
@@ -125,12 +156,36 @@ body {
     display: block;
     clear: both;
 }
+
+.left-menu .protector {
+  margin:10px 10px 0px 10px;
+  border-bottom:1px solid gray;
+  padding:10px 0px 10px 0px;
+  clear:both;
+  color:white;
+  height:80px;
+}
+
+.left-menu .protector img {
+  float:left;
+  width:50px;
+  margin-right:10px;
+  height:50px;
+}
+
+.minion-selector img {
+    float:left;
+    width:50px;
+    margin-right:10px;
+    height:50px;
+  }
+
 .left-menu button {
-    height: 60px;
-    margin: 10px;
-    width: 150px;
-    display: block;
-    font-size: 20px;
+    height: 30px;
+    margin: 0px 0px 0px 10px;
+    width: 30px;
+    display: inline-block;
+    font-size: 14px;
     font-family: "Impact";
     font-weight: bold;
     clear: both;
@@ -140,7 +195,7 @@ body {
     display:block;
     width:150px;
     height:200px;
-    margin:20px 10px 10px 10px;
+    margin:20px 10px 5px 10px;
     border:4px solid black;
     background-color:#bbb;
     background-size: auto 100%;
@@ -152,8 +207,8 @@ body {
     top:30px;
     bottom: 10px;
     background-color: #aaa;
-    right:60px;
-    left:210px;
+    right:0px;
+    left:170px;
 }
 
 
@@ -174,28 +229,25 @@ body {
     top:180px;
     height:400px;
     background-color: #aaa;
-    right:60px;
-    left:210px;
+    right:0px;
+    left:170px;
 }
 
 .alarm {
-    position: absolute;
-    top: 210px;
-    display: inline;
-    left:690px;
+    margin:0px;
 }
 
 .animation {
     position:absolute;
     top:180px;
     height:400px;
-    right:60px;
-    left:210px;
+    right:0px;
+    left:170px;
 }
 .animation .body {
     margin:auto;
-    right:60px;
-    left:210px;
+    right:0px;
+    left:170px;
     width:900px;
 }
 
@@ -207,14 +259,14 @@ div.drop {
     position:absolute;
     top:550px;
     height:40px;
-    right:60px;
-    left:210px;
+    right:0px;
+    left:170px;
 }
 
 .drop .body {
     margin:auto;
-    right:60px;
-    left:210px;
+    right:0px;
+    left:170px;
     width:900px;
 }
 
@@ -222,14 +274,14 @@ div.minion {
     position:absolute;
     top:280px;
     height:30px;
-    right:60px;
-    left:210px;
+    right:0px;
+    left:170px;
 }
 
 .minion .body {
     margin:auto;
-    right:60px;
-    left:210px;
+    right:0px;
+    left:170px;
     width:900px;
 }
 

@@ -80,28 +80,6 @@ export function PunkxielDrawer(props: IProps) {
     let drawer = world.getInstance(homeIndex*individualWidth).drawer;
     drawer.draw(painter, homeIndex*individualWidth);
     context.putImageData(image,0,0);
-  }, [])
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    const image = context.getImageData(0, 0, individualWidth*ratio, individualHeight*ratio)
-    let painter = (x:number, y:number, c:number) => {
-      let sx = x * ratio;
-      let sy = y * ratio;
-      let color = toDyeColor(c, timeClock);
-      for (var px=sx; px<sx+ratio; px++) {
-        for (var py=sy; py<sy+ratio; py++) {
-          let index = ((100 * ratio - py) * individualWidth * ratio + px) * 4;
-            image.data[index] = color[0];
-            image.data[index+1] = color[1];
-            image.data[index+2] = color[2];
-            image.data[index+3] = 255;
-        }
-      }
-    };
-    let drawer = world.getInstance(homeIndex*individualWidth).drawer;
-    drawer.draw(painter, homeIndex*individualWidth);
   }, [sketchSignal, timeClock])
 
   return (

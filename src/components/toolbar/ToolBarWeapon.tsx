@@ -1,29 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import '../Component.css';
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
-import { WeaponItem } from './Weapon';
-import { Weapon, Weapons } from "../../data/weapon";
 import Contribute from "../../modals/contribute";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { selectViewIndex, selectWorld } from '../../data/statusSlice';
+import { individualWidth } from '../../data/draw';
 
-import {
-    selectWeapons,
-    selectWeaponFocus,
-} from '../../data/statusSlice';
 
 export function ToolBarWeapon() {
-  const inventory = useAppSelector(selectWeapons);
-  const weapons_focus:Weapons = useAppSelector(selectWeaponFocus);
-
+  const viewIndex = useAppSelector(selectViewIndex);
+  const world = useAppSelector(selectWorld);
   return (
     <div className="tool-bar">
         <ul>
             <li>
                 <ul className="inline-brick">
-                    <li>ProtectorList:</li>
+                    {world.getInstance(viewIndex*individualWidth).info.minions.map((m) => {
+                        return <li>{m.id}</li>;
+                    })}
+                    <li> are protecting this city. </li>
                     <Contribute></Contribute>
-                    <li>{weapons_focus.damage} Damage Per Hit </li>
                 </ul>
             </li>
         </ul>

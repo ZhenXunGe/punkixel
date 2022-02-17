@@ -1,6 +1,5 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useAppDispatch } from '../app/hooks';
-import './Component.css';
 import {
   contribute, signalAlien,
 } from '../data/statusSlice';

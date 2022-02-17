@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { Palette, Dye, basic, red_palette, shine_palette } from  './palette';
-import { Weapon, Weapons, weapon_01, weapon_02} from  './weapon';
 import { World, individualWidth } from "./draw"
 import { Alien } from "./alien"
+import { availableMinions, getMinionById, Minion, randomMinion } from "./minion";
 
 export interface StatusState {
     energy: number;
@@ -16,13 +16,12 @@ export interface StatusState {
     palettes: Array<Palette>;
     palette_focus: number;
     dye_focus: number;
-    inventory: Array<Weapons>;
-    weapon_focus: Weapons;
     world: World;
     viewIndex: number;
     homeIndex: number;
     sketchSignal: number;
     alien: Alien;
+    inventory: Array<Minion | null>;
 }
 
 const initialState: StatusState = {
@@ -36,8 +35,7 @@ const initialState: StatusState = {
     dye_focus: 0,
     contribution: 0,
     reward: 0,
-    inventory: [weapon_01, weapon_02],
-    weapon_focus: weapon_01,
+    inventory: [randomMinion(), randomMinion(), null, null, null],
     world: new World(0),
     homeIndex: 1,
     viewIndex: 0,
@@ -108,6 +106,15 @@ export const statusSlice = createSlice({
         }
       }
       state.alien.status = status;
+    },
+
+    signalPlaceMinion: (state, mId) => {
+      let instance = state.world.getInstance(state.viewIndex*individualWidth);
+      let m = getMinionById(availableMinions(state.inventory), mId.payload)!;
+      //let m = randomMinion();
+      instance.info.minions.push(m);
+      //console.log("minion added");
+      //m.location = state.viewIndex;
     }
   },
   extraReducers: (builder) => {
@@ -118,7 +125,7 @@ export const statusSlice = createSlice({
 
 export const { paintColor, pickColor, pickPalette,
     action, contribute, switchView,
-    signalSketch, signalAlien,
+    signalSketch, signalAlien, signalPlaceMinion,
 } = statusSlice.actions;
 
 export const selectEnergy = (state: RootState) => state.status.energy;
@@ -133,14 +140,16 @@ export const selectDye = (state: RootState) => state.status.dye_focus;
 export const selectPalettes = (state: RootState) => state.status.palettes;
 export const selectPaletteFocus = (state: RootState) => state.status.palette_focus;
 
-export const selectWeapons= (state: RootState) => state.status.inventory;
-export const selectWeaponFocus= (state: RootState) => state.status.weapon_focus;
-
 export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
 export const selectWorld = (state: RootState) => state.status.world;
 export const selectAlien = (state: RootState) => state.status.alien;
 export const selectViewIndex = (state: RootState) => state.status.viewIndex;
 
 export const selectSketchSignal = (state: RootState) => state.status.sketchSignal;
+export const selectInventory = (state: RootState) => state.status.inventory;
+export const selectLocalMinions = (state: RootState) => {
+  let instance = state.status.world.getInstance(state.status.viewIndex*individualWidth);
+  return instance.info.minions;
+}
 
 export default statusSlice.reducer;

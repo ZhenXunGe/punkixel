@@ -3,11 +3,15 @@ import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { individualWidth } from "../data/draw";
-import { randomMinion } from "../data/minion";
-import { selectViewIndex, selectWorld } from "../data/statusSlice";
+import { Minion, randomMinion, getMinionById, availableMinions } from "../data/minion";
+import { selectInventory, selectViewIndex, selectWorld, signalPlaceMinion } from "../data/statusSlice";
+import { MinionSelector } from "../components/Inventory";
+
+
 export default function Contribute() {
   const [show, setShow] = useState(false);
-
+  const [minionId, setMinionId] = useState<string|null>(null);
+  const inventory = useAppSelector(selectInventory);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -16,8 +20,8 @@ export default function Contribute() {
   const viewIndex = useAppSelector(selectViewIndex);
   const world = useAppSelector(selectWorld);
   const handleConfirm = () => {
-    let instance = world.getInstance(viewIndex*individualWidth);
-    instance.addMinion(randomMinion())
+    dispatch(signalPlaceMinion(minionId));
+    setShow(false);
   }
   return (
 
@@ -26,20 +30,19 @@ export default function Contribute() {
         Protect This Instance
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Are you sure to protect this city?</Modal.Title>
+          <Modal.Title>Pick which minion to protect this city?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Pick your space ship:
-          speed: ???
+          <MinionSelector setminion={setMinionId}></MinionSelector>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="Close" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="Confirm" onClick={handleConfirm}>
-            Yes! Why not!
+          <Button active={minionId!==null} variant="Confirm" onClick={handleConfirm}>
+            Choose
           </Button>
         </Modal.Footer>
       </Modal>

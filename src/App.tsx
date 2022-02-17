@@ -20,10 +20,12 @@ function App() {
   }, [])
 
   return (
-    <>
-    <LeftMenu></LeftMenu>
-    <RightPanel key="right-panel"></RightPanel>
-    </>
+    <div className="screen">
+      <div className="application">
+      <LeftMenu></LeftMenu>
+      <RightPanel key="right-panel"></RightPanel>
+      </div>
+    </div>
   );
 }
 

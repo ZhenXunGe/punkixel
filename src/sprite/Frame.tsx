@@ -8,7 +8,7 @@ import {
   signalBulletsUpdate,
   selectBullets,
 } from '../timer/timeSlice';
-import { selectAlien, switchView, signalAlien, selectViewIndex, selectWorld } from '../data/statusSlice';
+import { selectAlien, switchView, signalAlien, selectViewIndex, selectWorld, selectLocalMinions } from '../data/statusSlice';
 import { Sprite } from './sprite';
 
 interface IProps {
@@ -25,6 +25,7 @@ export default function Frame(prop: IProps) {
   const bullets = useAppSelector(selectBullets);
   const viewIndex = useAppSelector(selectViewIndex);
   const world = useAppSelector(selectWorld);
+  const minions = useAppSelector(selectLocalMinions);
 
   useEffect(() => {
       let state = alien.status;
@@ -42,11 +43,9 @@ export default function Frame(prop: IProps) {
       if (viewIndex != idx) {
         dispatch(switchView(idx));
         dispatch(resetBullets());
-        let minions = world.getInstance(viewIndex*individualWidth).info.minions;
       }
-      let minions = world.getInstance(viewIndex*individualWidth).info.minions;
       minions.map((m,i) => {
-        prop.minion?.paint(prop.canvasRef?.current!, m.x, m.y, timeClock);
+        //prop.minion?.paint(prop.canvasRef?.current!, m.x, m.y, timeClock);
         m.countingdown--;
         if (m.countingdown <=0) {
             m.countingdown = m.frequency;
@@ -55,10 +54,6 @@ export default function Frame(prop: IProps) {
       });
       //console.log("alien pos:", alien.pos, idx, individualWidth);
   }, [timeClock])
-
-  useEffect(() => {
-    let minions = world.getInstance(viewIndex*individualWidth).info.minions;
-  },[])
 
   useEffect(() => {
     dispatch(signalAlien("run"));
