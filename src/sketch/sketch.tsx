@@ -4,8 +4,9 @@ import { Sprite } from "../sprite/sprite";
 import sketch01 from "./sketch-01.png";
 import sketch02 from "./sketch-02.png";
 import sketch03 from "./sketch-03.png";
+import sketch04 from "./sketch-04.png";
 export const clips = [
-  {name:"default", src: [sketch01, sketch02,sketch03]}
+  {name:"default", src: [sketch01, sketch02,sketch03, sketch04]}
 ]
 
 function getRandomInt(max:number) {
@@ -22,7 +23,7 @@ interface item {
 export function sketch(w:number, h:number, n:number, front:number=0) {
   let items = new Array<item>(0);
   let start = 5;
-  let base_width = 10 + (front*2);
+  let base_width = 15 + (front*2);
   let base_height = 10;
   let ceil_height = 75 + (front*10);
   let gap = 10;
@@ -55,6 +56,7 @@ export function sketchBuild(drawer:Drawer, canvan:HTMLCanvasElement,
   gray:number) {
   let ctx = canvan.getContext("2d")!;
   let idx = getRandomInt(3);
+  if (width > 20 ){idx = 3;};
   let image = sprite.getFrame("default",idx);
   ctx.drawImage(image, 0, 0, width, height);
   let pixels = ctx.getImageData(0, 0, width, height);

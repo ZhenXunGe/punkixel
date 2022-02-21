@@ -10,6 +10,7 @@ import {
 } from '../timer/timeSlice';
 import { selectAlien, switchView, signalAlien, selectViewIndex, selectWorld, selectLocalMinions } from '../data/statusSlice';
 import { Sprite } from './sprite';
+import { BsPrefixComponent } from 'react-bootstrap/esm/helpers';
 
 interface IProps {
     monster: Sprite;
@@ -36,12 +37,18 @@ export default function Frame(prop: IProps) {
       prop.monster?.paint(prop.canvasRef?.current!, pos, 300, timeClock);
       dispatch(signalAlien(state));
       for (var b of bullets) {
-        canvas?.save();
-        canvas?.translate(b.x, b.y);
-        let angle = Math.atan(b.x-pos-50) / (380-b.y)*180/Math.PI;
-        canvas?.rotate(angle);
-        canvas?.fillRect(0, 0, 4, b.power);
-        canvas?.restore();
+        /*if (Math.abs(b.x-pos-43) + Math.abs(b.y - 340) <20) {
+          if (canvas) {canvas!.fillStyle = "#ff0000"};
+          canvas?.arc(b.x, b.y, 10,0,360, true);
+        } else*/ {
+          canvas?.save();
+          canvas?.translate(b.x, b.y);
+          let angle = Math.atan(b.x-pos-50) / (380-b.y)*180/Math.PI;
+          canvas?.rotate(angle + 90);
+          let img = prop.minion.getFrame("missle",0);
+          canvas?.drawImage(img,0,0,16,7)
+          canvas?.restore();
+        }
       }
       dispatch(signalBulletsUpdate([pos+50, 300+40]));
       let idx = Math.floor(alien.pos / individualWidth);

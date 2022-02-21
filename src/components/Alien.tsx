@@ -12,10 +12,9 @@ export function AlienItem() {
   function attackEvent(e:any) {
     dispatch(signalAlien("dizzle"));
   }
-  const imageEls = new Array(13);
   const canvasRef = useRef<HTMLCanvasElement>();
   const spriteMonster = new Sprite(2, 100, 80, 13, 0, 0, "run");
-  const spriteUFO = new Sprite(2, 40, 40, 1, 0, 0, "default");
+  const spriteUFO = new Sprite(2, 50, 50, 1, 0, 0, "default");
   return (
   <>
     <LoadSprite sprite={spriteMonster} height={100} width={80} clips={MonsterClips}></LoadSprite>
