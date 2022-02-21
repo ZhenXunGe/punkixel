@@ -20,7 +20,6 @@ import {
 import {
     action,
     selectPalettes,
-    selectPaletteFocus,
     selectDye,
     paintColor,
     selectHomeIndex,
@@ -42,8 +41,6 @@ export function PunkxielDrawer(props: IProps) {
 
   const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
-  const palettes = useAppSelector(selectPalettes);
-  const pickedPalette = useAppSelector(selectPaletteFocus);
   const pickedDye = useAppSelector(selectDye);
   const world = useAppSelector(selectWorld);
   const homeIndex = useAppSelector(selectHomeIndex);
@@ -53,9 +50,8 @@ export function PunkxielDrawer(props: IProps) {
   function drawEvent(e:any) {
     var x = Math.floor(e.nativeEvent.offsetX/4);
     var y = Math.floor(e.nativeEvent.offsetY/4);
-    var dyeIndex = toDyeIndex(palettes[pickedPalette].idx, pickedDye);
     let drawer = world.getInstance(homeIndex*individualWidth).drawer;
-    drawer.pushPixelDelta(getCorIndex(x,100-y), dyeIndex);
+    drawer.pushPixelDelta(getCorIndex(x,100-y), pickedDye);
     dispatch(signalSketch());
   }
 

@@ -36,7 +36,12 @@ export default function Frame(prop: IProps) {
       prop.monster?.paint(prop.canvasRef?.current!, pos, 300, timeClock);
       dispatch(signalAlien(state));
       for (var b of bullets) {
-        canvas?.fillRect(b.x, b.y, 4, 4);
+        canvas?.save();
+        canvas?.translate(b.x, b.y);
+        let angle = Math.atan(b.x-pos-50) / (380-b.y)*180/Math.PI;
+        canvas?.rotate(angle);
+        canvas?.fillRect(0, 0, 4, b.power);
+        canvas?.restore();
       }
       dispatch(signalBulletsUpdate([pos+50, 300+40]));
       let idx = Math.floor(alien.pos / individualWidth);
@@ -45,11 +50,11 @@ export default function Frame(prop: IProps) {
         dispatch(resetBullets());
       }
       minions.map((m,i) => {
-        //prop.minion?.paint(prop.canvasRef?.current!, m.x, m.y, timeClock);
+        prop.minion?.paint(prop.canvasRef?.current!, m.x, m.y, timeClock);
         m.countingdown--;
         if (m.countingdown <=0) {
             m.countingdown = m.frequency;
-            dispatch(addBullet({x:m.x+10,y:m.y+10}));
+            dispatch(addBullet({x:m.x+10, y:m.y+10, source:m.home, power:m.power}));
         }
       });
       //console.log("alien pos:", alien.pos, idx, individualWidth);

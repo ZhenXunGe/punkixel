@@ -1,47 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import '../Component.css';
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { individualWidth } from "../../data/draw";
-
+import { clips as SketchClips} from "../../sketch/sketch";
 import {
-    action,
     selectPalettes,
-    selectPaletteFocus,
     selectDye,
     pickColor,
-    pickPalette,
     signalSketch,
     selectHomeIndex,
     selectWorld,
 } from '../../data/statusSlice';
+import { ofDyeIndex, toDyeColor, toDyeIndex } from '../../data/palette';
+import { LoadSprite, Sprite } from '../../sprite/sprite';
 
 export function ToolBarDye() {
   const palettes = useAppSelector(selectPalettes);
-  const pickedPalette = useAppSelector(selectPaletteFocus);
   const dispatch = useAppDispatch();
+  const [pickedCategory, setPickedCategory] = useState(0);
+  const [pickedPalette, setPickedPalette] = useState(0);
   const pickedDye = useAppSelector(selectDye);
   const homeIndex = useAppSelector(selectHomeIndex);
   const world = useAppSelector(selectWorld);
+  const spriteSketch = new Sprite(2, 50, 100, 1, 0, 0, "default");
+  const canvasRef = useRef<HTMLCanvasElement>();
   const onSketch = () => {
+    for(var i=0;i<world.instances.length;i++){
+      let d = world.getInstance(i*individualWidth).drawer;
+      d.reset();
+      d.sketchWithStyle(canvasRef.current!,spriteSketch);
+    }
+    /*
     let d = world.getInstance(homeIndex*individualWidth).drawer;
-    d.resetSketch();
+    d.reset();
+    d.sketchWithStyle(canvasRef.current!,spriteSketch);
+    //d.resetSketch();
+    */
     dispatch(signalSketch())
-  }
+  };
+  /*
+  useEffect(() => {
+    for(var i=0;i<world.instances.length;i++){
+      let d = world.getInstance(homeIndex*individualWidth).drawer;
+      d.reset();
+      d.sketchWithStyle(canvasRef.current!,spriteSketch);
+    }
+  },[]);
+  */
   return (
     <div className="tool-bar">
+        <LoadSprite sprite={spriteSketch} height={100} width={80} clips={SketchClips}></LoadSprite>
+        <div className="hide">
+        <canvas height="100" width="300" ref={e => {
+          canvasRef.current = e!
+          }}>
+        </canvas>
+        </div>
         <ul>
             <li>
                 <ul className="inline-brick">
                     <li>Dye</li>
                     <li>
                     <DropdownButton
-                        title = {"Category"}
+                        title = {palettes[pickedCategory].name}
                     >
                     { palettes.map((p,idx) =>
-                        <Dropdown.Item onClick={() => dispatch(pickPalette(idx))}>{p.name}</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setPickedCategory(idx)}>{palettes[idx].name}</Dropdown.Item>
                       )
                     }
                     </DropdownButton>
@@ -49,25 +76,34 @@ export function ToolBarDye() {
 
                     <li>
                     <DropdownButton
-                        title = {palettes[pickedPalette].name}
+                        title = {palettes[pickedCategory].palettes[pickedPalette].name}
                     >
-                    { palettes.map((p,idx) =>
-                        <Dropdown.Item onClick={() => dispatch(pickPalette(idx))}>{p.name}</Dropdown.Item>
+                    { palettes[pickedCategory].palettes.map((p,idx) =>
+                        <Dropdown.Item onClick={() => setPickedPalette(idx)}>{p.name}</Dropdown.Item>
                       )
                     }
                     </DropdownButton>
                     </li>
-                    { palettes[pickedPalette].dye.map((d,idx) =>
+                    { palettes[pickedCategory].palettes[pickedPalette].dye.map((d,idx) => {
+                        let palette = palettes[pickedCategory].palettes[pickedPalette];
+                        return (
                         <li>
-                        <div className="dye-item" style= {{
+                        <div className="dye-item"
+                          style= {{
                             backgroundColor: `rgb(${d.color[0]}, ${d.color[1]}, ${d.color[2]})`,
-                            border: d.color == palettes[pickedPalette].dye[pickedDye].color ? '1px solid red' : '1px solid gray',
-                        }} onClick={() => dispatch(pickColor(idx))}>
+                            border: d.color == ofDyeIndex(pickedDye).color ? '1px solid red' : '1px solid gray',
+                          }}
+                          onClick={() => {
+                              dispatch(pickColor(toDyeIndex(palette.idx, + idx)))
+                            }
+                          }
+                        >
                         </div>
                         </li>
+                        )} 
                       )
                     }
-                    <li>{palettes[pickedPalette].pph} PPH Per Pixel</li>
+                    <li>{palettes[pickedCategory].palettes[pickedPalette].pph} PPH Per Pixel</li>
                 </ul>
             </li>
             <li><Button onClick={() => onSketch()}> sketch </Button></li>

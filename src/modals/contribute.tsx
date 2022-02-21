@@ -32,7 +32,7 @@ export default function Contribute() {
 
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Pick which minion to protect this city?</Modal.Title>
+          <Modal.Title>Pick a minion to protect this block?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <MinionSelector setminion={setMinionId}></MinionSelector>

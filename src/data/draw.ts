@@ -1,6 +1,7 @@
-import { Dye, basic, DyeIndex, ofDyeIndex, IsNillDye } from "./palette";
+import { Dye, DyeIndex, IsNillDye } from "./palette";
 import { Minion, randomMinion } from "./minion";
-import { sketch } from "./sketch";
+import { sketch, sketchBuild } from "../sketch/sketch";
+import { Sprite } from "../sprite/sprite";
 
 /* Size of the individual home */
 export const individualWidth:number = 225;
@@ -138,17 +139,42 @@ export class Drawer {
       }
     }
 
-    resetSketch() {
+    setPixelByCor(x:number, y:number, dye:DyeIndex) {
+      let id = getCorIndex(x,y);
+      this.setPixel(id, dye);
+    }
+
+    reset() {
       for (var i=0; i<content_size; i++) {
         this.setPixel(i, 0);
       }
+    }
+    resetSketch() {
       let items_front = sketch(individualWidth, individualHeight, 30);
       let items_back = sketch(individualWidth, individualHeight, 30);
       for (var item of items_front) {
-        this.drawPolygon(sketchLayer, 1*16 + 2, item.x, item.y, item.h, item.w);
+        this.drawPolygon(sketchLayer, 1*16 + 6, item.x, item.y, item.h, item.w);
       }
       for (var item of items_back) {
-        this.drawPolygon(sketchLayer, 1*16 + 2, item.x, item.y, item.h, item.w);
+        this.drawPolygon(sketchLayer, 1*16 + 6, item.x, item.y, item.h, item.w);
+      }
+    }
+    sketchWithStyle(canvas:HTMLCanvasElement, template:Sprite) {
+      for (var i=0; i<content_size; i++) {
+        this.setPixel(i, 0);
+      }
+
+      let items_front2 = sketch(individualWidth, individualHeight, 30, 1);
+      let items_front = sketch(individualWidth, individualHeight, 30, 2);
+      let items_back = sketch(individualWidth, individualHeight, 30,0);
+      for (var item of items_back) {
+        sketchBuild(this, canvas, template, item.w, item.h, item.x, item.y, -4);
+      }
+      for (var item of items_front2) {
+        sketchBuild(this, canvas, template, item.w, item.h, item.x, item.y, -2);
+      }
+      for (var item of items_front) {
+        sketchBuild(this, canvas, template, item.w, item.h, item.x, item.y, 0);
       }
     }
 }
@@ -180,7 +206,7 @@ export function EmptyInstance(id: string) {
       content[1][i] = 0;
       content[2][i] = 0;
   }
-  let instance = {content: content, minions: [randomMinion(), randomMinion(), randomMinion()], drops:[], id:id};
+  let instance = {content: content, minions: [randomMinion(1000), randomMinion(1000), randomMinion(1000)], drops:[], id:id};
   return instance;
 }
 

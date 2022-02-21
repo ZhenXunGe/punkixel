@@ -1,9 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { Palette, Dye, basic, red_palette, shine_palette } from  './palette';
+import { Palette, Dye, red_palette, gray_palette, liquid_green_palette, liquid_blue_palette,} from  './palette';
 import { World, individualWidth } from "./draw"
 import { Alien } from "./alien"
 import { availableMinions, getMinionById, Minion, randomMinion } from "./minion";
+
+interface ColorCategory {
+  name:string;
+  palettes: Array<Palette>;
+}
 
 export interface StatusState {
     energy: number;
@@ -11,10 +16,8 @@ export interface StatusState {
     ranking: number;
     pph: number;
     voucher: number;
-    contribution: number;
     reward: number;
-    palettes: Array<Palette>;
-    palette_focus: number;
+    palettes: Array<ColorCategory>;
     dye_focus: number;
     world: World;
     viewIndex: number;
@@ -30,12 +33,21 @@ const initialState: StatusState = {
     ranking: 9999,
     pph: 0,
     voucher: 1,
-    palettes: [basic, red_palette, shine_palette],
-    palette_focus: 0,
+    palettes: [
+      {
+        name:"basic",
+        palettes: [gray_palette, red_palette]
+      },
+      {
+        name:"spin",
+        palettes: [
+          liquid_green_palette,
+          liquid_blue_palette,]
+      },
+    ],
     dye_focus: 0,
-    contribution: 0,
     reward: 0,
-    inventory: [randomMinion(), randomMinion(), null, null, null],
+    inventory: [randomMinion(1), randomMinion(1), null, null, null],
     world: new World(0),
     homeIndex: 1,
     viewIndex: 0,
@@ -59,20 +71,8 @@ export const statusSlice = createSlice({
       state.dye_focus = d.payload;
     },
 
-    pickPalette: (state, d) => {
-      state.palette_focus = d.payload;
-    },
-
     paintColor: (state, d) => {
       state.pph += d.payload.weight;
-    },
-
-    contribute: (state) => {
-      if (state.homeIndex != state.viewIndex) {
-        state.contribution += 1;
-      } else {
-        state.reward += 1;
-      }
     },
 
     switchView: (state, d) => {
@@ -110,11 +110,14 @@ export const statusSlice = createSlice({
 
     signalPlaceMinion: (state, mId) => {
       let instance = state.world.getInstance(state.viewIndex*individualWidth);
-      let m = getMinionById(availableMinions(state.inventory), mId.payload)!;
+      let minion = getMinionById(availableMinions(state.inventory), mId.payload)!;
+      let m = {
+        ...minion
+      }
       //let m = randomMinion();
       instance.info.minions.push(m);
       //console.log("minion added");
-      //m.location = state.viewIndex;
+      minion.location = state.viewIndex;
     }
   },
   extraReducers: (builder) => {
@@ -123,8 +126,8 @@ export const statusSlice = createSlice({
 
 });
 
-export const { paintColor, pickColor, pickPalette,
-    action, contribute, switchView,
+export const { paintColor, pickColor,
+    action, switchView,
     signalSketch, signalAlien, signalPlaceMinion,
 } = statusSlice.actions;
 
@@ -133,12 +136,10 @@ export const selectPunkixel= (state: RootState) => state.status.punkxiel;
 export const selectRanking = (state: RootState) => state.status.ranking;
 export const selectPPH = (state: RootState) => state.status.pph;
 export const selectVoucher = (state: RootState) => state.status.voucher;
-export const selectContribution = (state: RootState) => state.status.contribution;
 export const selectReward = (state: RootState) => state.status.reward;
 export const selectDye = (state: RootState) => state.status.dye_focus;
 
 export const selectPalettes = (state: RootState) => state.status.palettes;
-export const selectPaletteFocus = (state: RootState) => state.status.palette_focus;
 
 export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
 export const selectWorld = (state: RootState) => state.status.world;

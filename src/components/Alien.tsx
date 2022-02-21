@@ -1,7 +1,7 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useAppDispatch } from '../app/hooks';
 import {
-  contribute, signalAlien,
+  signalAlien,
 } from '../data/statusSlice';
 import Frame from '../sprite/Frame';
 import { Sprite, LoadSprite } from '../sprite/sprite';
@@ -11,7 +11,6 @@ export function AlienItem() {
   const dispatch = useAppDispatch();
   function attackEvent(e:any) {
     dispatch(signalAlien("dizzle"));
-    dispatch(contribute());
   }
   const imageEls = new Array(13);
   const canvasRef = useRef<HTMLCanvasElement>();

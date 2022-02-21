@@ -1,18 +1,21 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import { WritableDraft } from 'immer/dist/internal';
 import { RootState } from '../app/store';
 
 interface BulletInfo {
   x: number;
   y: number;
+  source: number;
+  power:number;
 }
 
 export interface TimerState {
     timeClock: number;
+    contribution: number;
     bullets: Array<BulletInfo>;
 }
 
 const initialState: TimerState = {
+  contribution:0,
   timeClock: 0,
   bullets: [],
 };
@@ -61,6 +64,10 @@ export const timerSlice = createSlice({
           b.x = cor[0];
           b.y = cor[1];
           cs.push(b);
+        } else {
+          if (b.source === 1) {
+            state.contribution += 1;
+          }
         }
       }
       state.bullets = cs;
@@ -76,4 +83,5 @@ export const timerSlice = createSlice({
 export const { resetBullets, signalBulletsUpdate, addBullet } = timerSlice.actions;
 export const selectTimeClock = (state: RootState) => state.timer.timeClock;
 export const selectBullets = (state: RootState) => state.timer.bullets;
+export const selectContribution = (state: RootState) => state.timer.contribution;
 export default timerSlice.reducer;

@@ -6,12 +6,15 @@ import {
   selectPunkixel,
   selectRanking,
   selectVoucher,
-  selectContribution,
+
   selectReward,
   selectPPH,
   selectViewIndex,
 } from '../data/statusSlice';
 
+import {
+  selectContribution,
+} from '../timer/timeSlice';
 
 import './Component.css';
 

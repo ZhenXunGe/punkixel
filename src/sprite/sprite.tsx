@@ -46,6 +46,12 @@ export class Sprite {
         this.sheet[name][index]  = img;
       }
     }
+    getFrame(
+      name:string,
+      idx: number,
+    ) {
+      return this.sheet[name][idx];
+    }
     setState(state:string) {
       this.currentClip = state;
     }

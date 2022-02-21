@@ -14,7 +14,7 @@ export function SingleItem(m:single){
   } else if ( m.minion.location === null) {
     return (<div className="protector"> <img src={ufo}></img> is now idling. </div>);
   } else {
-    return (<div className="protector"> <img src={ufo}></img> is now protecting home {m.minion.location}. </div>);
+    return (<div className="protector"> <img src={ufo}></img> is now protecting block {m.minion.location}. </div>);
   }
 }
 
@@ -30,20 +30,25 @@ interface SingleSelect {
 
 export function SingleListItem(m:SingleSelect) {
   if ( m.minion.location === null) {
-    return (<ListGroup.Item onClick={()=>m.setminion(m.minion.id)}> <img src={ufo}></img> {m.minion.id} is now idling. [speed: {m.minion.speed}] </ListGroup.Item>);
+    return (<ListGroup.Item onClick={()=>m.setminion(m.minion.id)}  href={"#" + m.minion.id}> <img src={ufo}></img> {m.minion.id} is now idling. [speed: {m.minion.power}] </ListGroup.Item>);
   } else {
-    return (<ListGroup.Item> <img src={ufo}></img> is now protecting home {m.minion.location}. </ListGroup.Item>);
+    return (<ListGroup.Item disabled> <img src={ufo}></img> is now protecting block {m.minion.location}. </ListGroup.Item>);
   }
 }
 
 
 export function MinionSelector(s:MinionSelector) {
   const inventory = useAppSelector(selectInventory);
-  return (<ul className="list-group minion-selector">
+  const [current, setCurrent] = useState("none");
+  const setMinion = (mid:string) => {
+    setCurrent(mid);
+    s.setminion(mid);
+  }
+  return (<ListGroup className="minion-selector" defaultActiveKey={"#" + current}>
     {inventory.filter((m) => m!==null).map((m,i) => {
-    return <SingleListItem setminion={s.setminion} minion={m!} key={m!.id}></SingleListItem>
+    return <SingleListItem setminion={setMinion} minion={m!} key={m!.id}></SingleListItem>
     })}
-  </ul>)
+  </ListGroup>)
 }
 
 export default function Inventory() {
