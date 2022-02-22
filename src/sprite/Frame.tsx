@@ -7,6 +7,7 @@ import {
   addBullet,
   signalBulletsUpdate,
   selectBullets,
+  bulletAngle,
 } from '../timer/timeSlice';
 import { selectAlien, switchView, signalAlien, selectViewIndex, selectWorld, selectLocalMinions } from '../data/statusSlice';
 import { Sprite } from './sprite';
@@ -40,8 +41,8 @@ export default function Frame(prop: IProps) {
       for (var b of bullets) {
           canvas?.save();
           canvas?.translate(b.x, b.y);
-          let angle = Math.atan(b.x-pos-50) / (380-b.y)*180/Math.PI;
-          canvas?.rotate(angle + 90);
+          let angle = bulletAngle(b);
+          canvas?.rotate(angle);
           let img = prop.minion.getFrame("missle",0);
           canvas?.drawImage(img,0,0,16,7)
           canvas?.restore();
@@ -60,9 +61,9 @@ export default function Frame(prop: IProps) {
             m.countingdown = m.frequency;
             let x = m.x+10;
             let y = m.y+10;
-            let tx = pos + 250;
+            let tx = pos + 280;
             let ty = 300+40;
-            let track = pointsOnBezierCurves([[x, y],[(x+tx)/3, (y+ty)/3 - 100], [(x+2*tx)/3,(y+2*ty)/3 + 50],[tx, ty]]);
+            let track = pointsOnBezierCurves([[x, y],[(x+tx)/3, (y+ty)/3 - 50], [(x+2*tx)/3, (y+2*ty)/3 - 100],[tx, ty]]);
             // console.log("bullet track:", track);
             dispatch(addBullet({x:x, y:y, source:m.home, power:m.power, tx: tx, ty: ty, track: track, ti: 0}));
         }

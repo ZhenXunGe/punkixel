@@ -12,6 +12,22 @@ interface BulletInfo {
   ti: number;
 }
 
+export function bulletAngle(b: BulletInfo): number {
+  let i = b.ti;
+  let track = b.track;
+  let len = track.length;
+  var angle = 0;
+  if (i < len - 1) {
+    let tan = (track[i][1] - b.track[i+1][1]) / (b.track[i][0] - b.track[i+1][0]);
+    angle = Math.atan(tan);
+    angle = ((len - i) * angle + i * Math.PI / 2) / len;
+  } else {
+    angle = Math.PI / 2;
+  }
+  console.log("bullet angle:", angle);
+  return angle;
+}
+
 export interface TimerState {
     timeClock: number;
     contribution: number;
@@ -58,11 +74,9 @@ export const timerSlice = createSlice({
       let cor:[number, number] = d.payload;
       for (var i=0;i<state.bullets.length;i++) {
         let b = state.bullets[i];
-        let track = b.track;
         let d = distance(b, cor);
-        if (b.ti < track.length) { 
-           let nb = track[b.ti];
-           b.ti = b.ti + 1;
+        if (b.ti < b.track.length) { 
+           let nb = b.track[b.ti++];
            b.x = nb[0];
            b.y = nb[1];
            cs.push(b);
