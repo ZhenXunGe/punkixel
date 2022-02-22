@@ -46,7 +46,7 @@ export default function Frame(prop: IProps) {
           let img = prop.minion.getFrame("missle",0);
           canvas?.drawImage(img,0,0,16,7)
           canvas?.restore();
-     }
+      }
 
       dispatch(signalBulletsUpdate([pos+50, 300+40]));
       let idx = Math.floor(alien.pos / individualWidth);
@@ -54,6 +54,7 @@ export default function Frame(prop: IProps) {
         dispatch(switchView(idx));
         dispatch(resetBullets());
       }
+      
       minions.map((m,i) => {
         prop.minion?.paint(prop.canvasRef?.current!, m.x, m.y, timeClock);
         m.countingdown--;
@@ -61,11 +62,12 @@ export default function Frame(prop: IProps) {
             m.countingdown = m.frequency;
             let x = m.x+10;
             let y = m.y+10;
-            let tx = pos + 280;
-            let ty = 300+40;
-            let track = pointsOnBezierCurves([[x, y],[(x+tx)/3, (y+ty)/3 - 50], [(x+2*tx)/3, (y+2*ty)/3 - 100],[tx, ty]]);
+            // TODO: hitPt needs to be calculated.
+            let hitPt: [number, number] = [pos+320, 300+40];
+
+            let track = pointsOnBezierCurves([[x, y],[(x+hitPt[0])/3 + 50, (y+hitPt[1])/3 - 150], [(x+2*hitPt[0])/3 + 50, (y+2*hitPt[1])/3 - 150], hitPt]);
             // console.log("bullet track:", track);
-            dispatch(addBullet({x:x, y:y, source:m.home, power:m.power, tx: tx, ty: ty, track: track, ti: 0}));
+            dispatch(addBullet({x:x, y:y, source:m.home, power:m.power, tx: hitPt[0], ty: hitPt[1], track: track, ti: 0}));
         }
       });
       //console.log("alien pos:", alien.pos, idx, individualWidth);
