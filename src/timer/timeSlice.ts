@@ -6,6 +6,10 @@ interface BulletInfo {
   y: number;
   source: number;
   power:number;
+  tx: number;
+  ty: number;
+  track: [[number, number]];
+  ti: number;
 }
 
 export interface TimerState {
@@ -54,16 +58,14 @@ export const timerSlice = createSlice({
       let cor:[number, number] = d.payload;
       for (var i=0;i<state.bullets.length;i++) {
         let b = state.bullets[i];
+        let track = b.track;
         let d = distance(b, cor);
-        if (d > 20) {
-          let dnext = d - 20;
-          b.x = (dnext/d) * (b.x - cor[0]) + cor[0];
-          b.y = (dnext/d) * (b.y - cor[1]) + cor[1];
-          cs.push(b);
-        } else if (d>10){
-          b.x = cor[0];
-          b.y = cor[1];
-          cs.push(b);
+        if (b.ti < track.length) { 
+           let nb = track[b.ti];
+           b.ti = b.ti + 1;
+           b.x = nb[0];
+           b.y = nb[1];
+           cs.push(b);
         } else {
           if (b.source === 1) {
             state.contribution += 1;

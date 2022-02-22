@@ -11,6 +11,7 @@ import {
 import { selectAlien, switchView, signalAlien, selectViewIndex, selectWorld, selectLocalMinions } from '../data/statusSlice';
 import { Sprite } from './sprite';
 import { BsPrefixComponent } from 'react-bootstrap/esm/helpers';
+import { pointsOnBezierCurves } from 'points-on-curve';
 
 interface IProps {
     monster: Sprite;
@@ -37,10 +38,6 @@ export default function Frame(prop: IProps) {
       prop.monster?.paint(prop.canvasRef?.current!, pos, 300, timeClock);
       dispatch(signalAlien(state));
       for (var b of bullets) {
-        /*if (Math.abs(b.x-pos-43) + Math.abs(b.y - 340) <20) {
-          if (canvas) {canvas!.fillStyle = "#ff0000"};
-          canvas?.arc(b.x, b.y, 10,0,360, true);
-        } else*/ {
           canvas?.save();
           canvas?.translate(b.x, b.y);
           let angle = Math.atan(b.x-pos-50) / (380-b.y)*180/Math.PI;
@@ -48,8 +45,8 @@ export default function Frame(prop: IProps) {
           let img = prop.minion.getFrame("missle",0);
           canvas?.drawImage(img,0,0,16,7)
           canvas?.restore();
-        }
-      }
+     }
+
       dispatch(signalBulletsUpdate([pos+50, 300+40]));
       let idx = Math.floor(alien.pos / individualWidth);
       if (viewIndex != idx) {
@@ -61,7 +58,13 @@ export default function Frame(prop: IProps) {
         m.countingdown--;
         if (m.countingdown <=0) {
             m.countingdown = m.frequency;
-            dispatch(addBullet({x:m.x+10, y:m.y+10, source:m.home, power:m.power}));
+            let x = m.x+10;
+            let y = m.y+10;
+            let tx = pos + 250;
+            let ty = 300+40;
+            let track = pointsOnBezierCurves([[x, y],[(x+tx)/3, (y+ty)/3 - 100], [(x+2*tx)/3,(y+2*ty)/3 + 50],[tx, ty]]);
+            // console.log("bullet track:", track);
+            dispatch(addBullet({x:x, y:y, source:m.home, power:m.power, tx: tx, ty: ty, track: track, ti: 0}));
         }
       });
       //console.log("alien pos:", alien.pos, idx, individualWidth);
