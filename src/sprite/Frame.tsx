@@ -64,8 +64,9 @@ export default function Frame(prop: IProps) {
             let y = m.y+10;
             // TODO: hitPt needs to be calculated.
             let hitPt: [number, number] = [pos+320, 300+40];
+            let isForward: number = (x >= pos+320) ? 1 : -1;
 
-            let track = pointsOnBezierCurves([[x, y],[(x+hitPt[0])/3 + 50, (y+hitPt[1])/3 - 150], [(x+2*hitPt[0])/3 + 50, (y+2*hitPt[1])/3 - 150], hitPt]);
+            let track = pointsOnBezierCurves([[x, y],[(x+hitPt[0])/3 - 50 * isForward, (y+hitPt[1])/3 - 150], [(x+2*hitPt[0])/3 - 50 * isForward, (y+2*hitPt[1])/3 - 150], hitPt]);
             // console.log("bullet track:", track);
             dispatch(addBullet({x:x, y:y, source:m.home, power:m.power, tx: hitPt[0], ty: hitPt[1], track: track, ti: 0}));
         }

@@ -80,7 +80,7 @@ export const timerSlice = createSlice({
       for (var i=0;i<state.bullets.length;i++) {
         let b = state.bullets[i];
         let len = b.track.length;
-        if (b.ti < len) { 
+        if (b.ti < len) {
           let nb = b.track[b.ti];
           b.x = ((len - b.ti) * nb[0] + b.ti * cor[0]) / len;
           b.y = ((len - b.ti) * nb[1] + b.ti * cor[1]) / len;
