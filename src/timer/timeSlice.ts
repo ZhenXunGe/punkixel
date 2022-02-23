@@ -85,7 +85,7 @@ export const timerSlice = createSlice({
           b.x = ((len - b.ti) * nb[0] + b.ti * cor[0]) / len;
           b.y = ((len - b.ti) * nb[1] + b.ti * cor[1]) / len;
           cs.push(b);
-          b.ti++;
+          b.ti = b.ti + Math.floor(Math.pow(1.04, b.ti)); 
         } else {
           state.contribution += 1;
         }
