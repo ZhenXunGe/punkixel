@@ -12,7 +12,7 @@ import {
 import { selectAlien, switchView, signalAlien, selectViewIndex, selectWorld, selectLocalMinions } from '../data/statusSlice';
 import { Sprite } from './sprite';
 import { BsPrefixComponent } from 'react-bootstrap/esm/helpers';
-import { pointsOnBezierCurves } from 'points-on-curve';
+import { pointsOnBezierCurves, Point } from 'points-on-curve';
 
 interface IProps {
     monster: Sprite;
@@ -63,10 +63,19 @@ export default function Frame(prop: IProps) {
             let x = m.x+10;
             let y = m.y+10;
             // TODO: hitPt needs to be calculated.
-            let hitPt: [number, number] = [pos+320, 300+40];
-            let isForward: number = (x >= pos+320) ? 1 : -1;
+            let hitX = pos+250;
+            let hitPt: [number, number] = [hitX, 300+40];
+            // -1: left, 1: rigth
+            let direction: number = (x <= pos) ? 1 : -1;
+            // console.log("direction", direction);
 
-            let track = pointsOnBezierCurves([[x, y],[(x+hitPt[0])/3 - 50 * isForward, (y+hitPt[1])/3 - 150], [(x+2*hitPt[0])/3 - 50 * isForward, (y+2*hitPt[1])/3 - 150], hitPt]);
+            let baseCurve: Point[] = [
+              [x, y],
+              [(3*x + hitPt[0]) / 4 + 50 * direction, (3*y + hitPt[1]) / 4 - 50], 
+              [(x + 3*hitPt[0]) / 4 + 50 * direction, (y + 3*hitPt[1]) / 4 - 100], 
+              hitPt
+            ];
+            let track = pointsOnBezierCurves(baseCurve);
             // console.log("bullet track:", track);
             dispatch(addBullet({x:x, y:y, source:m.home, power:m.power, tx: hitPt[0], ty: hitPt[1], track: track, ti: 0}));
         }
