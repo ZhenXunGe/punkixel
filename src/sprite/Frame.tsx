@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, MutableRefObject } from 'react';
+import React, {useEffect, MutableRefObject } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { individualWidth } from "../data/draw";
 import {
@@ -7,10 +7,16 @@ import {
   addBullet,
   signalBulletsUpdate,
   selectBullets,
-} from '../timer/timeSlice';
-import { selectAlien, switchView, signalAlien, selectViewIndex, selectWorld, selectLocalMinions } from '../data/statusSlice';
+  signalAlien,
+  switchView,
+  addEvent,
+  selectAlien,
+  selectViewIndex,
+} from '../dynamic/dynamicSlice';
 import { Sprite } from './sprite';
 import { BsPrefixComponent } from 'react-bootstrap/esm/helpers';
+import getWorld from '../data/world';
+import { AlienEvent } from '../dynamic/event';
 
 interface IProps {
     monster: Sprite;
@@ -25,10 +31,10 @@ export default function Frame(prop: IProps) {
   const alien = useAppSelector(selectAlien);
   const bullets = useAppSelector(selectBullets);
   const viewIndex = useAppSelector(selectViewIndex);
-  const world = useAppSelector(selectWorld);
-  const minions = useAppSelector(selectLocalMinions);
 
   useEffect(() => {
+      let instance = getWorld().getInstance(viewIndex*individualWidth);
+      let minions = instance.info.minions;
       let state = alien.status;
       prop.monster.setState(state);
       let canvas = prop.canvasRef?.current!.getContext("2d");
@@ -55,6 +61,7 @@ export default function Frame(prop: IProps) {
       if (viewIndex != idx) {
         dispatch(switchView(idx));
         dispatch(resetBullets());
+        dispatch(addEvent(AlienEvent(alien, getWorld().getInstance(idx))));
       }
       minions.map((m,i) => {
         prop.minion?.paint(prop.canvasRef?.current!, m.x, m.y, timeClock);

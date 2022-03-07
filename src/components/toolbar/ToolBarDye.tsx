@@ -5,17 +5,16 @@ import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { individualWidth } from "../../data/draw";
-import { clips as SketchClips} from "../../sketch/sketch";
 import {
     selectPalettes,
     selectDye,
     pickColor,
     signalSketch,
     selectHomeIndex,
-    selectWorld,
 } from '../../data/statusSlice';
 import { ofDyeIndex, toDyeColor, toDyeIndex } from '../../data/palette';
-import { LoadSprite, Sprite } from '../../sprite/sprite';
+import { getSprite } from '../../sprite/spriteSlice';
+import getWorld from '../../data/world';
 
 export function ToolBarDye() {
   const palettes = useAppSelector(selectPalettes);
@@ -24,12 +23,11 @@ export function ToolBarDye() {
   const [pickedPalette, setPickedPalette] = useState(0);
   const pickedDye = useAppSelector(selectDye);
   const homeIndex = useAppSelector(selectHomeIndex);
-  const world = useAppSelector(selectWorld);
-  const spriteSketch = new Sprite(2, 50, 100, 1, 0, 0, "default");
   const canvasRef = useRef<HTMLCanvasElement>();
+  const spriteSketch = getSprite("sketch");
   const onSketch = () => {
-    for(var i=0;i<world.instances.length;i++){
-      let d = world.getInstance(i*individualWidth).drawer;
+    for(var i=0;i<getWorld().instances.length;i++){
+      let d = getWorld().getInstance(i*individualWidth).drawer;
       d.reset();
       d.sketchWithStyle(canvasRef.current!,spriteSketch);
     }
@@ -52,7 +50,7 @@ export function ToolBarDye() {
   */
   return (
     <div className="tool-bar">
-        <LoadSprite sprite={spriteSketch} height={100} width={80} clips={SketchClips}></LoadSprite>
+
         <div className="hide">
         <canvas height="100" width="300" ref={e => {
           canvasRef.current = e!

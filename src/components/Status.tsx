@@ -9,14 +9,11 @@ import {
 
   selectReward,
   selectPPH,
-  selectViewIndex,
 } from '../data/statusSlice';
 
 import {
-  selectContribution,
-} from '../timer/timeSlice';
-
-import './Component.css';
+  selectContribution, selectViewIndex,
+} from '../dynamic/dynamicSlice';
 
 export function Status () {
     const energy = useAppSelector(selectEnergy);

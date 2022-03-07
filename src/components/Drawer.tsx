@@ -4,8 +4,6 @@ import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import { Dye, ofDyeIndex, IsNillDye, toDyeColor } from "../data/palette";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-    EmptyInstance,
-    World,
     individualWidth,
     individualHeight,
     getCorIndex, ofCorIndex,
@@ -23,14 +21,14 @@ import {
     selectDye,
     paintColor,
     selectHomeIndex,
-    selectWorld,
     selectSketchSignal,
     signalSketch,
 } from '../data/statusSlice';
 
 import {
   selectTimeClock,
-} from '../timer/timeSlice';
+} from '../dynamic/dynamicSlice';
+import getWorld from '../data/world';
 
 interface IProps {
 }
@@ -42,7 +40,6 @@ export function PunkxielDrawer(props: IProps) {
   const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
   const pickedDye = useAppSelector(selectDye);
-  const world = useAppSelector(selectWorld);
   const homeIndex = useAppSelector(selectHomeIndex);
   const timeClock = useAppSelector(selectTimeClock);
   const sketchSignal = useAppSelector(selectSketchSignal);
@@ -50,7 +47,7 @@ export function PunkxielDrawer(props: IProps) {
   function drawEvent(e:any) {
     var x = Math.floor(e.nativeEvent.offsetX/4);
     var y = Math.floor(e.nativeEvent.offsetY/4);
-    let drawer = world.getInstance(homeIndex*individualWidth).drawer;
+    let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
     drawer.pushPixelDelta(getCorIndex(x,100-y), pickedDye);
     dispatch(signalSketch());
   }
@@ -73,14 +70,14 @@ export function PunkxielDrawer(props: IProps) {
         }
       }
     };
-    let drawer = world.getInstance(homeIndex*individualWidth).drawer;
+    let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
     drawer.draw(painter, homeIndex*individualWidth);
     context.putImageData(image,0,0);
   }, [sketchSignal, timeClock])
 
   return (
     <div className="drawer" onClick={(e) => {drawEvent(e);}}>
-    <canvas key="home-drawer" height="400" width="900" ref={canvasRef}>
+    <canvas key="home-drawer" height="400" width={`${individualWidth * ratio}`} ref={canvasRef}>
         Drawer Drawer
     </canvas>
     </div>

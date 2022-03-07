@@ -1,24 +1,18 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useAppDispatch } from '../app/hooks';
-import {
-  signalAlien,
-} from '../data/statusSlice';
+import { signalAlien } from '../dynamic/dynamicSlice';
 import Frame from '../sprite/Frame';
-import { Sprite, LoadSprite } from '../sprite/sprite';
-import { clips as MonsterClips} from "../sprite/monster/sprite";
-import { clips as UFOClips} from "../sprite/ufo/sprite";
+import { getSprite } from '../sprite/spriteSlice';
 export function AlienItem() {
   const dispatch = useAppDispatch();
   function attackEvent(e:any) {
     dispatch(signalAlien("dizzle"));
   }
   const canvasRef = useRef<HTMLCanvasElement>();
-  const spriteMonster = new Sprite(2, 100, 80, 13, 0, 0, "run");
-  const spriteUFO = new Sprite(2, 50, 50, 1, 0, 0, "default");
+  const spriteMonster = getSprite("monster");
+  const spriteUFO = getSprite("ufo");
   return (
   <>
-    <LoadSprite sprite={spriteMonster} height={100} width={80} clips={MonsterClips}></LoadSprite>
-    <LoadSprite sprite={spriteUFO} height={40} width={40} clips={UFOClips}></LoadSprite>
     <Frame monster={spriteMonster} minion={spriteUFO} canvasRef={canvasRef}></Frame>
     <div className="animation" >
         <div className="body">

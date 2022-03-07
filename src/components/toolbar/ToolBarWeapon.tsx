@@ -1,25 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import '../Component.css';
-import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import Contribute from "../../modals/contribute";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { selectViewIndex, selectWorld } from '../../data/statusSlice';
 import { individualWidth } from '../../data/draw';
+import getWorld from '../../data/world';
+import { selectViewIndex } from '../../dynamic/dynamicSlice';
+import minion from "../../sprite/ufo/ufo.png";
+
+export function MinionAvator() {
+    return (<div className="minion-avator"><img src={minion} className="minion-avator"></img></div>)
+}
 
 
 export function ToolBarWeapon() {
   const viewIndex = useAppSelector(selectViewIndex);
-  const world = useAppSelector(selectWorld);
+  const minions = getWorld().getInstance(viewIndex*individualWidth).info.minions;
+  var damage = 0;
+  for (var m of minions) {
+    damage += m.power;
+  }
   return (
     <div className="tool-bar">
         <ul>
             <li>
                 <ul className="inline-brick">
-                    {world.getInstance(viewIndex*individualWidth).info.minions.map((m) => {
-                        return <li>{m.id}</li>;
+                    {minions.map((m) => {
+                        return <li key={m.id}><MinionAvator></MinionAvator></li>;
                     })}
-                    <li> are protecting this city. </li>
+                    <li> {minions.length} minions are protecting this block. </li>
+                    <li> Total Damage: {damage} </li>
+                    <li> Speed reduction: %10</li>
                     <Contribute></Contribute>
                 </ul>
             </li>

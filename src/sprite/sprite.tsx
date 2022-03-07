@@ -1,4 +1,6 @@
-import { MutableRefObject } from "react";
+import { MutableRefObject, useEffect } from "react";
+import { useAppDispatch } from "../app/hooks";
+import { installSprite, loadSpriteFrame } from "./spriteSlice";
 
 export type Painter = (sheet: ImageData, left:number, top:number, width:number, height:number) => void
 
@@ -85,9 +87,24 @@ export interface LoadingIProps {
   width: number;
   height: number;
   clips: Array<ClipInfo>;
+  name: string;
 }
 
 export function LoadSprite(props:LoadingIProps) {
+  const dispatch = useAppDispatch();
+  var sum = 0;
+  for (var clip of props.clips) {
+    sum += clip.src.length;
+  }
+  console.log(`install sprite ${props.name} ${sum}`);
+  useEffect(()=>{
+    dispatch(installSprite({
+    name:props.name,
+    resource:sum,
+    sprite:props.sprite,
+    }))
+  },[]);
+
   return (
   <div className="hide">
   {
@@ -97,15 +114,17 @@ export function LoadSprite(props:LoadingIProps) {
       <img style={{height:props.height, width:props.width}} key={`sprite-alien-${i}`} src={c} ref={(e)=>
         {
           // onLoad replacement for SSR
-          console.log("Loading Resource of Sprites");
+          console.log(`Loading Resource of Sprites ${props.name} ${k} ${i}`);
           if (!e) { return; }
           const img = e;
           const updateFunc = () => {
             props.sprite.setFrame(img, clip.name, i, clip.src.length);
+            dispatch(loadSpriteFrame());
           };
-          img.onload = updateFunc;
           if (img.complete) {
             updateFunc();
+          } else {
+            img.onload = updateFunc;
           }
         }
       }></img>

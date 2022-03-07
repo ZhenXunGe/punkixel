@@ -10,11 +10,53 @@ interface single {
 }
 export function SingleItem(m:single){
   if (m.minion === null) {
-    return (<div className="protector"> <img src={ufo}></img> Not own yet. </div>);
+    return (
+      <div className="protector">
+        <div className="left">
+        <img src={ufo}></img>
+        <div className="button">
+          UNLOCK
+        </div>
+        </div>
+        <div className="right">
+          <div>power: ?</div>
+          <div>speed: ?</div>
+          <div>mod: ? </div>
+        </div>
+      </div>
+    );
   } else if ( m.minion.location === null) {
-    return (<div className="protector"> <img src={ufo}></img> is now idling. </div>);
+    return (
+    <div className="protector">
+      <div className="left">
+        <img src={ufo}></img>
+        <div className="button">
+          IDLE
+        </div>
+      </div>
+      <div className="right">
+          <div>power: {m.minion.power}</div>
+          <div>speed: {m.minion.frequency}</div>
+          <div>mod: t </div>
+      </div>
+    </div>
+    );
   } else {
-    return (<div className="protector"> <img src={ufo}></img> is now protecting block {m.minion.location}. </div>);
+    return (
+      <div className="protector">
+        <div className="left">
+          <img src={ufo}></img>
+          <div className="button">
+            INUSE
+          </div>
+        </div>
+        <div className="right">
+          <div>power: {m.minion.power}</div>
+          <div>speed: {m.minion.frequency}</div>
+          <div>mod: t</div>
+        </div>
+      </div>
+    );
   }
 }
 

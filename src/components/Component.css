@@ -39,9 +39,12 @@ div.application {
     display:inline;
     margin:10px;
 }
-
 .tool-bar ul li .weapon-item {
     display: inline-block;
+}
+
+.tool-bar ul li button.right {
+    float:right;
 }
 
 .tool-bar ul li .dye-item {
@@ -55,7 +58,7 @@ div.application {
     position: absolute;
     top:30px;
     height:50px;
-    background-color: #ddd;
+    background-color: #777;
     right:0px;
     left:170px;
 }
@@ -63,6 +66,7 @@ div.application {
 .tool-bar ul {
     padding:5px;
     margin:0px;
+    border-right:1px solid gray;
 }
 
 .tool-bar ul div.dropdown {
@@ -74,6 +78,7 @@ div.application {
 .tool-bar ul li {
     display:inline;
     margin:5px;
+    color:white;
 }
 
 
@@ -97,7 +102,6 @@ div.application {
 
 .drawer {
     height: 400px;
-    width: 900px;
     background-color: transparent;
     margin: auto;
 }
@@ -108,12 +112,53 @@ div.application {
 }
 .guest-info {
     position:absolute;
-    padding:10px;
     top:598px;
     height:200px;
     left:170px;
-    right:0px;
+    right:300px;
     background-color:white;
+}
+
+.guest-info div.event {
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding:5px;
+    margin:5px;;
+    height:60px;
+}
+.alien-info {
+    position:absolute;
+    padding:10px;
+    top:598px;
+    height:200px;
+    left:880px;
+    right:0px;
+    color: white;
+    font-size:12px;
+    background-color:#333;
+}
+
+.alien-info .alien-basic {
+    height:60px;
+}
+
+.alien-info .alien-basic-avator {
+    float:left;
+    height:50px;
+    width:50px;
+    border:1px solid gray;
+}
+
+.alien-info img {
+    height:50px;
+    width: 50px;
+}
+
+.alien-info div.right {
+    width:220px;
+    float:right;
+    margin-left:5px;
+    border:1px solid gray;
 }
 
 .thumbnail {
@@ -127,7 +172,6 @@ div.application {
 
 .thumbnail .content {
     margin:auto;
-    width: 900px;
     height: 100px;
 }
 
@@ -158,20 +202,57 @@ div.application {
 }
 
 .left-menu .protector {
-  margin:10px 10px 0px 10px;
-  border-bottom:1px solid gray;
-  padding:10px 0px 10px 0px;
+  margin:0px 10px 0px 10px;
   clear:both;
   color:white;
-  height:80px;
+  background-color:#777;
+  width:148px;
+  height:90px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding:5px;
+  margin-bottom:5px;
+}
+
+.left-menu .protector .left{
+  float:left;
+  height:60px;
+  width:60px;
+  border-radius: 4px;
+  background-color: #555;
+  border:1px solid gray;
+}
+
+.left-menu .protector .right{
+  width: 70px;
+  margin-left:5px;
+  float:right;
+}
+
+.left-menu .protector .right div {
+    font-size:12px;
+    margin:1px 3px 3px 0px;
+    border:1px solid #333;
+    color:white;
+    border-radius:3px;
+    padding:2px 4px 2px 4px;
 }
 
 .left-menu .protector img {
-  float:left;
   width:50px;
-  margin-right:10px;
   height:50px;
+  margin:5px;
 }
+.left-menu .protector .button {
+    display: block;
+    border: 1px solid #666;
+    border-radius: 5px;
+    background-color:#555;
+    width:60px;
+    height:20px;
+    text-align:center;
+    font-size:9px;
+  }
 
 .minion-selector img {
     float:left;
@@ -180,15 +261,34 @@ div.application {
     height:50px;
   }
 
-.left-menu button {
+.left-menu .button-left {
+    border:1px solid gray;
+    border-radius: 4px;
     height: 30px;
-    margin: 0px 0px 0px 10px;
-    width: 30px;
+    margin: 0px 5px 5px 10px;
+    width: 72px;
     display: inline-block;
     font-size: 14px;
-    font-family: "Impact";
+    font-family: "Arial";
     font-weight: bold;
     clear: both;
+    background-color: #ccc;
+    color: #333;
+}
+
+.left-menu .button-right {
+    border: 1px solid gray;
+    border-radius: 4px;
+    height: 30px;
+    margin: 0px 5px 5px 0px;
+    width: 72px;
+    display: inline-block;
+    font-size: 14px;
+    font-family: "Arial";
+    font-weight: bold;
+    clear: both;
+    background-color: #ccc;
+    color: #333;
 }
 
 .left-menu div.staking {
@@ -251,10 +351,6 @@ div.application {
     width:900px;
 }
 
-div.hide {
-    display:none;
-}
-
 div.drop {
     position:absolute;
     top:550px;
@@ -291,4 +387,20 @@ div.drop img {
 
 div.minion.img {
     position:relative;
+}
+
+
+div.minion-avator {
+    display: inline-block;
+    background-color:#eee;
+    padding:2px;
+    border-radius:12px;
+}
+
+div.minion-avator img {
+    background-color:#555;
+    width:38px;
+    height:38px;
+    border: 1px solid gray;
+    border-radius: 10px;
 }

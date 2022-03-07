@@ -1,29 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from './app/hooks';
-import { LeftMenu } from './components/LeftMenu';
-import { RightPanel } from './layout/RightPanel';
+import { useAppDispatch } from './app/hooks';
+import { clips as MonsterClips} from "./sprite/monster/sprite";
+import { clips as UFOClips} from "./sprite/ufo/sprite";
+import { clips as SketchClips} from "./sketch/sketch";
+import { LoadSprite, Sprite } from './sprite/sprite';
+import { Main } from './layout/Main';
 
 import './App.css';
 
-import {
-    selectTimeClock,
-    updateTimeClockAsync,
-} from './timer/timeSlice';
-
-
 
 function App() {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    setInterval(function () {dispatch(updateTimeClockAsync(0))}, 80);
-  }, [])
-
+  const spriteMonster = new Sprite(2, 100, 80, 13, 0, 0, "run");
+  const spriteUFO = new Sprite(2, 50, 50, 1, 0, 0, "default");
+  const spriteSketch = new Sprite(2, 50, 100, 1, 0, 0, "default");
   return (
     <div className="screen">
-      <div className="application">
-      <LeftMenu></LeftMenu>
-      <RightPanel key="right-panel"></RightPanel>
-      </div>
+      <Main></Main>
+      <LoadSprite sprite={spriteMonster} name="monster" height={100} width={80} clips={MonsterClips}></LoadSprite>
+      <LoadSprite sprite={spriteUFO} name="ufo" height={40} width={40} clips={UFOClips}></LoadSprite>
+      <LoadSprite sprite={spriteSketch} name="sketch" height={100} width={80} clips={SketchClips}></LoadSprite>
     </div>
   );
 }

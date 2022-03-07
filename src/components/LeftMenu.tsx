@@ -19,10 +19,10 @@ export function LeftMenu() {
     <div className="left-menu">
         <div className="padding-top"></div>
         <div className="staking"></div>
-        <button onClick={() => dispatch(home())}> H </button>
-        <button onClick={() => dispatch(world())}> W </button>
-        <button onClick={() => dispatch(vote())}> R </button>
-        <button onClick={() => dispatch(market())}> M </button>
+        <button className="button-left" onClick={() => dispatch(home())}> Home </button>
+        <button className="button-right" onClick={() => dispatch(world())}> World </button>
+        <button className="button-left" onClick={() => dispatch(vote())}> Rank </button>
+        <button className="button-right" onClick={() => dispatch(market())}> Market </button>
         <Inventory></Inventory>
     </div>
   );

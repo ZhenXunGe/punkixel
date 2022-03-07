@@ -1,28 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-    EmptyInstance,
-    World,
     individualWidth,
     individualHeight,
-    getCorIndex, ofCorIndex,
 } from "../data/draw"
 import { toDyeColor } from "../data/palette"
 
 import {
-    action,
-    selectDye,
-    paintColor,
-    selectHomeIndex,
-    selectWorld,
-    selectViewIndex,
-} from '../data/statusSlice';
-
-import {
-  selectTimeClock
-} from '../timer/timeSlice';
+  selectTimeClock,
+  selectViewIndex,
+} from '../dynamic/dynamicSlice';
+import getWorld from '../data/world';
 
 
 interface IProps {
@@ -34,7 +23,6 @@ export function WorldBoard (props: IProps) {
 
   const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
-  const world = useAppSelector(selectWorld);
   const timeClock = useAppSelector(selectTimeClock);
   const viewIndex = useAppSelector(selectViewIndex);
 
@@ -60,7 +48,7 @@ export function WorldBoard (props: IProps) {
         }
       }
     };
-    let drawer = world.getInstance(viewIndex*individualWidth).drawer;
+    let drawer = getWorld().getInstance(viewIndex*individualWidth).drawer;
     drawer.draw(painter, viewIndex*individualWidth);
     context.putImageData(image,0,0);
   }, [viewIndex, timeClock])
@@ -68,7 +56,7 @@ export function WorldBoard (props: IProps) {
   return (
     <div className="main-board">
     <div className="drawer" onClick={(e) => {clickEvent(e);}}>
-    <canvas key="drawer-world-board" height="400" width="900" ref={canvasRef}>
+    <canvas key="drawer-world-board" height="400" width={`${individualWidth*ratio}`} ref={canvasRef}>
         Drawer Drawer
     </canvas>
     </div>

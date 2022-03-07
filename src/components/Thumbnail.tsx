@@ -3,22 +3,20 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { toDyeColor } from '../data/palette';
 
 import {
-  selectWorld,
   selectSketchSignal,
-  selectViewIndex,
 } from '../data/statusSlice';
 
 import {
     individualWidth,
-    individualHeight,
 } from "../data/draw"
+import { selectViewIndex } from '../dynamic/dynamicSlice';
+import getWorld from '../data/world';
 
 export function Thumbnail() {
   let ratio = 1;
 
   const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
-  const world = useAppSelector(selectWorld);
   const sketchSignal = useAppSelector(selectSketchSignal);
   const viewIndex = useAppSelector(selectViewIndex);
   useEffect(() => {
@@ -39,14 +37,14 @@ export function Thumbnail() {
         }
       }
     };
-    world.rend(painter, viewIndex*individualWidth);
+    getWorld().rend(painter, viewIndex*individualWidth);
     context.putImageData(image,0,0);
   }, [viewIndex, sketchSignal])
 
   return (
     <div className="thumbnail">
       <div className="content">
-        <canvas height="100" width="900" ref={canvasRef} key="thumbnail-canvas">
+        <canvas height="100" width={`${individualWidth*4}`} ref={canvasRef} key="thumbnail-canvas">
         Drawer Drawer
         </canvas>
       </div>

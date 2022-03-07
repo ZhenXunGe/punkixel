@@ -1,14 +1,15 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import panelReducer from '../layout/layoutSlice';
 import statusReducer from '../data/statusSlice';
-import timerReducer from '../timer/timeSlice';
-
+import dynamicReducer from '../dynamic/dynamicSlice';
+import spriteReducer from '../sprite/spriteSlice';
 export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
         ignoredActions: [
+          'sprite/installSprite'
         ],
         // Ignore these field paths in all actions
         ignoredActionPaths: ['status.world'],
@@ -21,7 +22,8 @@ export const store = configureStore({
   reducer: {
     panel: panelReducer,
     status: statusReducer,
-    timer: timerReducer,
+    dynamic: dynamicReducer,
+    sprite: spriteReducer,
   },
 });
 

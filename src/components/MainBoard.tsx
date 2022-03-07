@@ -4,9 +4,7 @@ import {
   action,
   selectEnergy,
 } from '../data/statusSlice';
-import {updateTimeClockAsync} from "../timer/timeSlice";
 import { PunkxielDrawer } from "./Drawer";
-import { World } from "../data/draw";
 
 export function MainBoard () {
   const dispatch = useAppDispatch();
