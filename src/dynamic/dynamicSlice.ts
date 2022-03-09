@@ -1,33 +1,45 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import { rawListeners } from 'process';
 import { RootState } from '../app/store';
 import { Alien } from '../data/alien';
 import { individualWidth } from '../data/draw';
 import getWorld from '../data/world';
+import { BulletInfo } from './bullet';
 import { Event }  from './event';
 
-interface BulletInfo {
-  x: number;
-  y: number;
-  source: number;
-  power:number;
+
+
+
+var bullets: Array<BulletInfo> = [];
+
+export function addBullet(d:BulletInfo) {
+  bullets.push(d);
+};
+
+export function resetBullets(){
+  bullets = [];
+};
+
+export function allBullets(){
+  return bullets;
 }
 
 export interface DynamicState {
     timeClock: number;
     contribution: number;
-    bullets: Array<BulletInfo>;
     events: Array<Event>;
     alien: Alien;
     viewIndex: number;
+    sketchSignal: number;
 }
 
 const initialState: DynamicState = {
   contribution:0,
   timeClock: 0,
-  bullets: [],
   events:[],
   alien: {name:"GruStoood", alienId: 0, pos:0, status:"run", dizzle:0},
   viewIndex: 0,
+  sketchSignal: 0,
 };
 
 function timeout(ms:number) {
@@ -42,12 +54,6 @@ export const updateTimeClockAsync = createAsyncThunk(
     }
 )
 
-const distance = (a:BulletInfo, b:[number, number]) => {
-  let dx = a.x - b[0];
-  let dy = a.y - b[1];
-  return Math.sqrt((dx * dx) + (dy * dy));
-} 
-
 export const dynamicSlice = createSlice({
   name: 'dynamic',
   initialState,
@@ -55,35 +61,24 @@ export const dynamicSlice = createSlice({
     addEvent: (state, d) => {
       state.events.unshift(d.payload);
     },
-    addBullet: (state, d) => {
-      state.bullets.push(d.payload);
-    },
-    resetBullets: (state) => {
-      console.log("reset bullets");
-      state.bullets = [];
+    signalSketch: (state) => {
+      state.sketchSignal ++;
     },
     signalBulletsUpdate: (state, d) => {
       let cs = [];
       let cor:[number, number] = d.payload;
-      for (var i=0;i<state.bullets.length;i++) {
-        let b = state.bullets[i];
-        let d = distance(b, cor);
-        if (d > 20) {
-          let dnext = d - 20;
-          b.x = (dnext/d) * (b.x - cor[0]) + cor[0];
-          b.y = (dnext/d) * (b.y - cor[1]) + cor[1];
-          cs.push(b);
-        } else if (d>10){
-          b.x = cor[0];
-          b.y = cor[1];
-          cs.push(b);
-        } else {
+      for (var i=0;i<bullets.length;i++) {
+        let b = bullets[i];
+        let hit = b.approach(cor[0], cor[1]);
+        if (hit) {
           if (b.source === 1) {
             state.contribution += 1;
           }
+        } else {
+          cs.push(b);
         }
       }
-      state.bullets = cs;
+      bullets = cs;
     },
     signalAlien: (state, d) => {
       let status = d.payload;
@@ -120,11 +115,11 @@ export const dynamicSlice = createSlice({
       })
   },
 });
-export const { resetBullets, signalBulletsUpdate, addBullet, signalAlien, switchView, addEvent } = dynamicSlice.actions;
+export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch } = dynamicSlice.actions;
 export const selectTimeClock = (state: RootState) => state.dynamic.timeClock;
-export const selectBullets = (state: RootState) => state.dynamic.bullets;
 export const selectContribution = (state: RootState) => state.dynamic.contribution;
 export const selectEvents = (state: RootState) => state.dynamic.events;
 export const selectAlien = (state: RootState) => state.dynamic.alien;
 export const selectViewIndex = (state: RootState) => state.dynamic.viewIndex;
+export const selectSketchSignal = (state: RootState) => state.dynamic.sketchSignal;
 export default dynamicSlice.reducer;

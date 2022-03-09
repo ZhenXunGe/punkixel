@@ -21,12 +21,11 @@ import {
     selectDye,
     paintColor,
     selectHomeIndex,
-    selectSketchSignal,
-    signalSketch,
 } from '../data/statusSlice';
 
 import {
-  selectTimeClock,
+  selectSketchSignal,
+  selectTimeClock, signalSketch,
 } from '../dynamic/dynamicSlice';
 import getWorld from '../data/world';
 

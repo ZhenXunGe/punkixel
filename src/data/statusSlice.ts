@@ -20,7 +20,6 @@ export interface StatusState {
     palettes: Array<ColorCategory>;
     dye_focus: number;
     homeIndex: number;
-    sketchSignal: number;
     inventory: Array<Minion | null>;
 }
 
@@ -46,7 +45,6 @@ const initialState: StatusState = {
     reward: 0,
     inventory: [randomMinion(1), randomMinion(1), null, null, null],
     homeIndex: 1,
-    sketchSignal: 0,
 };
 
 function timeout(ms:number) {
@@ -67,10 +65,6 @@ export const statusSlice = createSlice({
 
     paintColor: (state, d) => {
       state.pph += d.payload.weight;
-    },
-
-    signalSketch: (state) => {
-      state.sketchSignal ++;
     },
 
     signalPlaceMinion: (state, d) => {
@@ -95,7 +89,7 @@ export const statusSlice = createSlice({
 
 export const { paintColor, pickColor,
     action,
-    signalSketch, signalPlaceMinion,
+    signalPlaceMinion,
 } = statusSlice.actions;
 
 export const selectEnergy = (state: RootState) => state.status.energy;
@@ -107,7 +101,6 @@ export const selectReward = (state: RootState) => state.status.reward;
 export const selectDye = (state: RootState) => state.status.dye_focus;
 export const selectPalettes = (state: RootState) => state.status.palettes;
 export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
-export const selectSketchSignal = (state: RootState) => state.status.sketchSignal;
 export const selectInventory = (state: RootState) => state.status.inventory;
 
 export default statusSlice.reducer;

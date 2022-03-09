@@ -27,5 +27,3 @@ export function getMinionById(instances:Array<Minion>, id:string):Minion {
 export function availableMinions(instances:Array<Minion|null>) :Array<Minion> {
   return instances.filter((m)=>{return (m !== null)}).map((x) => {return x!});
 }
-
-

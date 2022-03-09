@@ -1,5 +1,5 @@
 import { Alien } from "../data/alien";
-import { Instance } from "../data/world";
+import { Instance } from "../data/instance";
 
 
 

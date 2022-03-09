@@ -1,15 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { toDyeColor } from '../data/palette';
-
-import {
-  selectSketchSignal,
-} from '../data/statusSlice';
-
 import {
     individualWidth,
 } from "../data/draw"
-import { selectViewIndex } from '../dynamic/dynamicSlice';
+import { selectSketchSignal, selectViewIndex } from '../dynamic/dynamicSlice';
 import getWorld from '../data/world';
 
 export function Thumbnail() {

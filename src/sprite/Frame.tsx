@@ -6,17 +6,18 @@ import {
   resetBullets,
   addBullet,
   signalBulletsUpdate,
-  selectBullets,
   signalAlien,
   switchView,
   addEvent,
   selectAlien,
   selectViewIndex,
+  allBullets,
 } from '../dynamic/dynamicSlice';
 import { Sprite } from './sprite';
 import { BsPrefixComponent } from 'react-bootstrap/esm/helpers';
 import getWorld from '../data/world';
 import { AlienEvent } from '../dynamic/event';
+import { TrackBullet } from '../dynamic/bullet';
 
 interface IProps {
     monster: Sprite;
@@ -29,7 +30,7 @@ export default function Frame(prop: IProps) {
   const timeClock = useAppSelector(selectTimeClock);
   const dispatch = useAppDispatch();
   const alien = useAppSelector(selectAlien);
-  const bullets = useAppSelector(selectBullets);
+
   const viewIndex = useAppSelector(selectViewIndex);
 
   useEffect(() => {
@@ -42,25 +43,20 @@ export default function Frame(prop: IProps) {
       canvas?.clearRect(0,0, 900,400);
       prop.monster?.paint(prop.canvasRef?.current!, pos, 300, timeClock);
       dispatch(signalAlien(state));
-      for (var b of bullets) {
+      for (var b of allBullets()) {
         /*if (Math.abs(b.x-pos-43) + Math.abs(b.y - 340) <20) {
           if (canvas) {canvas!.fillStyle = "#ff0000"};
           canvas?.arc(b.x, b.y, 10,0,360, true);
         } else*/ {
-          canvas?.save();
-          canvas?.translate(b.x, b.y);
-          let angle = Math.atan(b.x-pos-50) / (380-b.y)*180/Math.PI;
-          canvas?.rotate(angle + 90);
-          let img = prop.minion.getFrame("missle",0);
-          canvas?.drawImage(img,0,0,16,7)
-          canvas?.restore();
+          b.paint(canvas!, prop.minion);
         }
       }
-      dispatch(signalBulletsUpdate([pos+50, 300+40]));
+      let alien_center_x = pos + 50;
+      dispatch(signalBulletsUpdate([alien_center_x, 300+40]));
       let idx = Math.floor(alien.pos / individualWidth);
       if (viewIndex != idx) {
         dispatch(switchView(idx));
-        dispatch(resetBullets());
+        resetBullets();
         dispatch(addEvent(AlienEvent(alien, getWorld().getInstance(idx))));
       }
       minions.map((m,i) => {
@@ -68,7 +64,11 @@ export default function Frame(prop: IProps) {
         m.countingdown--;
         if (m.countingdown <=0) {
             m.countingdown = m.frequency;
-            dispatch(addBullet({x:m.x+10, y:m.y+10, source:m.home, power:m.power}));
+            let rotate = 0;
+            if (m.x > alien_center_x) {
+              rotate = 180;
+            }
+            addBullet(new TrackBullet(m.x+20, m.y+20, 20, m.power, 0, rotate, m.home));
         }
       });
       //console.log("alien pos:", alien.pos, idx, individualWidth);

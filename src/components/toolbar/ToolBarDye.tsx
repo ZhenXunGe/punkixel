@@ -9,12 +9,12 @@ import {
     selectPalettes,
     selectDye,
     pickColor,
-    signalSketch,
     selectHomeIndex,
 } from '../../data/statusSlice';
 import { ofDyeIndex, toDyeColor, toDyeIndex } from '../../data/palette';
 import { getSprite } from '../../sprite/spriteSlice';
 import getWorld from '../../data/world';
+import { signalSketch } from '../../dynamic/dynamicSlice';
 
 export function ToolBarDye() {
   const palettes = useAppSelector(selectPalettes);
