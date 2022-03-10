@@ -3,6 +3,7 @@ import { rawListeners } from 'process';
 import { RootState } from '../app/store';
 import { Alien } from '../data/alien';
 import { individualWidth } from '../data/draw';
+import { availableMinions, getMinionById } from '../data/minion';
 import getWorld from '../data/world';
 import { BulletInfo } from './bullet';
 import { Event }  from './event';
@@ -31,6 +32,7 @@ export interface DynamicState {
     alien: Alien;
     viewIndex: number;
     sketchSignal: number;
+    damage: number;
 }
 
 const initialState: DynamicState = {
@@ -40,6 +42,7 @@ const initialState: DynamicState = {
   alien: {name:"GruStoood", alienId: 0, pos:0, status:"run", dizzle:0},
   viewIndex: 0,
   sketchSignal: 0,
+  damage:0,
 };
 
 function timeout(ms:number) {
@@ -69,20 +72,27 @@ export const dynamicSlice = createSlice({
       let cor:[number, number] = d.payload;
       for (var i=0;i<bullets.length;i++) {
         let b = bullets[i];
-        let hit = b.approach(cor[0], cor[1]);
+        let [done, hit] = b.approach(cor[0], cor[1]);
         if (hit) {
           if (b.source === 1) {
             state.contribution += 1;
           }
-        } else {
+          state.damage += b.power;
+          if (state.damage > 200) {
+            state.alien.status = "dizzle";
+            state.alien.dizzle = 20;
+            state.damage = 0;
+          }
+          console.log(`alien has taken ${state.damage} damage`);
+        }
+        if (!done) {
           cs.push(b);
         }
       }
       bullets = cs;
     },
-    signalAlien: (state, d) => {
-      let status = d.payload;
-      let def = "run";
+    signalAlien: (state) => {
+      let status = state.alien.status;
       if (status == "run") {
         state.alien.pos += 1;
         if (state.alien.pos >= individualWidth * getWorld().instances.length) {
@@ -90,23 +100,29 @@ export const dynamicSlice = createSlice({
         }
       }
       if (status == "dizzle") {
-        if (state.alien.status!="dizzle") {
-          let instance = getWorld().getInstanceById(state.viewIndex);
-          console.log("drop...", state.viewIndex, instance.info.id);
-          instance.info.drops.push(state.alien.pos % individualWidth);
-          state.alien.dizzle = 20;
-        } else {
-          state.alien.dizzle -= 1;
-        }
+        //let instance = getWorld().getInstanceById(state.viewIndex);
+        //instance.info.drops.push(state.alien.pos % individualWidth);
+        state.alien.dizzle -= 1;
         if (state.alien.dizzle == 0) {
-          status = def;
+          state.alien.status = "run";
         }
       }
-      state.alien.status = status;
     },
     switchView: (state, d) => {
       state.viewIndex = d.payload;
     },
+    signalPlaceMinion: (state, d) => {
+      let viewIndex = d.payload.viewIndex;
+      let instance = getWorld().getInstance(viewIndex*individualWidth);
+      //let m = randomMinion();
+      let m = {
+        ...
+        d.payload.minion
+      }
+      instance.info.minions.push(m);
+      //console.log("minion added");
+      d.payload.location = viewIndex;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -115,7 +131,7 @@ export const dynamicSlice = createSlice({
       })
   },
 });
-export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch } = dynamicSlice.actions;
+export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch, signalPlaceMinion,} = dynamicSlice.actions;
 export const selectTimeClock = (state: RootState) => state.dynamic.timeClock;
 export const selectContribution = (state: RootState) => state.dynamic.contribution;
 export const selectEvents = (state: RootState) => state.dynamic.events;

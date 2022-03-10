@@ -66,20 +66,6 @@ export const statusSlice = createSlice({
     paintColor: (state, d) => {
       state.pph += d.payload.weight;
     },
-
-    signalPlaceMinion: (state, d) => {
-      let viewIndex = d.payload.viewIndex;
-      let mId = d.payload.mId;
-      let instance = getWorld().getInstance(viewIndex*individualWidth);
-      let minion = getMinionById(availableMinions(state.inventory), mId)!;
-      let m = {
-        ...minion
-      }
-      //let m = randomMinion();
-      instance.info.minions.push(m);
-      //console.log("minion added");
-      minion.location = viewIndex;
-    }
   },
   extraReducers: (builder) => {
   },
@@ -89,7 +75,6 @@ export const statusSlice = createSlice({
 
 export const { paintColor, pickColor,
     action,
-    signalPlaceMinion,
 } = statusSlice.actions;
 
 export const selectEnergy = (state: RootState) => state.status.energy;
@@ -102,5 +87,4 @@ export const selectDye = (state: RootState) => state.status.dye_focus;
 export const selectPalettes = (state: RootState) => state.status.palettes;
 export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
 export const selectInventory = (state: RootState) => state.status.inventory;
-
 export default statusSlice.reducer;

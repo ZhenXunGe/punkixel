@@ -2,11 +2,12 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { selectInventory, signalPlaceMinion } from "../data/statusSlice";
+import { selectInventory, } from "../data/statusSlice";
 import { MinionSelector } from "../components/Inventory";
-import { addEvent, selectViewIndex } from "../dynamic/dynamicSlice";
+import { addEvent, selectViewIndex, signalPlaceMinion } from "../dynamic/dynamicSlice";
 import { ProtectingEvent } from "../dynamic/event";
 import getWorld from "../data/world";
+import { availableMinions, getMinionById } from "../data/minion";
 
 
 export default function Contribute() {
@@ -20,7 +21,8 @@ export default function Contribute() {
   const dispatch = useAppDispatch();
   const viewIndex = useAppSelector(selectViewIndex);
   const handleConfirm = () => {
-    dispatch(signalPlaceMinion({mId:minionId, viewIndex:viewIndex}));
+    let minion = getMinionById(availableMinions(inventory), minionId!)!;
+    dispatch(signalPlaceMinion({minion:minion, viewIndex:viewIndex}));
     dispatch(addEvent(ProtectingEvent("GruPlayer 1", getWorld().getInstance(viewIndex))));
     setShow(false);
   }

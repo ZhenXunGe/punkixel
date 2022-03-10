@@ -1,4 +1,4 @@
-import React, {useEffect, MutableRefObject } from 'react';
+import React, {useEffect, MutableRefObject, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { individualWidth } from "../data/draw";
 import {
@@ -14,10 +14,9 @@ import {
   allBullets,
 } from '../dynamic/dynamicSlice';
 import { Sprite } from './sprite';
-import { BsPrefixComponent } from 'react-bootstrap/esm/helpers';
 import getWorld from '../data/world';
 import { AlienEvent } from '../dynamic/event';
-import { TrackBullet } from '../dynamic/bullet';
+import { Minion, spawnBullet } from '../data/minion';
 
 interface IProps {
     monster: Sprite;
@@ -30,19 +29,18 @@ export default function Frame(prop: IProps) {
   const timeClock = useAppSelector(selectTimeClock);
   const dispatch = useAppDispatch();
   const alien = useAppSelector(selectAlien);
-
+  const [minions, setMinions] = useState<Minion[]>([]);
   const viewIndex = useAppSelector(selectViewIndex);
 
   useEffect(() => {
-      let instance = getWorld().getInstance(viewIndex*individualWidth);
-      let minions = instance.info.minions;
+      let minions = getWorld().getInstance(viewIndex*individualWidth).info.minions;
       let state = alien.status;
       prop.monster.setState(state);
       let canvas = prop.canvasRef?.current!.getContext("2d");
       let pos = (alien.pos % (individualWidth)) * ratio;
-      canvas?.clearRect(0,0, 900,400);
+      canvas?.clearRect(0,0, 1000,400);
       prop.monster?.paint(prop.canvasRef?.current!, pos, 300, timeClock);
-      dispatch(signalAlien(state));
+      dispatch(signalAlien());
       for (var b of allBullets()) {
         /*if (Math.abs(b.x-pos-43) + Math.abs(b.y - 340) <20) {
           if (canvas) {canvas!.fillStyle = "#ff0000"};
@@ -52,7 +50,8 @@ export default function Frame(prop: IProps) {
         }
       }
       let alien_center_x = pos + 50;
-      dispatch(signalBulletsUpdate([alien_center_x, 300+40]));
+      let alien_center_y = 300 + 40;
+      dispatch(signalBulletsUpdate([alien_center_x, alien_center_y]));
       let idx = Math.floor(alien.pos / individualWidth);
       if (viewIndex != idx) {
         dispatch(switchView(idx));
@@ -64,18 +63,14 @@ export default function Frame(prop: IProps) {
         m.countingdown--;
         if (m.countingdown <=0) {
             m.countingdown = m.frequency;
-            let rotate = 0;
-            if (m.x > alien_center_x) {
-              rotate = 180;
-            }
-            addBullet(new TrackBullet(m.x+20, m.y+20, 20, m.power, 0, rotate, m.home));
+            addBullet(spawnBullet(m, alien_center_x, alien_center_y, 20, m.power, 0, m.home));
         }
       });
       //console.log("alien pos:", alien.pos, idx, individualWidth);
   }, [timeClock])
 
   useEffect(() => {
-    dispatch(signalAlien("run"));
+    dispatch(signalAlien());
   }, []);
   return(<>abc</>);
 }
