@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { individualWidth } from '../../data/draw';
 import getWorld from '../../data/world';
 import { selectViewIndex } from '../../dynamic/dynamicSlice';
-import minion from "../../sprite/ufo/ufo.png";
+import minion from "../../sprite/ufo/ufo0.png";
 
 export function MinionAvator() {
     return (<div className="minion-avator"><img src={minion} className="minion-avator"></img></div>)

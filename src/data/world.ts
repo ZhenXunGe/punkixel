@@ -25,6 +25,7 @@ export interface Player {
 
 export class World {
   cursor: number;
+  weather: string;
   instances: Array<Instance>;
   minions: Map<string, Minion>;
   players: Map<string, Player>;
@@ -34,6 +35,7 @@ export class World {
     this.minions = new Map<string, Minion>();
     this.players = new Map<string, Player>();
     this.instances = [];
+    this.weather = "normal";
   }
   getInstance(center_position: number) {
     return this.instances[Math.floor(center_position / individualWidth)];
@@ -68,6 +70,12 @@ export class World {
       }
     }
     this.cursor = pos;
+  }
+
+  flipWeather() {
+    let w = ['rain', 'default', 'snow'];
+    let r = w[Math.floor(Math.random()*3)];
+    this.weather = r;
   }
 
   registerPlayer(p: Player) {

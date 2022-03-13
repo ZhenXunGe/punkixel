@@ -109,6 +109,7 @@ export const dynamicSlice = createSlice({
     },
     switchView: (state, d) => {
       state.viewIndex = d.payload;
+      getWorld().flipWeather();
     },
     signalPlaceMinion: (state, d) => {
       let viewIndex = d.payload.viewIndex;

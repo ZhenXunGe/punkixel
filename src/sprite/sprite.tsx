@@ -75,6 +75,19 @@ export class Sprite {
         console.log("clip", this.currentClip);
       }
     }
+    paintAt(canvas:HTMLCanvasElement, x:number, y:number, f:number) {
+      if (this.sheet[this.currentClip]) {
+        let frame = this.sheet[this.currentClip][f];
+        if (frame) {
+        //console.log("frame is: ", frame);
+        let ctx = canvas.getContext("2d");
+        ctx?.drawImage(frame, x, y, this.frameWidth, this.frameHeight);
+        }
+      }
+      else {
+        console.log("clip", this.currentClip);
+      }
+    }
     switchClip(clip: string) {
       this.currentClip = clip;
     }

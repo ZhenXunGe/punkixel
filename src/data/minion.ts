@@ -1,5 +1,4 @@
 import { BulletInfo, StraightBullet, TrackBullet } from "../dynamic/bullet";
-import { world } from "../layout/layoutSlice";
 import { World } from "./world";
 
 type Modifier = "splash" | "track" | "straight" | "freeze" | "ignite";
@@ -23,10 +22,13 @@ export interface Minion {
   countingdown: number;
   modifier: Array<Modifier>;
   contribution: number;
+  style: number;
 }
 
 const mWidth = 50;
 const mHeight = 50;
+
+const minionStyle = ["default", "extend"];
 
 export function randomMinion(owner:string, world:World): Minion {
   let x = Math.random() * 900;
@@ -45,7 +47,8 @@ export function randomMinion(owner:string, world:World): Minion {
       id:id,
       owner:owner,
       modifier:randomModifier(),
-      contribution:0
+      contribution:0,
+      style: Math.floor(Math.random()*5),
     };
   world.registerMinion(m);
   return m;
