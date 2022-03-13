@@ -1,5 +1,5 @@
 import { Dye, DyeIndex, IsNillDye } from "./palette";
-import { sketch, sketchBuild } from "../sketch/sketch";
+import { drawBuildings, sketchBuildings, drawRoad } from "../sketch/sketch";
 import { Sprite } from "../sprite/sprite";
 
 /* Size of the individual home */
@@ -31,7 +31,7 @@ export function ofCorIndex(idx: number) {
   return [x,y]
 }
 
-export type Painter = (x:number, y:number, c:number) => void
+export type Painter = (x:number, y:number, c:number, alpha:number) => void
 
 export class Drawer {
     pixels: Array<Array<DyeIndex>>;
@@ -68,9 +68,9 @@ export class Drawer {
         }
       }
       if (!IsNillDye(dye)) {
-        paint(x + this.offset - cursor, y, dye);
+        paint(x + this.offset - cursor, y, dye, 255);
       } else {
-        paint(x + this.offset - cursor, y, (x + y) %2);
+        paint(x + this.offset - cursor, y, (x + y) %2, 90);
       }
     }
 
@@ -142,8 +142,8 @@ export class Drawer {
       }
     }
     resetSketch() {
-      let items_front = sketch(individualWidth, individualHeight, 30);
-      let items_back = sketch(individualWidth, individualHeight, 30);
+      let items_front = sketchBuildings(individualWidth, individualHeight, 30);
+      let items_back = sketchBuildings(individualWidth, individualHeight, 30);
       for (var item of items_front) {
         this.drawPolygon(sketchLayer, 1*16 + 6, item.x, item.y, item.h, item.w);
       }
@@ -151,24 +151,86 @@ export class Drawer {
         this.drawPolygon(sketchLayer, 1*16 + 6, item.x, item.y, item.h, item.w);
       }
     }
-    sketchWithStyle(canvas:HTMLCanvasElement, template:Sprite) {
+    sketchWithStyle(canvas:HTMLCanvasElement, template:Sprite, main:string, road: string) {
       for (var i=0; i<content_size; i++) {
         this.setPixel(i, 0);
       }
 
-      let items_front2 = sketch(individualWidth, individualHeight, 30, 1);
-      let items_front = sketch(individualWidth, individualHeight, 30, 2);
-      let items_back = sketch(individualWidth, individualHeight, 30,0);
+      let items_front = sketchBuildings(individualWidth, individualHeight, 30, 1);
+      let items_back = sketchBuildings(individualWidth, individualHeight, 30,0);
       for (var item of items_back) {
-        sketchBuild(this, canvas, template, item.w, item.h, item.x, item.y, -4);
-      }
-      for (var item of items_front2) {
-        sketchBuild(this, canvas, template, item.w, item.h, item.x, item.y, -2);
+        drawBuildings(this, canvas, template, item.w, item.h, item.x, item.y, -2, main);
       }
       for (var item of items_front) {
-        sketchBuild(this, canvas, template, item.w, item.h, item.x, item.y, 0);
+        drawBuildings(this, canvas, template, item.w, item.h, item.x, item.y, 0,  main);
       }
+      drawRoad(this, template, canvas, road);
     }
 }
 
+interface Drop {
+  x: number;
+  y: number;
+  l: number;
+  xs: number;
+  ys: number;
+}
+class Rain {
+  init: Drop[];
+  maxParts: number;
+  particles: Drop[];
+  w: number;
+  h: number;
+  constructor(w: number, h: number) {
+    this.init = [];
+    this.particles = [];
+    this.maxParts = 1000;
+    this.w = w;
+    this.h = w;
+    for (var a = 0; a < this.maxParts; a++) {
+      this.init.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        l: Math.random() * 1,
+        xs: -4 + Math.random() * 4 + 2,
+        ys: Math.random() * 10 + 10
+      })
+    }
+    for(var b = 0; b < this.maxParts; b++) {
+      this.particles.push(this.init[b]);
+    }
+  }
+  move() {
+    for(var b = 0; b < this.particles.length; b++) {
+      var p = this.particles[b];
+      p.x += p.xs;
+      p.y += p.ys;
+      if(p.x > this.w || p.y > this.h) {
+        p.x = Math.random() * this.w;
+        p.y = -20;
+      }
+    }
+  }
+}
 
+const rain = new Rain(1000, 400);
+
+export function drawWeather(canvas: HTMLCanvasElement) {
+  if (canvas.getContext) {
+    var ctx = canvas.getContext('2d')!;
+    var w = canvas.width;
+    var h = canvas.height;
+    ctx.strokeStyle = 'rgba(174,194,224,0.5)';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    ctx.clearRect(0, 0, w, h);
+    for (var c = 0; c < rain.particles.length; c++) {
+      var p = rain.particles[c];
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + p.l * p.xs, p.y + p.l * p.ys);
+      ctx.stroke();
+    }
+    rain.move();
+  }
+};

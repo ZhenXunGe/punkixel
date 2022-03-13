@@ -12,9 +12,7 @@ import {
     selectHomeIndex,
 } from '../../data/statusSlice';
 import { ofDyeIndex, toDyeColor, toDyeIndex } from '../../data/palette';
-import { getSprite } from '../../sprite/spriteSlice';
-import getWorld from '../../data/world';
-import { signalSketch } from '../../dynamic/dynamicSlice';
+import Sketch from "../../modals/sketch";
 
 export function ToolBarDye() {
   const palettes = useAppSelector(selectPalettes);
@@ -24,21 +22,7 @@ export function ToolBarDye() {
   const pickedDye = useAppSelector(selectDye);
   const homeIndex = useAppSelector(selectHomeIndex);
   const canvasRef = useRef<HTMLCanvasElement>();
-  const spriteSketch = getSprite("sketch");
-  const onSketch = () => {
-    for(var i=0;i<getWorld().instances.length;i++){
-      let d = getWorld().getInstance(i*individualWidth).drawer;
-      d.reset();
-      d.sketchWithStyle(canvasRef.current!,spriteSketch);
-    }
-    /*
-    let d = world.getInstance(homeIndex*individualWidth).drawer;
-    d.reset();
-    d.sketchWithStyle(canvasRef.current!,spriteSketch);
-    //d.resetSketch();
-    */
-    dispatch(signalSketch())
-  };
+
   /*
   useEffect(() => {
     for(var i=0;i<world.instances.length;i++){
@@ -104,7 +88,7 @@ export function ToolBarDye() {
                     <li>{palettes[pickedCategory].palettes[pickedPalette].pph} PPH Per Pixel</li>
                 </ul>
             </li>
-            <li><Button onClick={() => onSketch()}> sketch </Button></li>
+            <li><Sketch main="building" road="road" background={1} canvas={canvasRef} ></Sketch></li>
         </ul>
     </div>
   );

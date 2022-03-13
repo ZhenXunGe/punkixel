@@ -1,18 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { Palette, Dye, red_palette, gray_palette, liquid_green_palette, liquid_blue_palette,} from  './palette';
+import { Palette, Dye, red_palette, gray_palette, liquid_green_palette, liquid_blue_palette, ColorCategory,} from  './palette';
 import { individualWidth } from "./draw"
-import { availableMinions, getMinionById, Minion, randomMinion } from "./minion";
+import { randomMinion } from "./minion";
 import getWorld from './world';
-
-interface ColorCategory {
-  name:string;
-  palettes: Array<Palette>;
-}
 
 export interface StatusState {
     energy: number;
     punkxiel: number;
+    contribution: number;
     ranking: number;
     pph: number;
     voucher: number;
@@ -20,12 +16,13 @@ export interface StatusState {
     palettes: Array<ColorCategory>;
     dye_focus: number;
     homeIndex: number;
-    inventory: Array<Minion | null>;
+    inventory: Array<string | null>;
 }
 
 const initialState: StatusState = {
     energy: 50,
     punkxiel: 1000,
+    contribution: 0,
     ranking: 9999,
     pph: 0,
     voucher: 1,
@@ -43,7 +40,7 @@ const initialState: StatusState = {
     ],
     dye_focus: 0,
     reward: 0,
-    inventory: [randomMinion(1), randomMinion(1), null, null, null],
+    inventory: [],
     homeIndex: 1,
 };
 
@@ -56,8 +53,17 @@ export const statusSlice = createSlice({
   name: 'status',
   initialState,
   reducers: {
-    action: (state) => {
-      state.energy -= 1;
+    updateStatus: (state) => {
+      let player = getWorld().getPlayer("solo");
+      state.punkxiel = player.punkxiel;
+      state.inventory = player.inventory;
+      let total = 0;
+      for (var m of state.inventory) {
+        if (m!==null) {
+          total += getWorld().getMinion(m).contribution;
+        }
+      };
+      state.contribution = total;
     },
     pickColor: (state, d) => {
       state.dye_focus = d.payload;
@@ -74,7 +80,7 @@ export const statusSlice = createSlice({
 });
 
 export const { paintColor, pickColor,
-    action,
+    updateStatus,
 } = statusSlice.actions;
 
 export const selectEnergy = (state: RootState) => state.status.energy;
@@ -87,4 +93,5 @@ export const selectDye = (state: RootState) => state.status.dye_focus;
 export const selectPalettes = (state: RootState) => state.status.palettes;
 export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
 export const selectInventory = (state: RootState) => state.status.inventory;
+export const selectContribution = (state: RootState) => state.status.contribution;
 export default statusSlice.reducer;

@@ -6,12 +6,15 @@ import { Instance } from "../data/instance";
 export interface Event {
     id: number;
     tx: number;
-    time: Date;
+    time: number;
     description: string;
     source: any;
 }
 
 const AlienMoveEvent = 0x10;
+const AlienKnockEvent = 0x20;
+const MinionProtectingEvent = 0x11;
+
 
 
 export function AlienEvent(monster: Alien, instance: Instance) {
@@ -27,7 +30,7 @@ export function AlienEvent(monster: Alien, instance: Instance) {
 
 export function ProtectingEvent(user: string, instance: Instance) {
     return {
-        id: AlienMoveEvent,
+        id: MinionProtectingEvent,
         tx: 0,
         time: Date.now(),
         source: user,
@@ -35,3 +38,12 @@ export function ProtectingEvent(user: string, instance: Instance) {
     }
 }
 
+export function DropEvent(user: string, instance: Instance):Event {
+    return {
+        id: AlienKnockEvent,
+        tx: 0,
+        time: Date.now(),
+        source: user,
+        description: `Alien ${user} was knocked in ${instance.info.id}, 100 punkxiels dropped`,
+    }
+}

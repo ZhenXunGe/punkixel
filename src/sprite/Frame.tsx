@@ -59,11 +59,12 @@ export default function Frame(prop: IProps) {
         dispatch(addEvent(AlienEvent(alien, getWorld().getInstance(idx))));
       }
       minions.map((m,i) => {
-        prop.minion?.paint(prop.canvasRef?.current!, m.x, m.y, timeClock);
-        m.countingdown--;
-        if (m.countingdown <=0) {
-            m.countingdown = m.frequency;
-            addBullet(spawnBullet(m, alien_center_x, alien_center_y, 20, m.power, 0, m.home));
+        let minion = getWorld().getMinion(m);
+        prop.minion?.paint(prop.canvasRef?.current!, minion.x, minion.y, timeClock);
+        minion.countingdown--;
+        if (minion.countingdown <=0) {
+            minion.countingdown = minion.frequency;
+            addBullet(spawnBullet(minion, alien_center_x, alien_center_y));
         }
       });
       //console.log("alien pos:", alien.pos, idx, individualWidth);

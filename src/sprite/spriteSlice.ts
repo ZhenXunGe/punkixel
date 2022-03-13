@@ -36,9 +36,6 @@ export const spriteSlice = createSlice({
       let sinfo :SpriteInfo = d.payload;
       console.log("total beforez", state.total);
       state.total += sinfo.resource;
-      if (state.total === 68) {
-        throw "Strange 68";
-      }
       console.log("total after", state.total);
       if (spriteMap[sinfo.name]!=undefined) {
         console.error(`sprite ${sinfo.name} already existed`);

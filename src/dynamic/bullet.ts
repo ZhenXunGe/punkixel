@@ -9,7 +9,7 @@ const distance = (a: [number, number], b: [number, number]) => {
 export interface BulletInfo {
   x: number;
   y: number;
-  source: number;
+  source: string;
   power: number;
   speed: number;
   rotate: number;
@@ -21,13 +21,13 @@ export class StraightBullet implements BulletInfo {
   x: number;
   y: number;
   width: number;
-  source: number;
+  source: string;
   power: number;
   speed: number;
   rotate: number;
   bomb: 0;
   hit: boolean;
-  constructor(x: number, y: number, width: number, power: number, speed: number, rotate: number, source: number) {
+  constructor(x: number, y: number, width: number, power: number, speed: number, rotate: number, source: string) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -62,6 +62,7 @@ export class StraightBullet implements BulletInfo {
         [front_x, front_y] = this.getFront();
         let ratio = this.width / distance([this.x, this.y], [x, y]);
         //throw("Exception ERRE");
+        //console.log("ratio", ratio);
         if (ratio > 1) {
           this.hit = true;
           this.bomb++;
@@ -90,13 +91,13 @@ export class TrackBullet implements BulletInfo {
   x: number;
   y: number;
   width: number;
-  source: number;
+  source: string;
   power: number;
   speed: number;
   rotate: number;
   bomb: number;
   hit: boolean;
-  constructor(x: number, y: number, width: number, power: number, speed: number, rotate: number, source: number) {
+  constructor(x: number, y: number, width: number, power: number, speed: number, rotate: number, source: string) {
     this.x = x;
     this.y = y;
     this.width = width;

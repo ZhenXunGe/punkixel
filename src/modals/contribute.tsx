@@ -7,7 +7,6 @@ import { MinionSelector } from "../components/Inventory";
 import { addEvent, selectViewIndex, signalPlaceMinion } from "../dynamic/dynamicSlice";
 import { ProtectingEvent } from "../dynamic/event";
 import getWorld from "../data/world";
-import { availableMinions, getMinionById } from "../data/minion";
 
 
 export default function Contribute() {
@@ -21,8 +20,7 @@ export default function Contribute() {
   const dispatch = useAppDispatch();
   const viewIndex = useAppSelector(selectViewIndex);
   const handleConfirm = () => {
-    let minion = getMinionById(availableMinions(inventory), minionId!)!;
-    dispatch(signalPlaceMinion({minion:minion, viewIndex:viewIndex}));
+    dispatch(signalPlaceMinion({mId:minionId!, viewIndex:viewIndex}));
     dispatch(addEvent(ProtectingEvent("GruPlayer 1", getWorld().getInstance(viewIndex))));
     setShow(false);
   }

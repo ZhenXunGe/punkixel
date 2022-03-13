@@ -6,7 +6,7 @@ import { individualWidth } from '../data/draw';
 import { availableMinions, getMinionById } from '../data/minion';
 import getWorld from '../data/world';
 import { BulletInfo } from './bullet';
-import { Event }  from './event';
+import { DropEvent, Event }  from './event';
 
 
 
@@ -27,7 +27,6 @@ export function allBullets(){
 
 export interface DynamicState {
     timeClock: number;
-    contribution: number;
     events: Array<Event>;
     alien: Alien;
     viewIndex: number;
@@ -36,7 +35,6 @@ export interface DynamicState {
 }
 
 const initialState: DynamicState = {
-  contribution:0,
   timeClock: 0,
   events:[],
   alien: {name:"GruStoood", alienId: 0, pos:0, status:"run", dizzle:0},
@@ -74,14 +72,15 @@ export const dynamicSlice = createSlice({
         let b = bullets[i];
         let [done, hit] = b.approach(cor[0], cor[1]);
         if (hit) {
-          if (b.source === 1) {
-            state.contribution += 1;
-          }
+          getWorld().incMinionContribute(b.source, b.power);
           state.damage += b.power;
           if (state.damage > 200) {
             state.alien.status = "dizzle";
             state.alien.dizzle = 20;
             state.damage = 0;
+            let instance = getWorld().getInstance(state.viewIndex*individualWidth);
+            instance.calculateRewards(100,[]);
+            state.events.unshift(DropEvent("Guru01", instance));
           }
           console.log(`alien has taken ${state.damage} damage`);
         }
@@ -114,14 +113,9 @@ export const dynamicSlice = createSlice({
     signalPlaceMinion: (state, d) => {
       let viewIndex = d.payload.viewIndex;
       let instance = getWorld().getInstance(viewIndex*individualWidth);
+      getWorld().placeMinion(d.payload.mId, viewIndex);
       //let m = randomMinion();
-      let m = {
-        ...
-        d.payload.minion
-      }
-      instance.info.minions.push(m);
-      //console.log("minion added");
-      d.payload.location = viewIndex;
+      instance.info.minions.push(d.payload.mId);
     }
   },
   extraReducers: (builder) => {
@@ -133,7 +127,6 @@ export const dynamicSlice = createSlice({
 });
 export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch, signalPlaceMinion,} = dynamicSlice.actions;
 export const selectTimeClock = (state: RootState) => state.dynamic.timeClock;
-export const selectContribution = (state: RootState) => state.dynamic.contribution;
 export const selectEvents = (state: RootState) => state.dynamic.events;
 export const selectAlien = (state: RootState) => state.dynamic.alien;
 export const selectViewIndex = (state: RootState) => state.dynamic.viewIndex;

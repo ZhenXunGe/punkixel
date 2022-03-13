@@ -18,7 +18,7 @@ export function ToolBarWeapon() {
   const minions = getWorld().getInstance(viewIndex*individualWidth).info.minions;
   var damage = 0;
   for (var m of minions) {
-    damage += m.power;
+    damage += getWorld().getMinion(m).power;
   }
   return (
     <div className="tool-bar">
@@ -26,7 +26,7 @@ export function ToolBarWeapon() {
             <li>
                 <ul className="inline-brick">
                     {minions.map((m) => {
-                        return <li key={m.id}><MinionAvator></MinionAvator></li>;
+                        return <li key={getWorld().getMinion(m).id}><MinionAvator></MinionAvator></li>;
                     })}
                     <li> {minions.length} minions are protecting this block. </li>
                     <li> Total Damage: {damage} </li>

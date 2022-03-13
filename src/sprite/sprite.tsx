@@ -35,6 +35,9 @@ export class Sprite {
       this.x = x;
       this.y = y;
     }
+    getClip(name:string) {
+      return this.sheet[name];
+    }
     setFrame(
       img: HTMLImageElement,
       name: string,

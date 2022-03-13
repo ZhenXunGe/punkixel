@@ -10,6 +10,12 @@ export interface Palette {
     rotation: number;
 }
 
+export interface ColorCategory {
+  name:string;
+  palettes: Array<Palette>;
+}
+
+
 const color_trans = [
     {color:[0xee, 0xee, 0xee], weight:1},
     {color:[0xff, 0xff, 0xff], weight:1}
