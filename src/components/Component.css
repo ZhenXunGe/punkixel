@@ -24,7 +24,7 @@ div.application {
 .status {
     position: absolute;
     top: 0px;
-    left: 170px;
+    left: 208px;
     right: 0px;
     height:30px;
     background-color:#fff;
@@ -60,7 +60,7 @@ div.application {
     height:50px;
     background-color: #777;
     right:0px;
-    left:170px;
+    left:208px;
 }
 
 .tool-bar ul {
@@ -82,14 +82,14 @@ div.application {
 }
 
 
-.left-menu {
+/* .left-menu {
     position: absolute;
     left:00px;
     top:0px;
-    width:170px;
-    /* background-color:#333; */
+    width:208px;
+   
     bottom:0px;
-}
+} */
 
 .main-board {
     position: absolute;
@@ -97,12 +97,13 @@ div.application {
     height:400px;
     background-color: white;
     right:0px;
-    left:170px;
+    left:208px;
 }
 
 .drawer {
     height: 400px;
-    width: 1000px;
+    /* width: calc(1000px -32px); */
+    width: 968px;
     float: left;
     background-color: transparent;
     margin: auto;
@@ -110,7 +111,7 @@ div.application {
 
 .main-board .drawer canvas {
     height:400px;
-    width: 1000px;
+    width: 968px;
     position:absolute;
     top:0px;
     left:0px;
@@ -119,7 +120,7 @@ div.application {
     position:absolute;
     top:598px;
     height:200px;
-    left:170px;
+    left:208px;
     right:300px;
     background-color:white;
 }
@@ -172,7 +173,7 @@ div.application {
     height:100px;
     right:0px;
     background-color:white;
-    left:170px;
+    left:208px;
 }
 
 .thumbnail .content {
@@ -215,7 +216,7 @@ div.application {
     bottom: 10px;
     background-color: #aaa;
     right:0px;
-    left:170px;
+    left:208px;
 }
 
 
@@ -237,7 +238,7 @@ div.application {
     height:400px;
     background-color: #aaa;
     right:0px;
-    left:170px;
+    left:208px;
 }
 
 .alarm {
@@ -249,12 +250,12 @@ div.application {
     top:180px;
     height:400px;
     right:0px;
-    left:170px;
+    left:208px;
 }
 .animation .body {
     margin:auto;
     right:0px;
-    left:170px;
+    left:208px;
     width:1000px;
 }
 
@@ -263,13 +264,13 @@ div.drop {
     top:550px;
     height:40px;
     right:0px;
-    left:170px;
+    left:208px;
 }
 
 .drop .body {
     margin:auto;
     right:0px;
-    left:170px;
+    left:208px;
     width:900px;
 }
 
@@ -278,13 +279,13 @@ div.minion {
     top:280px;
     height:30px;
     right:0px;
-    left:170px;
+    left:208px;
 }
 
 .minion .body {
     margin:auto;
     right:0px;
-    left:170px;
+    left:208px;
     width:900px;
 }
 

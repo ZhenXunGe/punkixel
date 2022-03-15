@@ -14,6 +14,7 @@ import {
 } from '../dynamic/dynamicSlice';
 import getWorld, { getBackground } from '../data/world';
 
+import './Component.css';
 
 interface IProps {
 }

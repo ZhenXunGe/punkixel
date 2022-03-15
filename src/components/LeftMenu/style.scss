@@ -1,144 +1,149 @@
-.left-menu .padding-top {
-  height: 0px;
-  display: block;
-  clear: both;
+.left-menu {
+  width: 208px;
+
+  .padding-top {
+    height: 0px;
+    display: block;
+    clear: both;
+  }
+
+  .protector {
+    margin: 0px 10px 0px 10px;
+    clear: both;
+    color: white;
+    background-color: #777;
+    width: 148px;
+    height: 90px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 5px;
+    margin-bottom: 5px;
+
+    .left {
+      float: left;
+      height: 60px;
+      width: 60px;
+      border-radius: 4px;
+      background-color: #555;
+      border: 1px solid gray;
+    }
+
+    .right {
+      width: 70px;
+      margin-left: 5px;
+      float: right;
+
+      div {
+        font-size: 12px;
+        margin: 1px 3px 3px 0px;
+        border: 1px solid #333;
+        color: white;
+        border-radius: 3px;
+        padding: 2px 4px 2px 4px;
+      }
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      margin: 5px;
+    }
+
+    .button {
+      display: block;
+      border: 1px solid #666;
+      border-radius: 5px;
+      background-color: #555;
+      width: 60px;
+      height: 20px;
+      text-align: center;
+      font-size: 9px;
+    }
+  }
 }
 
-.left-menu .protector {
-  margin: 0px 10px 0px 10px;
-  clear: both;
-  color: white;
-  background-color: #777;
-  width: 148px;
-  height: 90px;
-  border: 1px solid gray;
-  border-radius: 4px;
-  padding: 5px;
-  margin-bottom: 5px;
-}
 
-.left-menu .protector .left {
-  float: left;
-  height: 60px;
-  width: 60px;
-  border-radius: 4px;
-  background-color: #555;
-  border: 1px solid gray;
-}
+// .left-menu .protector .right div {
+//   font-size: 12px;
+//   margin: 1px 3px 3px 0px;
+//   border: 1px solid #333;
+//   color: white;
+//   border-radius: 3px;
+//   padding: 2px 4px 2px 4px;
+// }
 
-.left-menu .protector .right {
-  width: 70px;
-  margin-left: 5px;
-  float: right;
-}
+// .left-menu .protector img {
+//   width: 50px;
+//   height: 50px;
+//   margin: 5px;
+// }
 
-.left-menu .protector .right div {
-  font-size: 12px;
-  margin: 1px 3px 3px 0px;
-  border: 1px solid #333;
-  color: white;
-  border-radius: 3px;
-  padding: 2px 4px 2px 4px;
-}
-
-.left-menu .protector img {
-  width: 50px;
-  height: 50px;
-  margin: 5px;
-}
-
-.left-menu .protector .button {
-  display: block;
-  border: 1px solid #666;
-  border-radius: 5px;
-  background-color: #555;
-  width: 60px;
-  height: 20px;
-  text-align: center;
-  font-size: 9px;
-}
+// .left-menu .protector .button {
+//   display: block;
+//   border: 1px solid #666;
+//   border-radius: 5px;
+//   background-color: #555;
+//   width: 60px;
+//   height: 20px;
+//   text-align: center;
+//   font-size: 9px;
+// }
 
 
 .left-menu .panelSelect {
-  margin-top: 20px;
+  margin-top: 0px;
 
-  .button-right {
-    border: 1px solid gray;
-    border-radius: 4px;
-    height: 30px;
-    margin: 0px 5px 5px 0px;
-    width: 72px;
-    display: inline-block;
-    font-size: 14px;
-    font-family: "Arial";
-    font-weight: bold;
-    clear: both;
-    background-color: #ccc;
-    color: #333;
+  .button-icon {
+    border: 0;
 
-  }
-
-  .button-left {
-    border: 1px solid gray;
-    border-radius: 4px;
-    height: 30px;
-    margin: 0px 5px 5px 10px;
-    width: 72px;
-    display: inline-block;
-    font-size: 14px;
-    font-family: "Arial";
-    font-weight: bold;
-    clear: both;
-    background-color: #ccc;
-    color: #333;
-
-  }
-  &.active {
-    .button-right {
-      background-color: #777;
-      color: white;
+    &.right {
+      margin-left: -15px;
     }
-    .button-left {
-      background-color: #777;
-      color: white;
+
+    &.bottom {
+      margin-top: -3px;
+    }
+
+    &.unact {
+      z-index: -1;
+    }
+
+    height: 48px;
+    width: 96px;
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0);
+
+    img {
+      width: 96px;
+      height: 50px;
     }
   }
-}
 
-.left-menu div.staking {
-  display: block;
-  width: 121px;
-  height: 168px;
-  margin: 46px 10px 50px 35px;
 
-  /* border:4px solid black; */
-  background-color: #bbb;
-  background-size: auto 100%;
-  background-image: url("../hero.jpeg");
 }
 
 .left-menu div.avator {
   position: relative;
   width: 208px;
   height: 252px;
-}
 
-.left-menu div.avator .avatorContext {
-  position: absolute;
-  width: 121px;
-  height: 168px;
-  left: 35px;
-  top: 47px;
-  background-size: auto 100%;
-  background-image: url("../hero.jpeg");
-}
+  .avatorContext {
+    position: absolute;
+    width: 121px;
+    height: 168px;
+    left: 35px;
+    top: 47px;
+    background-size: auto 100%;
+    background-image: url("../hero.jpeg");
+  }
 
-.left-menu div.avator .avatorBorder {
-  position: absolute;
-  width: 208px;
-  height: 252px;
-  left: 0;
-  top: 0;
-  background-size: auto 100%;
-  background-image: url("../../images/avatar.png");
+  .avatorBorder {
+    position: absolute;
+    width: 208px;
+    height: 252px;
+    left: 0;
+    top: 0;
+    background-size: auto 100%;
+    background-image: url("../../images/avatar.png");
+  }
 }
