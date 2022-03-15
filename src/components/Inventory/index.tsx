@@ -1,11 +1,11 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectInventory } from '../data/statusSlice';
-import { Minion } from "../data/minion";
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectInventory } from '../../data/statusSlice';
+import { Minion } from "../../data/minion";
 import { ListGroup } from 'react-bootstrap';
-import getWorld from '../data/world';
-import Unlock from '../modals/unlock';
-import { getSprite } from '../sprite/spriteSlice';
+import getWorld from '../../data/world';
+import Unlock from '../../modals/unlock';
+import { getSprite } from '../../sprite/spriteSlice';
 
 import minion1 from '../images/protectors/minion1.png';
 import minion2 from '../images/protectors/minion2.png';
@@ -36,9 +36,10 @@ export function SingleItem(m: single) {
       //     <div>mod: ? </div>
       //   </div>
       // </div>
-      <div className='avator'>
-        <div className='avatorContext'></div>
-        <div className='avatorBorder'></div>
+      <div className='protector1'>
+        <div className='tag'>1</div>
+        <div className='avator'>2</div>
+        <div className='btn'>3</div>
       </div>
     );
   } else {

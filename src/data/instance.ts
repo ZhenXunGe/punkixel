@@ -2,7 +2,7 @@ import { Minion, randomMinion } from "./minion";
 import { DyeIndex } from "./palette";
 import { content_size, Drawer, individualHeight, individualWidth, Painter } from "./draw";
 import getWorld, { World } from "./world";
-import { MinionSelector } from "../components/Inventory";
+// import { MinionSelector } from "../components/Inventory";
 
 export interface InstanceInfo {
     id: string;

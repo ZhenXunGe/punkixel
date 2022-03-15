@@ -9,7 +9,7 @@ import {
   selectPanel,
 } from '../../layout/layoutSlice';
 
-import Inventory from "../Inventory"
+import  Inventory from "../Inventory"
 
 import './style.scss';
 import HOME_ACT from '../../images/buttons/home_act.png';

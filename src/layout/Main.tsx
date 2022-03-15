@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { LeftMenu } from '../components/LeftMenu/LeftMenu';
+import { LeftMenu } from '../components/LeftMenu';
 import { RightPanel } from './RightPanel';
 import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded } from '../sprite/spriteSlice';
 import { updateTimeClockAsync } from '../dynamic/dynamicSlice';
