@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import '../Component.css';
+import '../Component.scss';
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

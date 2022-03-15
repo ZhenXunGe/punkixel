@@ -7,6 +7,17 @@ import getWorld from '../data/world';
 import Unlock from '../modals/unlock';
 import { getSprite } from '../sprite/spriteSlice';
 
+import minion1 from '../images/protectors/minion1.png';
+import minion2 from '../images/protectors/minion2.png';
+import minion3 from '../images/protectors/minion3.png';
+import minion4 from '../images/protectors/minion4.png';
+import minion5 from '../images/protectors/minion5.png';
+import Inuse from '../images/protectors/Inuse.png';
+import Unlock_ from '../images/protectors/Unlock.png';
+import protector_avator from '../images/protectors/protector_avator.png';
+import protector_border from '../images/protectors/protector_border.png';
+import protector_tag from '../images/protectors/protector_tag.png';
+
 interface single {
   mId: string | null;
   index: number;
@@ -14,16 +25,20 @@ interface single {
 export function SingleItem(m: single) {
   if (m.mId === null) {
     return (
-      <div className="protector">
-        <div className="left">
-          <img src="FFF"></img>
-          <Unlock uid="solo" index={m.index}></Unlock>
-        </div>
-        <div className="right">
-          <div>power: ?</div>
-          <div>speed: ?</div>
-          <div>mod: ? </div>
-        </div>
+      // <div className="protector">
+      //   <div className="left">
+      //     <img src="FFF"></img>
+      //     <Unlock uid="solo" index={m.index}></Unlock>
+      //   </div>
+      //   <div className="right">
+      //     <div>power: ?</div>
+      //     <div>speed: ?</div>
+      //     <div>mod: ? </div>
+      //   </div>
+      // </div>
+      <div className='avator'>
+        <div className='avatorContext'></div>
+        <div className='avatorBorder'></div>
       </div>
     );
   } else {

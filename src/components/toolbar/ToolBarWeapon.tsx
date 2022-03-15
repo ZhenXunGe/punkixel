@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import '../Component.css';
+import '../Component.scss';
 import Contribute from "../../modals/contribute";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { individualWidth } from '../../data/draw';
