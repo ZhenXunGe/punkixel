@@ -87,7 +87,7 @@ div.application {
     left:00px;
     top:0px;
     width:170px;
-    background-color:#333;
+    /* background-color:#333; */
     bottom:0px;
 }
 
@@ -200,64 +200,6 @@ div.application {
 
 
 
-.left-menu .padding-top {
-    height: 0px;
-    display: block;
-    clear: both;
-}
-
-.left-menu .protector {
-  margin:0px 10px 0px 10px;
-  clear:both;
-  color:white;
-  background-color:#777;
-  width:148px;
-  height:90px;
-  border: 1px solid gray;
-  border-radius: 4px;
-  padding:5px;
-  margin-bottom:5px;
-}
-
-.left-menu .protector .left{
-  float:left;
-  height:60px;
-  width:60px;
-  border-radius: 4px;
-  background-color: #555;
-  border:1px solid gray;
-}
-
-.left-menu .protector .right{
-  width: 70px;
-  margin-left:5px;
-  float:right;
-}
-
-.left-menu .protector .right div {
-    font-size:12px;
-    margin:1px 3px 3px 0px;
-    border:1px solid #333;
-    color:white;
-    border-radius:3px;
-    padding:2px 4px 2px 4px;
-}
-
-.left-menu .protector img {
-  width:50px;
-  height:50px;
-  margin:5px;
-}
-.left-menu .protector .button {
-    display: block;
-    border: 1px solid #666;
-    border-radius: 5px;
-    background-color:#555;
-    width:60px;
-    height:20px;
-    text-align:center;
-    font-size:9px;
-  }
 
 .minion-selector img {
     float:left;
@@ -266,46 +208,6 @@ div.application {
     height:50px;
   }
 
-.left-menu .button-left {
-    border:1px solid gray;
-    border-radius: 4px;
-    height: 30px;
-    margin: 0px 5px 5px 10px;
-    width: 72px;
-    display: inline-block;
-    font-size: 14px;
-    font-family: "Arial";
-    font-weight: bold;
-    clear: both;
-    background-color: #ccc;
-    color: #333;
-}
-
-.left-menu .button-right {
-    border: 1px solid gray;
-    border-radius: 4px;
-    height: 30px;
-    margin: 0px 5px 5px 0px;
-    width: 72px;
-    display: inline-block;
-    font-size: 14px;
-    font-family: "Arial";
-    font-weight: bold;
-    clear: both;
-    background-color: #ccc;
-    color: #333;
-}
-
-.left-menu div.staking {
-    display:block;
-    width:150px;
-    height:200px;
-    margin:20px 10px 5px 10px;
-    border:4px solid black;
-    background-color:#bbb;
-    background-size: auto 100%;
-    background-image: url("./hero.jpeg");
-}
 
 .ranking-list {
     position: absolute;
