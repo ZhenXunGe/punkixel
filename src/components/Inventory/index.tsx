@@ -16,6 +16,7 @@ import minion4 from '../../images/protectors/minion4.png';
 import minion5 from '../../images/protectors/minion5.png';
 import Inuse from '../../images/protectors/Inuse.png';
 import Unlock_ from '../../images/protectors/Unlock.png';
+import Idle from '../../images/protectors/Idle.png';
 import protector_avator from '../../images/protectors/protector_avator.png';
 import protector_border from '../../images/protectors/protector_border.png';
 import protector_tag from '../../images/protectors/protector_tag.png';
@@ -72,7 +73,7 @@ export function SingleItem(m: single) {
           <img src={protector_avator}></img>
           </div>
           <button className='btn'>
-            <img src={Inuse}></img>
+            <img src={Idle}></img>
           </button>
           <div className="right">
             <div className='item'>{minion.power}</div>
