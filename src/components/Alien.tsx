@@ -13,7 +13,7 @@ export function AlienItem() {
     <Frame monster={spriteMonster} minion={spriteUFO} canvasRef={canvasRef}></Frame>
     <div className="animation" >
         <div className="body">
-        <canvas height="400" width="1000" ref={e => {
+        <canvas height="400" width="968" ref={e => {
           console.log("canvanref");
           canvasRef.current = e!
           }}>
