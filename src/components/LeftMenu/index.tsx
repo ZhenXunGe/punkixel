@@ -28,7 +28,7 @@ export function LeftMenu() {
   return (
     <div className="left-menu">
         <div className="padding-top"></div>
-        <div className='avator'>
+        <div className='avatorTop'>
  <div className='avatorContext'></div>
  <div className='avatorBorder'></div>
  </div>
@@ -54,7 +54,9 @@ export function LeftMenu() {
           <img src={currentpanel==='market' ? MARKET_ACT:MARKET_UNACT}></img>
         </button>
         </div>
+        <div style={{paddingTop:'19px'}}>
         <Inventory></Inventory>
+        </div>
     </div>
   );
 }

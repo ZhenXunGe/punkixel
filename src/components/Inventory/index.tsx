@@ -7,16 +7,18 @@ import getWorld from '../../data/world';
 import Unlock from '../../modals/unlock';
 import { getSprite } from '../../sprite/spriteSlice';
 
-import minion1 from '../images/protectors/minion1.png';
-import minion2 from '../images/protectors/minion2.png';
-import minion3 from '../images/protectors/minion3.png';
-import minion4 from '../images/protectors/minion4.png';
-import minion5 from '../images/protectors/minion5.png';
-import Inuse from '../images/protectors/Inuse.png';
-import Unlock_ from '../images/protectors/Unlock.png';
-import protector_avator from '../images/protectors/protector_avator.png';
-import protector_border from '../images/protectors/protector_border.png';
-import protector_tag from '../images/protectors/protector_tag.png';
+import './style.scss';
+
+import minion1 from '../../images/protectors/minion1.png';
+import minion2 from '../../images/protectors/minion2.png';
+import minion3 from '../../images/protectors/minion3.png';
+import minion4 from '../../images/protectors/minion4.png';
+import minion5 from '../../images/protectors/minion5.png';
+import Inuse from '../../images/protectors/Inuse.png';
+import Unlock_ from '../../images/protectors/Unlock.png';
+import protector_avator from '../../images/protectors/protector_avator.png';
+import protector_border from '../../images/protectors/protector_border.png';
+import protector_tag from '../../images/protectors/protector_tag.png';
 
 interface single {
   mId: string | null;
@@ -37,9 +39,21 @@ export function SingleItem(m: single) {
       //   </div>
       // </div>
       <div className='protector1'>
-        <div className='tag'>1</div>
-        <div className='avator'>2</div>
-        <div className='btn'>3</div>
+        <div className='avatorbg'></div>
+        <div className='tag'>
+          <img src={protector_tag} ></img>
+        </div>
+        <div className='avator'>
+        <img src={protector_avator}></img>
+        </div>
+        <button className='btn'>
+          <img src={Unlock_}></img>
+        </button>
+        <div className="right">
+          <div className='item'>???</div>
+          <div className='item'>???</div>
+          {/* <div>mod: t</div> */}
+        </div>
       </div>
     );
   } else {
@@ -48,33 +62,55 @@ export function SingleItem(m: single) {
     let ufo = sprites.getFrame("default", minion.style).src;
     if (minion.location === null) {
       return (
-        <div className="protector">
-          <div className="left">
-            <img src={ufo}></img>
-            <div className="button">
-              IDLE
-            </div>
+
+        <div className='protector1'>
+          <div className='avatorbg'></div>
+          <div className='tag'>
+            <img src={protector_tag} ></img>
           </div>
+          <div className='avator'>
+          <img src={protector_avator}></img>
+          </div>
+          <button className='btn'>
+            <img src={Inuse}></img>
+          </button>
           <div className="right">
-            <div>power: {minion.power}</div>
-            <div>speed: {minion.frequency}</div>
-            <div>mod: t </div>
+            <div className='item'>{minion.power}</div>
+            <div className='item'>{minion.frequency}</div>
+            {/* <div>mod: t</div> */}
           </div>
         </div>
+        // <div className="protector">
+        //   <div className="left">
+        //     <img src={ufo}></img>
+        //     <div className="button">
+        //       IDLE
+        //     </div>
+        //   </div>
+        //   <div className="right">
+        //     <div>power: {minion.power}</div>
+        //     <div>speed: {minion.frequency}</div>
+        //     <div>mod: t </div>
+        //   </div>
+        // </div>
       );
     } else {
       return (
-        <div className="protector">
-          <div className="left">
-            <img src={ufo}></img>
-            <div className="button">
-              INUSE
-            </div>
+        <div className='protector1'>
+          <div className='avatorbg'></div>
+          <div className='tag'>
+            <img src={protector_tag} ></img>
           </div>
+          <div className='avator'>
+            <img src={protector_avator}></img>
+          </div>
+          <button className='btn'>  
+            <img src={Inuse}></img>
+          </button>
           <div className="right">
-            <div>power: {minion.power}</div>
-            <div>speed: {minion.frequency}</div>
-            <div>mod: t</div>
+            <div className='item'>{minion.power}</div>
+            <div className='item'>{minion.frequency}</div>
+            {/* <div>mod: t</div> */}
           </div>
         </div>
       );
