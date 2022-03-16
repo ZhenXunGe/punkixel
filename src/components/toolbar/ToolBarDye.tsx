@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import '../Component.scss';
 import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import './style.scss';
 import { individualWidth } from "../../data/draw";
 import {
     selectPalettes,

@@ -1,0 +1,87 @@
+@import '../../styles/common.scss';
+
+.tool-bar ul li .weapon-item {
+    display: inline-block;
+}
+div.minion-avator {
+    display: inline-block;
+    // background-color:#eee;
+    padding:2px;
+    border-radius:12px;
+}
+div.minion-avator img {
+    background-color:#555;
+    width:36px;
+    height:36px;
+    border-radius: 10px;
+}
+.tool-bar ul li button.right {
+    float: right;
+}
+
+.tool-bar ul li .dye-item {
+    display: inline-block;
+    // border: 1px solid gray;
+    width: 15px;
+    height: 15px;
+}
+
+.tool-bar {
+    position: absolute;
+    top: 30px;
+    height: 50px;
+    padding-top: 23px;
+    // background-color: #777;
+    background-color: rgba(255, 255, 255, 0);
+    right: 0px;
+    left: 208px;
+    ul {
+        padding-left: 0px;
+        padding-top: 5px;
+        margin: 0px;
+        // border-right: 1px solid gray;
+        li {
+            display: inline;
+            // margin: 5px;
+            margin-top: 5px;
+            color: white;
+        }
+    }
+    ul div.dropdown {
+        display: inline;
+    }
+    .inline-brick {
+        height: 69px;
+        width: 832px;
+        background-image: url('../../images/world/toolbar.png');
+    
+        .minionList {
+            float: left;
+            margin-top: 10px;
+            margin-left: 12px;
+            display: inline;
+            .minionItem{
+                padding-left: 5px;
+                width: 44px;
+                height: 44px;
+            }
+            // .minionItem:first-child{
+            //     margin-left: 0px;
+            // }
+        }
+        .minionDamage{
+            float: right;
+            // margin-left: 400px;
+            margin-top: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            width: 320px;
+            // display: inline;
+            li {
+                color: $fontcolor;
+            }
+        }
+    
+    }
+}
+

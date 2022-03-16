@@ -24,52 +24,10 @@ div.application {
 
 
 
-.tool-bar ul li .weapon-item {
-    display: inline-block;
-}
-
-.tool-bar ul li button.right {
-    float:right;
-}
-
-.tool-bar ul li .dye-item {
-    display: inline-block;
-    border: 1px solid gray;
-    width:15px;
-    height:15px;
-}
-
-.tool-bar {
-    position: absolute;
-    top:30px;
-    height:50px;
-    background-color: #777;
-    right:0px;
-    left:208px;
-}
-
-.tool-bar ul {
-    padding:5px;
-    margin:0px;
-    border-right:1px solid gray;
-}
-
-.tool-bar ul div.dropdown {
-    display:inline;
-}
-
-
-
-.tool-bar ul li {
-    display:inline;
-    margin:5px;
-    color:white;
-}
-
 
 .main-board {
     position: absolute;
-    top:190px;
+    top:240px;
     height:400px;
     background-color: white;
     right:0px;
@@ -94,8 +52,9 @@ div.application {
 }
 .guest-info {
     position:absolute;
-    top:598px;
-    height:200px;
+    top:648px;
+    // height:200px;
+    height: 150px;
     left:208px;
     right:300px;
     background-color:white;
@@ -111,8 +70,9 @@ div.application {
 .alien-info {
     position:absolute;
     padding:10px;
-    top:598px;
-    height:200px;
+    top:648px;
+    // height:200px;
+    height: 150px;
     left:880px;
     right:0px;
     color: white;
@@ -143,37 +103,8 @@ div.application {
     border:1px solid gray;
 }
 
-.thumbnail {
-    position: absolute;
-    top:85px;
-    height:100px;
-    right:0px;
-    background-color:white;
-    left:208px;
-}
-
-.thumbnail .content {
-    margin:auto;
-    height: 100px;
-}
-
-.thumbnail .focus {
-    height:98px;
-    width:150px;
-    margin:auto;
-    border-top:1px solid white;
-    border-bottom:1px solid white;
-    border-left:5px solid white;
-    border-right:5px solid white;
-    background-size: auto 100%;
-    -webkit-filter: none;
-}
 
 
-
-.inline-brick {
-    display:inline;
-}
 
 
 
@@ -274,17 +205,4 @@ div.minion.img {
 }
 
 
-div.minion-avator {
-    display: inline-block;
-    background-color:#eee;
-    padding:2px;
-    border-radius:12px;
-}
 
-div.minion-avator img {
-    background-color:#555;
-    width:38px;
-    height:38px;
-    border: 1px solid gray;
-    border-radius: 10px;
-}

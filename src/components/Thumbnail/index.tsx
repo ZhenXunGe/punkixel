@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { toDyeColor } from '../data/palette';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { toDyeColor } from '../../data/palette';
 import {
     individualWidth,
-} from "../data/draw"
-import { selectSketchSignal, selectViewIndex } from '../dynamic/dynamicSlice';
-import getWorld from '../data/world';
-
+} from "../../data/draw"
+import { selectSketchSignal, selectViewIndex } from '../../dynamic/dynamicSlice';
+import getWorld from '../../data/world';
+import './style.scss';
 export function Thumbnail() {
   let ratio = 1;
 

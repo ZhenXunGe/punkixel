@@ -8,7 +8,8 @@ import { addEvent, selectViewIndex, signalPlaceMinion } from "../dynamic/dynamic
 import { ProtectingEvent } from "../dynamic/event";
 import getWorld from "../data/world";
 
-
+import PROTECT from '../images/world/protect_btn.png';
+import './style.scss';
 export default function Contribute() {
   const [show, setShow] = useState(false);
   const [minionId, setMinionId] = useState<string|null>(null);
@@ -27,10 +28,12 @@ export default function Contribute() {
   return (
 
     <>
-      <Button variant="primary" onClick={handleShow} className="right">
+      {/* <Button variant="primary" onClick={handleShow} className="right">
         Protect This Block
-      </Button>
-
+      </Button> */}
+      <button className="protect_btn" onClick={handleShow}>
+        <img src={PROTECT} ></img>
+      </button>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Pick a minion to protect this block?</Modal.Title>
