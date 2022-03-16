@@ -21,24 +21,9 @@ div.application {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
-.status {
-    position: absolute;
-    top: 0px;
-    left: 208px;
-    right: 0px;
-    height:30px;
-    background-color:#fff;
-}
-.status ul {
-    padding:0px;
-    margin:0px;
-    float:right;
-}
 
-.status ul li {
-    display:inline;
-    margin:10px;
-}
+
+
 .tool-bar ul li .weapon-item {
     display: inline-block;
 }

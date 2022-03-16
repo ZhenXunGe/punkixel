@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   selectEnergy,
   selectPunkixel,
@@ -9,11 +9,11 @@ import {
   selectReward,
   selectPPH,
   updateStatus,
-} from '../data/statusSlice';
-
+} from '../../data/statusSlice';
+import './style.scss';
 import {
    selectTimeClock, selectViewIndex,
-} from '../dynamic/dynamicSlice';
+} from '../../dynamic/dynamicSlice';
 
 export function Status () {
   const dispatch = useAppDispatch();
@@ -32,14 +32,14 @@ export function Status () {
   return (
     <div className="status">
         <ul>
-        <li>View: {viewIndex}</li>
-        <li>Energy: {energy}</li>
-        <li>Punkixel: {punkixel}</li>
-        <li>Ranking: {ranking}</li>
-        <li>Voucher: {voucher}</li>
-        <li>Contribution: {contribution}</li>
-        <li>Reward: {reward}</li>
-        <li>PPH: {pph}</li>
+        <li>{viewIndex}</li>
+        <li>{energy}</li>
+        <li>{punkixel}</li>
+        <li>{ranking}</li>
+        <li>{voucher}</li>
+        <li>{contribution}</li>
+        <li>{reward}</li>
+        <li>{pph}</li>
         </ul>
     </div>
   );
