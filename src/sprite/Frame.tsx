@@ -73,7 +73,7 @@ export default function Frame(prop: IProps) {
   useEffect(() => {
     dispatch(signalAlien());
   }, []);
-  return(<>abc</>);
+  return(<></>);
 }
 
 

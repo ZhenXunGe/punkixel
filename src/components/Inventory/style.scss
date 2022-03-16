@@ -1,10 +1,13 @@
 @import '../../styles/common.scss';
 .left-menu div.protector1 {
-    margin-top: -8px;
+    margin-top: -5px;
     position: relative;
     width: 204px;
     height: 95px;
     background-image: url('../../images/protectors/minion1.png');
+    &:first-child{
+        margin-top: -8px;
+    }
     div.right{
         color: $fontcolor;
         // padding-left: 11px;

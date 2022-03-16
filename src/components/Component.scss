@@ -1,3 +1,4 @@
+@import '../styles/common.scss';
 body {
    background-color:#999;
 }
@@ -13,8 +14,8 @@ div.screen {
 
 div.application {
   position:relative;
-  height:800px;
-  width:1180px;
+  height:814px;
+  width:1200px;
   margin:auto;
   border:1px solid gray;
   top:50%;
@@ -52,21 +53,45 @@ div.application {
 }
 .guest-info {
     position:absolute;
-    top:648px;
+    top:668px;
     // height:200px;
     height: 150px;
     left:208px;
     right:300px;
-    background-color:white;
+    // background-color:white;
+    background-color: rgba(255, 255, 255, 0);
 }
 
 .guest-info div.event {
-    border: 1px solid gray;
-    border-radius: 4px;
+    
+    border-bottom: 2px solid #745435;
+    border-radius: 4px; 
     padding:5px;
-    margin:5px;;
-    height:60px;
+    color: $fontcolor;
+    // margin:5px;;
+    font-size: 14px;
+    font-weight: bold;
+    height:42px;
+    div.minion-avator {
+        margin-left: 20px;
+        margin-right: 10px;
+        display: inline-block;
+        // background-color:#eee;
+        border: 2px solid #d6af85;
+        // padding:2px;
+        border-radius:12px;
+    }
+    div.minion-avator img {
+        background-color:#555;
+        width:26px;
+        height:26px;
+        border-radius: 10px;
+    }
 }
+
+
+
+
 .alien-info {
     position:absolute;
     padding:10px;

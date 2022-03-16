@@ -3,18 +3,7 @@
 .tool-bar ul li .weapon-item {
     display: inline-block;
 }
-div.minion-avator {
-    display: inline-block;
-    // background-color:#eee;
-    padding:2px;
-    border-radius:12px;
-}
-div.minion-avator img {
-    background-color:#555;
-    width:36px;
-    height:36px;
-    border-radius: 10px;
-}
+
 .tool-bar ul li button.right {
     float: right;
 }
@@ -64,6 +53,18 @@ div.minion-avator img {
                 padding-left: 5px;
                 width: 44px;
                 height: 44px;
+                div.minion-avator {
+                    display: inline-block;
+                    // background-color:#eee;
+                    padding:2px;
+                    border-radius:12px;
+                }
+                div.minion-avator img {
+                    background-color:#555;
+                    width:36px;
+                    height:36px;
+                    border-radius: 10px;
+                }
             }
             // .minionItem:first-child{
             //     margin-left: 0px;

@@ -13,6 +13,9 @@ import { Events } from '../components/Events';
 
 import alien from "../sprite/monster/run/skeleton-03_run_00.png";
 
+import './style.scss';
+import btm_left from '../images/bottom_left.png';
+import btm_right from '../images/bottom_right.png';
 
 function AlienInfo() {
   return (<div>
@@ -41,6 +44,12 @@ export function RightPanel() {
     <Events></Events>
     <div className="alien-info">
       <AlienInfo></AlienInfo>
+    </div>
+    <div className='bottom_left'>
+      <img src={btm_left}></img>
+    </div>
+    <div className='bottom_right'>
+      <img src={btm_right}></img>
     </div>
     </>
   );
