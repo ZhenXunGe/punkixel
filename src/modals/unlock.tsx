@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import getWorld from "../data/world";
-
+import Unlock_ from "../images/protectors/Unlock.png";
 interface UnlockProps {
   uid: string;
   index: number;
@@ -23,9 +23,12 @@ export default function Unlock(prop:UnlockProps) {
   return (
 
     <>
-      <div className="button" onClick={() => handleShow()}>
+      {/* <div className="button" onClick={() => handleShow()}>
             UNLOCK
-      </div>
+      </div> */}
+      <button className='btn' onClick={() => handleShow()}>
+          <img src={Unlock_}></img>
+        </button>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Unlock a random new minion to join your force!</Modal.Title>

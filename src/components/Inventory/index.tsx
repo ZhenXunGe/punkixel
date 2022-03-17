@@ -47,9 +47,10 @@ export function SingleItem(m: single) {
         <div className='avator'>
         <img src={protector_avator}></img>
         </div>
-        <button className='btn'>
+        {/* <button className='btn'>
           <img src={Unlock_}></img>
-        </button>
+        </button> */}
+        <Unlock  uid="solo" index={m.index}></Unlock>
         <div className="right">
           <div className='item'>???</div>
           <div className='item'>???</div>
