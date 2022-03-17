@@ -62,6 +62,7 @@ export function SingleItem(m: single) {
     let minion = getWorld().getMinion(m.mId)!;
     let sprites = getSprite("ufo");
     let ufo = sprites.getFrame("default", minion.style).src;
+    console.log(minion.location);
     if (minion.location === null) {
       return (
 

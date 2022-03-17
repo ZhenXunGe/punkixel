@@ -43,7 +43,7 @@ export function ToolBarDye() {
         </div>
         <ul>
             <li>
-                <ul className="inline-brick">
+                <ul className="inline-brick dye">
                     <li>Dye</li>
                     <li>
                     <DropdownButton
@@ -88,7 +88,7 @@ export function ToolBarDye() {
                     <li>{palettes[pickedCategory].palettes[pickedPalette].pph} PPH Per Pixel</li>
                 </ul>
             </li>
-            <li><Sketch main="building" road="road" background={1} canvas={canvasRef} ></Sketch></li>
+            <li className='sketch'><Sketch main="building" road="road" background={1} canvas={canvasRef} ></Sketch></li>
         </ul>
     </div>
   );

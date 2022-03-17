@@ -1,19 +1,19 @@
 @import '../../styles/common.scss';
 
-.tool-bar ul li .weapon-item {
-    display: inline-block;
-}
+// .tool-bar ul li .weapon-item {
+//     display: inline-block;
+// }
 
-.tool-bar ul li button.right {
-    float: right;
-}
+// .tool-bar ul li button.right {
+//     float: right;
+// }
 
-.tool-bar ul li .dye-item {
-    display: inline-block;
-    // border: 1px solid gray;
-    width: 15px;
-    height: 15px;
-}
+// .tool-bar ul li .dye-item {
+//     display: inline-block;
+//     // border: 1px solid gray;
+//     width: 15px;
+//     height: 15px;
+// }
 
 .tool-bar {
     position: absolute;
@@ -24,65 +24,98 @@
     background-color: rgba(255, 255, 255, 0);
     right: 0px;
     left: 208px;
+
     ul {
         padding-left: 0px;
         padding-top: 5px;
         margin: 0px;
+
         // border-right: 1px solid gray;
         li {
             display: inline;
             // margin: 5px;
             margin-top: 5px;
             color: white;
+
+            .dye-item {
+                display: inline-block;
+                // border: 1px solid gray;
+                width: 15px;
+                height: 15px;
+            }
+
+            button.right {
+                float: right;
+            }
+
+            .weapon-item {
+                display: inline-block;
+            }
+
+
         }
     }
+
     ul div.dropdown {
         display: inline;
     }
+
     .inline-brick {
         height: 69px;
         width: 832px;
         background-image: url('../../images/world/toolbar.png');
-    
+
         .minionList {
             float: left;
             margin-top: 10px;
             margin-left: 12px;
             display: inline;
-            .minionItem{
+
+            .minionItem {
                 padding-left: 5px;
                 width: 44px;
                 height: 44px;
+
                 div.minion-avator {
                     display: inline-block;
                     // background-color:#eee;
-                    padding:2px;
-                    border-radius:12px;
+                    padding: 2px;
+                    border-radius: 12px;
                 }
+
                 div.minion-avator img {
-                    background-color:#555;
-                    width:36px;
-                    height:36px;
+                    background-color: #555;
+                    width: 36px;
+                    height: 36px;
                     border-radius: 10px;
                 }
             }
+
             // .minionItem:first-child{
             //     margin-left: 0px;
             // }
         }
-        .minionDamage{
+
+        .minionDamage {
             float: right;
             // margin-left: 400px;
             margin-top: 6px;
             font-weight: bold;
             font-size: 14px;
             width: 320px;
+
             // display: inline;
             li {
                 color: $fontcolor;
             }
         }
-    
+
     }
 }
 
+.sketch {
+    button {
+        float: right;
+        margin-top: -50px;
+    }
+}
