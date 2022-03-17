@@ -24,7 +24,7 @@ export function ToolBarWeapon() {
     <div className="tool-bar">
       <ul>
         <li>
-          <ul className="inline-brick">
+          <ul className="inline-brick world">
             <div className='minionList'>
               {minions.map((m) => {
                 return <li className='minionItem' key={getWorld().getMinion(m).id}><MinionAvator></MinionAvator></li>;

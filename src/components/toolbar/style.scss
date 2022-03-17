@@ -18,7 +18,7 @@
 .tool-bar {
     position: absolute;
     top: 30px;
-    height: 50px;
+    height: 500px;
     padding-top: 23px;
     // background-color: #777;
     background-color: rgba(255, 255, 255, 0);
@@ -40,8 +40,8 @@
             .dye-item {
                 display: inline-block;
                 // border: 1px solid gray;
-                width: 15px;
-                height: 15px;
+                width: 31px;
+                height: 46px;
             }
 
             button.right {
@@ -55,15 +55,56 @@
 
         }
     }
-
-    ul div.dropdown {
-        display: inline;
-    }
-
     .inline-brick {
         height: 69px;
         width: 832px;
-        background-image: url('../../images/world/toolbar.png');
+
+        &.world {
+            background-image: url('../../images/world/toolbar.png');
+        }
+
+        &.dye {
+            padding-left: 70px;
+            background-image: url('../../images/home/toolbar.png');
+
+            div.dropdown {
+                margin-top: 5px;
+                height: 44px;
+                background-color: rgba(255, 255, 255, 0);
+                
+                button.btn_left {
+                    color: $alieninfo_blue;
+                    border: none;
+                    width: 275px;
+                    background-color: rgba(255, 255, 255, 0);
+                    background-image: url('../../images/home/select_board.png');
+                }
+
+                button.btn_right {
+                    margin-left: -7px;
+                    border: none;
+                    width: 51px;
+                    background-color: rgba(255, 255, 255, 0);
+                    background-image: url('../../images/home/select_btn.png');
+                }
+            }
+            div.select_right{
+                float: right;
+                margin-top: 5px;
+                margin-right: 140px;
+            }
+            li#PPH{
+                width: 51px;
+                height: 44px;
+                // padding-bottom: 10px;
+                padding-left: 25px;
+            }
+            div.pph{
+                margin-top: -20px;
+                margin-left: 620px;
+            }
+        }
+
 
         .minionList {
             float: left;
@@ -114,8 +155,21 @@
 }
 
 .sketch {
+    float: right;
+        margin-top: -50px;
     button {
         float: right;
         margin-top: -50px;
     }
+}
+
+.sketch_btn{
+    // float: right;
+    // margin-top: 0px;
+    position: absolute;
+    right: 0px;
+    top: -30px;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    cursor: pointer;
 }

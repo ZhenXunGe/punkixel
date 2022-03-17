@@ -6,7 +6,7 @@ import getWorld from "../data/world";
 import { signalSketch } from "../dynamic/dynamicSlice";
 import { mainCategory, roadCategory } from "../sketch/sketch";
 import { getSprite } from "../sprite/spriteSlice";
-
+import sketch_btn from '../images/home/sketch_btn.png';
 interface SketchProps {
   main: string;
   road: string;
@@ -41,9 +41,9 @@ export default function Sketch(prop: SketchProps) {
   return (
 
     <>
-      <Button className="button" onClick={() => handleShow()}>
-        Sketch
-      </Button>
+      <div className="sketch_btn" onClick={() => handleShow()}>
+        <img src={sketch_btn}></img>
+      </div>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Sketch your block!</Modal.Title>
