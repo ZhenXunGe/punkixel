@@ -14,9 +14,7 @@
 //     width: 15px;
 //     height: 15px;
 // }
-.tool-bar .inline-brick.dye div.select_right .select_right_inline li#selected .dye-item{
-// padding-top: 5px;
-}
+
 .tool-bar {
     position: absolute;
     top: 30px;
@@ -104,32 +102,45 @@
             div.select_right{
                 float: right;
                 // margin-top: 5px;
-                width: 290px;
+                width: 300px;
                 .select_right_inline{
                     // 
                     float: left;
                     height: 70px;
                     li{
                         // padding-top: 10px;
-                        // margin-top: -10px;
+                        margin-top: 0px;
                         height: 70px;
                         display: inline-block;
                         .dye-item {
+                            margin-left: -5px;
                             display: inline-block;
                             // padding-top: 10px;
                             // border: 1px solid gray;
                             width: 35px;
                             height: 50px;
+                            margin-top: 5px;
                             img{
                                 
                                 margin-top: 3px;
                                 margin-left: 2px;
+                                // margin-bottom: 20px;
                             }
-                            
+                            &.mid{
+                                // background-color: #4063dd;
+                                margin-right: 20px;
+                              
+                            }
                         }
                         &#selected{
                             // margin-top: 0px !important;
                             // border: 1px solid $alieninfo_blue;
+                            img{
+                                
+                                // margin-top: 3px;
+                                // margin-left: 2px;
+                                padding-bottom: 5px;
+                            } 
                         
                         }
                         // background-color: red;
