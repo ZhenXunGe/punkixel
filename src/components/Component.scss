@@ -34,21 +34,23 @@ div.application {
     height: 400px;
     background-color: white;
     right: 0px;
-    left: 208px;
+    left: 198px;
 }
 
 .drawer {
     height: 400px;
     /* width: calc(1000px -32px); */
-    width: 968px;
+    width: 1000px;
     float: left;
+
     background-color: transparent;
-    margin: auto;
+    // margin: auto;
+    // margin-left: 100px;
 }
 
 .main-board .drawer canvas {
     height: 400px;
-    width: 968px;
+    width: 1000px;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -146,17 +148,17 @@ div.application {
 
 .animation {
     position: absolute;
-    top: 180px;
+    top: 230px;
     height: 400px;
     right: 0px;
-    left: 208px;
+    left: 199px;
 }
 
 .animation .body {
     margin: auto;
     right: 0px;
     left: 208px;
-    width: 968px;
+    width: 1000px;
 }
 
 div.drop {

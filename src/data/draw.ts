@@ -4,7 +4,7 @@ import { Sprite } from "../sprite/sprite";
 import getWorld from "./world";
 
 /* Size of the individual home */
-export const individualWidth:number = 242;
+export const individualWidth:number = 250;
 export const individualHeight:number = 100;
 export const content_size:number = individualWidth * individualHeight;
 
