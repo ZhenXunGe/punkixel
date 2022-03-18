@@ -17,6 +17,7 @@ import './style.scss';
 import btm_left from '../images/bottom_left.png';
 import btm_right from '../images/bottom_right.png';
 import righttube from '../images/righttube.png';
+import mid_left from '../images/mid_left.png';
 function AlienInfo() {
   return (<div>
     <div className="alien-basic">
@@ -57,6 +58,9 @@ export function RightPanel() {
       <Events></Events>
       <div className="alien-info">
         <AlienInfo></AlienInfo>
+      </div>
+      <div className="mid_left">
+        <img src={mid_left}></img>
       </div>
       <div className='righttube'>
         <img src={righttube}></img>
