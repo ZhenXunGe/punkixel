@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import { rawListeners } from 'process';
 import { RootState } from '../app/store';
-import { Alien } from '../data/alien';
+import { Alien, randomAlien } from '../data/alien';
 import { individualWidth } from '../data/draw';
 import { availableMinions, getMinionById } from '../data/minion';
 import getWorld from '../data/world';
 import { BulletInfo } from './bullet';
-import { DropEvent, Event }  from './event';
+import { DropEvent, Event, RewardEvent }  from './event';
 
 
 
@@ -29,6 +29,7 @@ export interface DynamicState {
     timeClock: number;
     events: Array<Event>;
     alien: Alien;
+    upcomingAlien: Alien;
     viewIndex: number;
     sketchSignal: number;
     damage: number;
@@ -37,7 +38,8 @@ export interface DynamicState {
 const initialState: DynamicState = {
   timeClock: 0,
   events:[],
-  alien: {name:"GruStoood", alienId: 0, pos:0, status:"run", dizzle:0},
+  alien: randomAlien(),
+  upcomingAlien: randomAlien(),
   viewIndex: 0,
   sketchSignal: 0,
   damage:0,
@@ -79,8 +81,9 @@ export const dynamicSlice = createSlice({
             state.alien.dizzle = 20;
             state.damage = 0;
             let instance = getWorld().getInstance(state.viewIndex*individualWidth);
-            instance.calculateRewards(100,[]);
-            state.events.unshift(DropEvent("Guru01", instance));
+            instance.calculateRewards(100, state.alien.drop);
+            state.events.unshift(RewardEvent(state.alien.name, instance));
+            state.events.unshift(DropEvent(state.alien.name, instance, state.alien.drop));
           }
           console.log(`alien has taken ${state.damage} damage`);
         }
@@ -95,7 +98,8 @@ export const dynamicSlice = createSlice({
       if (status == "run") {
         state.alien.pos += 1;
         if (state.alien.pos >= individualWidth * getWorld().instances.length) {
-          state.alien.pos = 0;
+          state.alien = state.upcomingAlien;
+          state.upcomingAlien = randomAlien();
         }
       }
       if (status == "dizzle") {
@@ -130,6 +134,7 @@ export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSket
 export const selectTimeClock = (state: RootState) => state.dynamic.timeClock;
 export const selectEvents = (state: RootState) => state.dynamic.events;
 export const selectAlien = (state: RootState) => state.dynamic.alien;
+export const selectUpcomingAlien = (state: RootState) => state.dynamic.upcomingAlien;
 export const selectViewIndex = (state: RootState) => state.dynamic.viewIndex;
 export const selectSketchSignal = (state: RootState) => state.dynamic.sketchSignal;
 export default dynamicSlice.reducer;

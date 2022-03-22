@@ -42,6 +42,8 @@ export class Instance {
       for (var m of this.info.minions) {
         getWorld().clearMinionContribute(m);
       }
+      let locOwner = this.info.owner;
+      getWorld().claimDrop(locOwner, drops);
     }
   }
   

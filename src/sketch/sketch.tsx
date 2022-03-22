@@ -1,19 +1,19 @@
 import { Drawer } from "../data/draw";
 import { findGrayColor } from "../data/palette";
 import { Sprite } from "../sprite/sprite";
-
 import build01 from "./resource/sketch-gray-01.png";
 import build02 from "./resource/sketch-gray-02.png";
 import build03 from "./resource/sketch-gray-03.png";
 import build04 from "./resource/sketch-gray-04.png";
 import build05 from "./resource/sketch-gray-05.png";
+import build06 from "./resource/sketch-gray-06.png";
 
 import road01 from "./resource/sketch-road-01.png";
 import road02 from "./resource/sketch-road-02.png";
 import road03 from "./resource/sketch-road-03.png";
 import road04 from "./resource/sketch-road-04.png";
 export const clips = [
-  { name: "building", src: [build01, build02, build03, build04, build05] },
+  { name: "building", src: [build01, build02, build03, build04, build05, build06] },
   { name: "road", src: [road01, road02, road03, road04] }
 ]
 
@@ -94,7 +94,7 @@ export function drawBuildings(
       let dyeidx = 0;
       if (a != 0) {
         dyeidx = findGrayColor(r, g, b);
-        drawer.setPixelByCor(sx + x, sy + height - y - 1, dyeidx + gray);
+        drawer.setBackgroundPixelByCor(sx + x, sy + height - y - 1, dyeidx + gray);
       }
       //drawer.setPixelByCor(sx+x, sy+height-y, 18);\
     }
@@ -127,7 +127,7 @@ function drawImageAt(
       let dyeidx = 0;
       if (a != 0) {
         dyeidx = findGrayColor(r, g, b);
-        drawer.setPixelByCor(sx + x, sy + height - y - 1, dyeidx);
+        drawer.setBackgroundPixelByCor(sx + x, sy + height - y - 1, dyeidx);
       }
       //drawer.setPixelByCor(sx+x, sy+height-y, 18);\
     }

@@ -1,7 +1,7 @@
 import { content_size, Drawer, individualHeight, individualWidth, Painter } from "./draw";
 import { EmptyInstance, Instance } from "./instance";
 import { Minion, randomMinion } from "./minion";
-import { ColorCategory } from "./palette";
+import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette } from "./palette";
 import background from "./back.jpg";
 
 export function getBackground(index: number) {
@@ -40,8 +40,16 @@ export class World {
   getInstance(center_position: number) {
     return this.instances[Math.floor(center_position / individualWidth)];
   }
-  getInstanceById(id: number) {
-    return this.instances[id];
+  getInstanceByIndex(idx: number) {
+    return this.instances[idx];
+  }
+  getInstanceById(id: string) {
+    for (var ins of this.instances) {
+      if (ins.info.id === id) {
+        return ins;
+      }
+    }
+    return undefined;
   }
   loadInstance() {
     this.instances = BuildTestInstances(() => { return this.cursor });
@@ -132,6 +140,35 @@ export class World {
       this.players.set(player.id, update);
     }
   }
+
+  claimDrop(owner: string, drops: Array<string>) {
+    if (owner == "solo") {
+      let player = this.players.get(owner)!;
+      let palettes = [...player.palettes];
+      for (var drop of drops) {
+        let paletteIndex = fromDrop(drop);
+        let palette = getPalette(fromDrop(drop));
+        let category = (paletteIndex - paletteIndex % 16) / 16;
+        let ps:ColorCategory = {
+          ...palettes[category],
+          palettes: [...palettes[category].palettes, palette]
+        }
+        palettes[category] = ps;
+        console.log(`palette ${palette.name} added`);
+      }
+      let update = { ...player, palettes: palettes };
+      this.players.set(player.id, update);
+    }
+  }
+
+  spentPunkxiel(sender: string, cost:number) {
+    if (sender == "solo") {
+      let player = this.players.get(sender)!;
+      console.log("updating rewords....");
+      let update = {...player, punkxiel: player.punkxiel - cost};
+      this.players.set(player.id, update);
+    }
+  }
 }
 
 export default function getWorld() {
@@ -147,7 +184,16 @@ let player =  {
   ranking: 9999,
   pph: 0,
   voucher: 1,
-  palettes: [],
+  palettes: [{
+    name:"basic",
+    palettes: basic_palettes,
+  },
+  {
+    name:"spin",
+    palettes: [
+      liquid_green_palette,
+      liquid_blue_palette,]
+  }],
   reward: 0,
   inventory: [randomMinion("solo", world).id, randomMinion("solo",world).id, null, null, null],
   homeIndex: 1,
@@ -157,14 +203,18 @@ world.registerPlayer(player);
 
 /* Testging purpose for standalone version */
 
+
+
 function BuildTestInstances(
   cursor: () => number,
 ) {
   let instance_list = new Array<Instance>();
   for (var i = 0; i < 5; i++) {
     let instance = EmptyInstance(`instance_${i}`, world);
+    if (i ==1) {
+      instance.owner = "solo";
+    }
     let d = new Drawer(instance.content, i * individualWidth, cursor);
-    d.resetSketch();
     instance_list.push(new Instance(d, instance));
   }
   return instance_list;

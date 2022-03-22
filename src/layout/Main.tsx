@@ -2,18 +2,23 @@ import React, { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { LeftMenu } from '../components/LeftMenu';
 import { RightPanel } from './RightPanel';
-import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded } from '../sprite/spriteSlice';
+import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded, spriteNumber } from '../sprite/spriteSlice';
 import { updateTimeClockAsync } from '../dynamic/dynamicSlice';
 import getWorld from '../data/world';
-export function Main() {
+import { propTypes } from 'react-bootstrap/esm/Image';
+interface loadingStatus {
+  totalSprites:number,
+}
+export function Main(prop: loadingStatus) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     setInterval(function () {dispatch(updateTimeClockAsync(0))}, 80);
   }, [])
-  const loaded = useAppSelector(spriteLoaded);
   const isloaded = useAppSelector(spriteIsLoaded);
+  const loaded = useAppSelector(spriteLoaded);
   const needload = useAppSelector(spriteNeedLoaded);
-  if(isloaded === true && getWorld()!=undefined) {
+  const total = useAppSelector(spriteNumber);
+  if(isloaded === true && getWorld()!=undefined && total === prop.totalSprites) {
     return (
       <div className="application">
       <LeftMenu></LeftMenu>

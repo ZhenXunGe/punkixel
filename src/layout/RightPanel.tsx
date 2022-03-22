@@ -10,23 +10,24 @@ import { WorldPanel } from '../components/WorldPanel';
 import { VotePanel } from '../components/VotePanel';
 import { MarketPanel } from '../components/MarketPanel';
 import { Events } from '../components/Events';
-
-import alien from "../sprite/monster/run/skeleton-03_run_00.png";
-
+import { selectUpcomingAlien } from '../dynamic/dynamicSlice';
+import { getSprite } from '../sprite/spriteSlice';
 
 function AlienInfo() {
+  const alien = useAppSelector(selectUpcomingAlien);
+  const sketch = getSprite(alien.sprite).getFrame("run", 0);
   return (<div>
     <div className="alien-basic">
       <div className="alien-basic-avator">
-        <img src={alien}></img>
+        <img src={sketch.src}></img>
       </div>
       <div className="right">
-        <div> Speed: 200</div>
-        <div> Attracted by: night view</div>
+        <div> Speed: {alien.speed}</div>
+        <div> Attracted by: {alien.favourate} </div>
       </div>
     </div>
-    <div> Gru02 from planet 0x3245 is about to arrive Z-city within arount 20 minutes </div>
-    <div> Gru02 carries plenty of native rocks from planet 0x3245 which is the receipt of dye [#dye2] [#dye3]</div>
+    <div> {alien.name} from planet 0x3245 is about to arrive Z-city within arount 20 minutes </div>
+    <div> {alien.name} carries plenty of native rocks from planet 0x3245 which is the receipt of dye [#dye2] [#dye3]</div>
   </div>);
 }
 

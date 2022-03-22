@@ -13,7 +13,8 @@ export function getSprite(sname:string) {
 }
 export interface SpriteState {
   total: number;
-  loaded: number;
+  totalFrame: 0;
+  loadedFrame: number;
 }
 
 export interface SpriteInfo {
@@ -24,7 +25,8 @@ export interface SpriteInfo {
 
 const initialState: SpriteState = {
   total: 0,
-  loaded: 0,
+  totalFrame: 0,
+  loadedFrame: 0,
 };
 
 export const spriteSlice = createSlice({
@@ -34,16 +36,16 @@ export const spriteSlice = createSlice({
     installSprite: (state, d) => {
       console.log("total before install", state.total);
       let sinfo :SpriteInfo = d.payload;
-      console.log("total beforez", state.total);
-      state.total += sinfo.resource;
+      state.totalFrame += sinfo.resource;
       console.log("total after", state.total);
       if (spriteMap[sinfo.name]!=undefined) {
         console.error(`sprite ${sinfo.name} already existed`);
       }
+      state.total += 1;
       spriteMap[sinfo.name] = sinfo.sprite;
     },
     loadSpriteFrame: (state) => {
-      state.loaded += 1;
+      state.loadedFrame += 1;
     } 
   },
   extraReducers: (builder) => {
@@ -54,12 +56,16 @@ export const spriteSlice = createSlice({
 
 export const { installSprite, loadSpriteFrame } = spriteSlice.actions;
 export const spriteIsLoaded = (state: RootState) => {
-  return(state.sprite.loaded == state.sprite.total);
+  return(state.sprite.loadedFrame == state.sprite.totalFrame);
 }
 export const spriteLoaded = (state: RootState) => {
-  return(state.sprite.loaded);
+  return(state.sprite.loadedFrame);
 }
 export const spriteNeedLoaded = (state: RootState) => {
+  return(state.sprite.totalFrame);
+}
+export const spriteNumber = (state: RootState) => {
   return(state.sprite.total);
 }
+
 export default spriteSlice.reducer;

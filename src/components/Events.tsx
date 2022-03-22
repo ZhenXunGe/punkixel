@@ -1,6 +1,7 @@
 import { Alert } from 'react-bootstrap';
 import { useAppSelector } from '../app/hooks';
 import { selectEvents } from '../dynamic/dynamicSlice';
+import { EventInfo } from '../dynamic/event';
 import { selectPanel } from '../layout/layoutSlice';
 
 import alien from "../sprite/monster/run/skeleton-03_run_00.png";
@@ -15,7 +16,7 @@ export function Events() {
     <div className ="guest-info">
     {events.slice(0,3).map((e,i) =>
         <div key={`event-${i}`} className="event">
-          <AlienAvator></AlienAvator> {e.description} {e.time}
+          <AlienAvator></AlienAvator> <EventInfo event={e}></EventInfo> {e.time}
         </div>
     )}
     </div>

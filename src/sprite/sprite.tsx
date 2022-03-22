@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import { useAppDispatch } from "../app/hooks";
 import { installSprite, loadSpriteFrame } from "./spriteSlice";
 
@@ -115,10 +115,11 @@ export function LoadSprite(props:LoadingIProps) {
   console.log(`install sprite ${props.name} ${sum}`);
   useEffect(()=>{
     dispatch(installSprite({
-    name:props.name,
-    resource:sum,
-    sprite:props.sprite,
-    }))
+      name:props.name,
+      resource:sum,
+      sprite:props.sprite,
+      }
+    ));
   },[]);
 
   return (
