@@ -1,4 +1,4 @@
-import { Dye, DyeIndex, IsNillDye } from "./palette";
+import { costOfDyeIndex, Dye, DyeIndex, IsNillDye, pphOfDyeIndex } from "./palette";
 import { drawBuildings, sketchBuildings, drawRoad } from "../sketch/sketch";
 import { Sprite } from "../sprite/sprite";
 import getWorld from "./world";
@@ -63,7 +63,7 @@ export class Drawer {
       }
       const [x, y] = ofCorIndex(index);
       var dye = this.pixels[minionLayer][index];
-      for (var i=1;i>=0;i--) {
+      for (var i=2;i>=0;i--) {
         if (IsNillDye(dye)) {
           dye = this.pixels[i][index];
         }
@@ -80,8 +80,8 @@ export class Drawer {
       this.dry = dry;
     }
 
-    setPixel(idx: number, dye:DyeIndex) {
-      this.pixels[frontLayer][idx] = dye;
+    setPixel(idx: number, dye:DyeIndex, layer=frontLayer) {
+      this.pixels[layer][idx] = dye;
     }
 
     getPixel(idx:number) {
@@ -89,12 +89,15 @@ export class Drawer {
     }
 
     pushPixelDelta(idx: number, dye:DyeIndex) {
+      let old_pph = pphOfDyeIndex(this.getPixel(idx));
       this.delta.push({
         index: idx,
         old: this.getPixel(idx),
         new: dye,
       });
       this.setPixel(idx, dye);
+      let cost = costOfDyeIndex(dye);
+      return [pphOfDyeIndex(dye) - old_pph, cost];
     }
 
     popPixelDelta(idx: number, dye:Dye) {
@@ -132,30 +135,19 @@ export class Drawer {
       }
     }
 
-    setPixelByCor(x:number, y:number, dye:DyeIndex) {
+    setBackgroundPixelByCor(x:number, y:number, dye:DyeIndex) {
       let id = getCorIndex(x,y);
-      this.setPixel(id, dye);
+      this.setPixel(id, dye, sketchLayer);
     }
 
-    reset() {
-      for (var i=0; i<content_size; i++) {
-        this.setPixel(i, 0);
-      }
-    }
     resetSketch() {
-      let items_front = sketchBuildings(individualWidth, individualHeight, 30);
-      let items_back = sketchBuildings(individualWidth, individualHeight, 30);
-      for (var item of items_front) {
-        this.drawPolygon(sketchLayer, 1*16 + 6, item.x, item.y, item.h, item.w);
-      }
-      for (var item of items_back) {
-        this.drawPolygon(sketchLayer, 1*16 + 6, item.x, item.y, item.h, item.w);
+      for (var i=0; i<content_size; i++) {
+        this.setPixel(i, 0, sketchLayer);
       }
     }
+
     sketchWithStyle(canvas:HTMLCanvasElement, template:Sprite, main:string, road: string) {
-      for (var i=0; i<content_size; i++) {
-        this.setPixel(i, 0);
-      }
+      this.resetSketch();
 
       let items_front = sketchBuildings(individualWidth, individualHeight, 30, 1);
       let items_back = sketchBuildings(individualWidth, individualHeight, 30,0);

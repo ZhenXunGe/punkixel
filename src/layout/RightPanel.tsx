@@ -11,6 +11,7 @@ import { VotePanel } from '../components/VotePanel';
 import { MarketPanel } from '../components/MarketPanel';
 import { Events } from '../components/Events';
 
+
 import alien from "../sprite/monster/run/skeleton-03_run_00.png";
 
 import './style.scss';
@@ -18,11 +19,16 @@ import btm_left from '../images/bottom_left.png';
 import btm_right from '../images/bottom_right.png';
 import righttube from '../images/righttube.png';
 import mid_left from '../images/mid_left.png';
+import { selectUpcomingAlien } from '../dynamic/dynamicSlice';
+import { getSprite } from '../sprite/spriteSlice';
+
 function AlienInfo() {
+  const alien = useAppSelector(selectUpcomingAlien);
+  const sketch = getSprite(alien.sprite).getFrame("run", 0);
   return (<div>
     <div className="alien-basic">
       <div className="alien-basic-avator">
-        <img src={alien}></img>
+        <img src={sketch.src}></img>
       </div>
       <div className="alien-basic-info">
           <p>Gru02</p> 
@@ -35,13 +41,13 @@ function AlienInfo() {
           </div>
         </div>
       <div className="right">
-        <div className='speed'>200</div>
-        <div className='strack'>Night view</div>
+        <div className='speed'>{alien.speed}</div>
+        <div className='strack'>{alien.favourate}</div>
       </div>
     </div>
     <div className='summary'>
-    <div> Gru02 from planet 0x3245 is about to arrive Z-city within arount 20 minutes </div>
-    {/* <div> Gru02 carries plenty of native rocks from planet 0x3245 which is the receipt of dye [#dye2] [#dye3]</div> */}
+    <div> {alien.name} from planet 0x3245 is about to arrive Z-city within arount 20 minutes </div>
+    {/* <div> {alien.name} carries plenty of native rocks from planet 0x3245 which is the receipt of dye [#dye2] [#dye3]</div> */}
     <button className='more'><p>MORE</p></button>
     </div>
   </div>);

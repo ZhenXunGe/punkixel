@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { Palette, Dye, red_palette, gray_palette, liquid_green_palette, liquid_blue_palette, ColorCategory,} from  './palette';
+import { Palette, Dye,
+    gray_palette,
+    basic_palettes,
+    liquid_green_palette,
+    liquid_blue_palette,
+    ColorCategory,} from  './palette';
 import { individualWidth } from "./draw"
 import { randomMinion } from "./minion";
 import getWorld from './world';
@@ -29,7 +34,7 @@ const initialState: StatusState = {
     palettes: [
       {
         name:"basic",
-        palettes: [gray_palette, red_palette]
+        palettes: basic_palettes,
       },
       {
         name:"spin",
@@ -57,6 +62,7 @@ export const statusSlice = createSlice({
       let player = getWorld().getPlayer("solo");
       state.punkxiel = player.punkxiel;
       state.inventory = player.inventory;
+      state.palettes = player.palettes;
       let total = 0;
       for (var m of state.inventory) {
         if (m!==null) {
@@ -69,8 +75,9 @@ export const statusSlice = createSlice({
       state.dye_focus = d.payload;
     },
 
-    paintColor: (state, d) => {
-      state.pph += d.payload.weight;
+    updatePPH: (state, d) => {
+      state.pph += d.payload.delta;
+      getWorld().spentPunkxiel("solo", d.payload.cost);
     },
   },
   extraReducers: (builder) => {
@@ -79,7 +86,7 @@ export const statusSlice = createSlice({
 
 });
 
-export const { paintColor, pickColor,
+export const { updatePPH, pickColor,
     updateStatus,
 } = statusSlice.actions;
 

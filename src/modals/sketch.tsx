@@ -26,8 +26,8 @@ export default function Sketch(prop: SketchProps) {
   const handleConfirm = () => {
     const spriteSketch = getSprite("sketch");
     for (var i = 0; i < getWorld().instances.length; i++) {
-      let d = getWorld().getInstanceById(i).drawer;
-      d.reset();
+      let d = getWorld().getInstanceByIndex(i).drawer;
+      d.resetSketch();
       d.sketchWithStyle(prop.canvas.current!, spriteSketch, main, road);
     }
     /*

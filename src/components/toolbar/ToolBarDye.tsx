@@ -13,8 +13,13 @@ import {
 } from '../../data/statusSlice';
 import { ofDyeIndex, toDyeColor, toDyeIndex } from '../../data/palette';
 import Sketch from "../../modals/sketch";
+
 import bottle from '../../images/home/bottle.png';
 import bottle_border from '../../images/home/bottle_border.png';
+
+import getWorld from '../../data/world';
+import { getSprite } from '../../sprite/spriteSlice';
+
 export function ToolBarDye() {
   const palettes = useAppSelector(selectPalettes);
   const dispatch = useAppDispatch();
@@ -24,16 +29,16 @@ export function ToolBarDye() {
   const pickedDye = useAppSelector(selectDye);
   const homeIndex = useAppSelector(selectHomeIndex);
   const canvasRef = useRef<HTMLCanvasElement>();
-
-  /*
   useEffect(() => {
-    for(var i=0;i<world.instances.length;i++){
-      let d = world.getInstance(homeIndex*individualWidth).drawer;
-      d.reset();
-      d.sketchWithStyle(canvasRef.current!,spriteSketch);
+    const spriteSketch = getSprite("sketch");
+    if (canvasRef.current) {
+      for(var i=0;i<getWorld().instances.length;i++){
+        let d = getWorld().getInstance(i*individualWidth).drawer;
+        d.resetSketch();
+        d.sketchWithStyle(canvasRef.current, spriteSketch, "building", "road");
+      }
     }
-  },[]);
-  */
+  },[canvasRef]);
   return (
     <div className="tool-bar">
 

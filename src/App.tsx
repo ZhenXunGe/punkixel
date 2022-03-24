@@ -15,7 +15,7 @@ function App() {
   const spriteSketch = new Sprite(2, 50, 100, 1, 0, 0, "default");
   return (
     <div className="screen">
-      <Main></Main>
+      <Main totalSprites={3}></Main>
       <LoadSprite sprite={spriteMonster} name="monster" height={100} width={80} clips={MonsterClips}></LoadSprite>
       <LoadSprite sprite={spriteUFO} name="ufo" height={40} width={40} clips={UFOClips}></LoadSprite>
       <LoadSprite sprite={spriteSketch} name="sketch" height={100} width={80} clips={SketchClips}></LoadSprite>

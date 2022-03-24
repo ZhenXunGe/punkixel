@@ -12,6 +12,7 @@ import {
 import {
     selectDye,
     selectHomeIndex,
+    updatePPH,
 } from '../data/statusSlice';
 
 import {
@@ -40,8 +41,9 @@ export function PunkxielDrawer(props: IProps) {
     var x = Math.floor(e.nativeEvent.offsetX/4);
     var y = Math.floor(e.nativeEvent.offsetY/4);
     let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
-    drawer.pushPixelDelta(getCorIndex(x,100-y), pickedDye);
+    let [delta, cost] = drawer.pushPixelDelta(getCorIndex(x,100-y), pickedDye);
     dispatch(signalSketch());
+    dispatch(updatePPH({delta:delta, cost:cost}));
   }
 
   useEffect(() => {
