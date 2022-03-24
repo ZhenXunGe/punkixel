@@ -1,10 +1,18 @@
 @import '../styles/common.scss';
 
 .bottom_left {
+    // width: 20px;
+    
+    //     height: 20px;
+    //     overflow: visible;
     img {
         position: absolute;
         bottom: 0px;
-        left: 200px;
+        // width: 20px;
+        // height: 20px;
+        // overflow: visible;
+        
+        left: 199px;
     }
 }
 
@@ -33,11 +41,11 @@
 .alien-info {
     position: absolute;
     padding: 10px;
-    left: 904px;
+    left: 810px;
     right: 0px;
-    top: 648px;
-    height: 130px;
-    width: 250px;
+    top: 610px;
+    height: 250px;
+    width: 370px;
     z-index: 999;
     color: #deb98e;// $fontcolor;
     font-size: 12px;
@@ -46,104 +54,108 @@
 }
 
 .alien-info .alien-basic {
-    height: 60px;
+    height: 90px;
 
     .alien-basic-info {
-        width: 260px;
+        width: 360px;
+        height: 140px;
         padding-top: 8px;
-
-
-
         font-size: 18px;
 
         p {
-            margin-left: 70px;
+            margin-left: 150px;
+            // height: 40px;
+            margin-bottom: 0px;
+            margin-top: 10px;
             font-weight: bold;
+            // bottom: 0px;
         }
 
         .skill {
-            padding-right: 24px;
-
+            padding-left: 84px;
+            width: 300px;
+            height: 25px;
+            // float: left;
             // display:inline;
-            ul {
-
-                margin-top: -44px;
-                float: right;
+            .skills {
 
                 li {
                     text-align: center;
-                    width: 20px;
-                    height: 20px;
+                    width: 25px;
+                    height: 25px;
                     margin-left: 9px;
                     background-color: bisque;
                     display: inline-block
                 }
             }
+            
+        }
+        .right {
+            display: inline-block;
+            margin-left: 15px;
+            margin-top: 8px;
+            width: 230px;
+            font-weight: bold;
+            // float: right;
+            // color: $alieninfo_blue;
+            -webkit-transform: scale(0.6);
+        
+            // font-weight: bold;
+            .speed {
+                margin-left: 0px;
+                float: left;
+            }
+        
+            .strack {
+                float: right;
+                margin-right: 14px;
+            }
+        
+            // border:1px solid gray;
         }
     }
 }
 
 .alien-info .alien-basic-avator {
-    margin-top: 8px;
+    margin-top: 48px;
     float: left;
-    height: 50px;
-    width: 50px;
+    height: 110px;
+    width: 110px;
 
 }
 
 .alien-info img {
 
-    height: 50px;
-    width: 50px;
+    height: 110px;
+    width: 110px;
 }
 
-.alien-info div.right {
-    display: inline-block;
-    margin-left: 30px;
-    margin-top: -14px;
-    width: 150px;
-    font-weight: bold;
-    float: right;
-    color: $alieninfo_blue;
-    -webkit-transform: scale(0.8);
-
-    // font-weight: bold;
-    .speed {
-        margin-left: 0px;
-        float: left;
-    }
-
-    .strack {
-        float: right;
-        padding-left: 60px;
-    }
-
-    // border:1px solid gray;
-}
+// .alien-info div
 
 
 .summary {
-    padding-top: 2px;
-    margin-left: -10px;
+    // padding-top: 2px;
+    margin-top: 10px;
+    margin-left: 120px;
     font-weight: bold;
-    width: 250px;
+    width: 230px;
     -webkit-transform: scale(0.8); //小于浏览器最小支持字体，使用css缩放
 
     .more {
-        margin-top: 15px;
+        margin-top: 12px;
         font-size: 14px;
         color: $alieninfo_blue;
-        margin-left: 15px;
+        margin-left: 80px;
         font-weight: bold;
-        width: 70px;
+        width: 120px;
         vertical-align: middle;
-        height: 22px;
-        border: 3px solid $alieninfo_blue;
-        border-radius: 5px;
+        height: 30px;
+        border: none;
+        // border-radius: 5px;
         background-color: rgba(255, 255, 255, 0);
-
-        p {
-            margin-top: -3px;
-        }
+        background-image: url('../images/MORE.png');
+        // p {
+        //     margin-top: -3px;
+        // }
     }
 }

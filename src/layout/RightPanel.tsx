@@ -31,24 +31,27 @@ function AlienInfo() {
         <img src={sketch.src}></img>
       </div>
       <div className="alien-basic-info">
-          <p>Gru02</p> 
-          <div className='skill'>
-            <ul>
+      <div className='skill'>
+            <ul className='skills'>
               <li>1</li>
               <li>2</li>
               <li>3</li>
             </ul>
           </div>
-        </div>
-      <div className="right">
+          <p>{alien.name}</p> 
+          <div className="right">
         <div className='speed'>{alien.speed}</div>
         <div className='strack'>{alien.favourate}</div>
       </div>
+        </div>
+     
     </div>
     <div className='summary'>
     <div> {alien.name} from planet 0x3245 is about to arrive Z-city within arount 20 minutes </div>
     {/* <div> {alien.name} carries plenty of native rocks from planet 0x3245 which is the receipt of dye [#dye2] [#dye3]</div> */}
-    <button className='more'><p>MORE</p></button>
+    <button className='more'>
+      {/* <p>MORE</p> */}
+      </button>
     </div>
   </div>);
 }
