@@ -38,7 +38,7 @@ function AlienInfo() {
               <li>3</li>
             </ul>
           </div>
-          <p>{alien.name}</p> 
+          <p style={{color:'white',fontFamily:'monospace'}}>{alien.name}</p> 
           <div className="right">
         <div className='speed'>{alien.speed}</div>
         <div className='strack'>{alien.favourate}</div>
@@ -47,7 +47,7 @@ function AlienInfo() {
      
     </div>
     <div className='summary'>
-    <div> {alien.name} from planet 0x3245 is about to arrive Z-city within arount 20 minutes </div>
+    <div style={{color:'white'}}> {alien.name} from planet 0x3245 is about to arrive Z-city within arount 20 minutes </div>
     {/* <div> {alien.name} carries plenty of native rocks from planet 0x3245 which is the receipt of dye [#dye2] [#dye3]</div> */}
     <button className='more'>
       {/* <p>MORE</p> */}

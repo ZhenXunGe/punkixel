@@ -74,94 +74,111 @@
             padding-left: 70px;
             background-image: url('../../images/home/toolbar.png');
 
-            div.dropdown {
-                margin-top: 5px;
-                height: 44px;
-                background-color: rgba(255, 255, 255, 0);
-                
-                button.btn_left {
-                    color: $alieninfo_blue;
-                    border: none;
-                    width: 275px;
-                    background-color: rgba(255, 255, 255, 0);
-                    background-image: url('../../images/home/select_board.png');
-                }
-
-                button.btn_right {
-                    margin-left: -7px;
-                    border: none;
-                    width: 51px;
-                    background-color: rgba(255, 255, 255, 0);
-                    background-image: url('../../images/home/select_btn.png');
-                }
-            }
+            
             div.select_board{
                 width: 630px;
-                
-            }
-            div.select_right{
-                float: right;
-                // margin-top: 5px;
-                width: 300px;
-                .select_right_inline{
-                    // 
-                    float: left;
-                    height: 70px;
-                    li{
-                        // padding-top: 10px;
-                        margin-top: 0px;
-                        height: 70px;
+                div.dropdown {
+                    position: absolute;
+                    margin-top: 10px;
+                    display: inline-block;
+                    height: 44px;
+                    width: 326px;
+                    background-color: rgba(255, 255, 255, 0);
+                    
+                    div.btn_left {
+                        float: left;
                         display: inline-block;
-                        .dye-item {
-                            margin-left: -5px;
-                            display: inline-block;
-                            // padding-top: 10px;
-                            // border: 1px solid gray;
-                            width: 35px;
-                            height: 50px;
-                            margin-top: 5px;
-                            img{
-                                
-                                margin-top: 3px;
-                                margin-left: 2px;
-                                // margin-bottom: 20px;
-                            }
-                            &.mid{
-                                // background-color: #4063dd;
-                                margin-right: 20px;
-                              
-                            }
-                        }
-                        &#selected{
-                            // margin-top: 0px !important;
-                            // border: 1px solid $alieninfo_blue;
-                            img{
-                                
-                                // margin-top: 3px;
-                                // margin-left: 2px;
-                                padding-bottom: 5px;
-                            } 
-                        
-                        }
-                        // background-color: red;
-                        // height: 50px !important;
-                        
+                        color: $alieninfo_blue;
+                        line-height: 44px;
+                        text-align: center;
+                        border: none;
+                        width: 275px;
+                        height: 44px;
+                        background-color: rgba(255, 255, 255, 0);
+                        background-image: url('../../images/home/select_board.png');
+                    }
+    
+                    div.btn_right {
+                        display: inline-block;
+                        float: right;
+                        // margin-left: -7px;
+                        cursor: pointer;
+                        border: none;
+                        width: 51px;
+                        height: 44px;
+                        background-color: rgba(255, 255, 255, 0);
+                        background-image: url('../../images/home/select_btn.png');
                     }
                 }
-                // margin-right: 140px;
-            }
-            div.pixel{
-                width: 32px;
-                float: left;
-                margin-top: -50px;
-                margin-left: 630px;
-                li#PPH{
-                    color: $fontcolor;
-                    float: right;
-                    width: 20px;
-                    height: 44px;
+                div.select_right{
+                    // float: right;
+                    display: inline-block;
+                    margin-left: 340px;
+                    // margin-top: -50px;
+                    width: 300px;
+                    .select_right_inline{
+                        // 
+                        float: left;
+                        height: 70px;
+                        li{
+                            // padding-top: 10px;
+                            margin-top: 0px;
+                            height: 70px;
+                            display: inline-block;
+                            .dye-item {
+                                margin-left: -5px;
+                                display: inline-block;
+                                // padding-top: 10px;
+                                // border: 1px solid gray;
+                                width: 35px;
+                                height: 50px;
+                                margin-top: 5px;
+                                img{
+                                    
+                                    margin-top: 3px;
+                                    margin-left: 2px;
+                                    // margin-bottom: 20px;
+                                }
+                                &.mid{
+                                    // background-color: #4063dd;
+                                    margin-right: 20px;
+                                  
+                                }
+                            }
+                            &#selected{
+                                // margin-top: 0px !important;
+                                // border: 1px solid $alieninfo_blue;
+                                img{
+                                    
+                                    // margin-top: 3px;
+                                    // margin-left: 2px;
+                                    padding-bottom: 5px;
+                                } 
+                            
+                            }
+                            // background-color: red;
+                            // height: 50px !important;
+                            
+                        }
+                    }
+                    // margin-right: 140px;
+                }
+                div.pixel{
+                    width: 32px;
+                    float: left;
+                    display: inline-block;
+                    margin-top: -50px;
+                    margin-left: 630px;
+                    li#PPH{
+                        color: $fontcolor;
+                        float: right;
+                        width: 20px;
+                        height: 44px;
+                    }
                 }
             }
+            
+            
             
             div.pph{
                 margin-top: -20px;

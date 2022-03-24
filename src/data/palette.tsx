@@ -59,7 +59,7 @@ const color_red = [
     buildPaletteDye("#dd191d", 1),
     buildPaletteDye("#d01716", 1),
     buildPaletteDye("#c41411", 1),
-    buildPaletteDye("#b0120a", 1),
+    // buildPaletteDye("#b0120a", 1),
 ];
 
 const color_pink = [
@@ -71,7 +71,7 @@ const color_pink = [
     buildPaletteDye("#dd191d", 1),
     buildPaletteDye("#d01716", 1),
     buildPaletteDye("#c41411", 1),
-    buildPaletteDye("#b0120a", 1),
+    // buildPaletteDye("#b0120a", 1),
 ];
 
 const color_purple = [
@@ -83,7 +83,7 @@ const color_purple = [
     buildPaletteDye("#dd191d", 1),
     buildPaletteDye("#d01716", 1),
     buildPaletteDye("#c41411", 1),
-    buildPaletteDye("#b0120a", 1),
+    // buildPaletteDye("#b0120a", 1),
 ];
 
 
@@ -96,7 +96,7 @@ const color_indigo = [
     buildPaletteDye("#dd191d", 1),
     buildPaletteDye("#d01716", 1),
     buildPaletteDye("#c41411", 1),
-    buildPaletteDye("#b0120a", 1),
+    // buildPaletteDye("#b0120a", 1),
 ];
 
 const color_blue = [
@@ -108,7 +108,7 @@ const color_blue = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_lightblue = [
@@ -120,7 +120,7 @@ const color_lightblue = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_cyan = [
@@ -132,7 +132,7 @@ const color_cyan = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_teal = [
@@ -144,7 +144,7 @@ const color_teal = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_green = [
@@ -156,7 +156,7 @@ const color_green = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_lightgreen = [
@@ -168,7 +168,7 @@ const color_lightgreen = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_lime = [
@@ -180,7 +180,7 @@ const color_lime = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_yellow = [
@@ -192,7 +192,7 @@ const color_yellow = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 
@@ -205,7 +205,7 @@ const color_amber = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_orange = [
@@ -217,7 +217,7 @@ const color_orange = [
     buildPaletteDye("#4e6cef", 1),
     buildPaletteDye("#455ede", 1),
     buildPaletteDye("#3b50ce", 1),
-    buildPaletteDye("#2a36b1", 1),
+    // buildPaletteDye("#2a36b1", 1),
 ];
 
 const color_liquid_green = [

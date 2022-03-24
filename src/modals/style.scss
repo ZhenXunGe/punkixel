@@ -1,13 +1,246 @@
-.protect_btn{
+.protect_btn {
     border: 0;
-    
+
     margin-right: -6px;
     margin-top: -128px;
     float: right;
     z-index: 100;
     background-color: rgba(255, 255, 255, 0);
-    img{
+
+    img {
         width: 160px;
         background-color: rgba(255, 255, 255, 0);
+    }
+}
+
+.modal-90w {
+    width: 920px;
+    // height: 520px;
+    // overflow: visible;
+    // min-height: 520px !important;
+    max-width: none !important;
+
+    .modal-content {
+        height: 540px;
+        background-image: url('../images/modal/modal.png');
+        background-color: transparent;
+        border: none;
+
+        button.closeBtn {
+            margin-left: 702px;
+            margin-top: -12px;
+            width: 49px;
+            height: 49px;
+            border-radius: 50%;
+            border: none;
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        .select_area {
+            width: 748px;
+            height: 421px;
+            margin-left: 45px;
+            display: flex;
+            justify-content: space-around;
+
+            .left {
+                width: 242px;
+                height: 400px;
+                margin-top: 38px;
+                background-image: url('../images/modal/palette/select_area.png');
+
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    margin-left: 10px;
+
+                    li.category {
+                        width: 250px;
+                        height: 50px;
+                        padding-left: 12px;
+                        padding-right: 38px;
+                        // background-color: aquamarine;
+                        font-size: 28px;
+                        line-height: 50px;
+                        color: white;
+                        text-align: center;
+                        user-select: none;
+
+                        &.selected {
+                            background-image: url('../images/modal/palette/selecting.png');
+
+                        }
+                    }
+
+                }
+            }
+
+            .right {
+                height: 408px;
+                width: 504px;
+                // background-color: rgb(116, 151, 151);
+                margin-left: 24px;
+                margin-top: 30px;
+                overflow-y: scroll;
+
+                &::-webkit-scrollbar {
+
+                    width: 30px;
+
+                    // background-color:#fff;
+                    background-image: url('../images/modal/roll_axis.png');
+
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    // background-repeat: no-repeat;
+
+                    background-image: url('../images/modal/roll_button.png');
+                }
+
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    margin-left: 0;
+
+                    .palette {
+                        margin-top: 2px;
+                        margin-left: 3px;
+                        float: left;
+                        width: 222px;
+                        height: 100px;
+                        background-image: url('../images/modal/palette/palette_unact.png');
+
+                        .paletteItem {
+                            margin-top: 20px;
+                            color: white;
+                            text-align: center;
+
+                        }
+
+                        ul {
+                            padding-left: 15px;
+                            margin-top: 17px;
+
+                            li {
+                                float: left;
+                                margin-right: 3px;
+
+                                &:nth-child(5),
+                                &:nth-child(7) {
+                                    margin-right: 4px;
+                                }
+
+                                &:first-child,
+                                &:last-child {
+                                    .dye-item {
+                                        width: 18px;
+                                    }
+                                }
+
+                                &:nth-child(3) {
+                                    .dye-item {
+                                        width: 23px;
+                                    }
+                                }
+
+                                &:nth-child(4),
+                                &:nth-child(7) {
+                                    .dye-item {
+                                        width: 22px;
+                                    }
+                                }
+
+                                .dye-item {
+                                    display: inline-block;
+                                    width: 22px;
+                                    height: 25px;
+                                }
+                            }
+                        }
+
+                        &.selected {
+                            background-image: url('../images/modal/palette/palette_act.png');
+                        }
+                    }
+                }
+            }
+
+            .protect_area {
+
+                // text-align: center;
+                .headerTitle {
+                    margin-top: 35px;
+                    text-align: center;
+
+                    img {
+                        width: 514px;
+                        height: 44px;
+                    }
+                }
+
+                .minions {
+
+                    width: 750px;
+                    height: 300px;
+                    // background-color: aquamarine;
+                    list-style: none;
+                    overflow-y: scroll;
+
+                    &::-webkit-scrollbar {
+
+                        width: 30px;
+
+                        // background-color:#fff;
+                        background-image: url('../images/modal/roll_axis.png');
+
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        // background-repeat: no-repeat;
+
+                        background-image: url('../images/modal/roll_button.png');
+                    }
+
+                    li {
+                        width: 680px;
+                        height: 98px;
+                        background-repeat: no-repeat;
+                        background-image: url('../images/modal/protect/minion_unact.png');
+                        line-height: 90px;
+                        cursor: pointer;
+                        img {
+                            width: 65px;
+                            height: auto;
+                            margin: 0 15px;
+                        }
+
+                        span {
+                            font-size: 24px;
+                            color: white;
+                            margin-left: 23px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .footer {
+            width: 93%;
+            height: 59px;
+            margin: 0 auto;
+            margin-top: -32px;
+            background-image: url('../images/modal/protect/bottom_btn_bg.png');
+            // text-align: center;
+            padding-top: 11px;
+            .cancel{
+                cursor: pointer;
+                margin-left: 190px;
+            }
+            .choose{
+                cursor: pointer;
+                margin-left: 73px;
+            }
+        }
     }
 }

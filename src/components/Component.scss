@@ -2,6 +2,7 @@
 
 body {
     background-color: #999;
+    user-select: none;
 }
 
 div.screen {
@@ -14,7 +15,7 @@ div.screen {
 }
 
 div.application {
-    user-select: none;
+    // user-select: none;
     position: relative;
     height: 814px;
     width: 1200px;

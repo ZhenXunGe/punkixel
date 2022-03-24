@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import '../Component.scss';
 import { Button, DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
+import { PaletteSelect } from '../../../src/modals/palette_select';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.scss';
 import { individualWidth } from "../../data/draw";
@@ -20,6 +21,11 @@ import bottle_border from '../../images/home/bottle_border.png';
 import getWorld from '../../data/world';
 import { getSprite } from '../../sprite/spriteSlice';
 
+
+
+
+
+
 export function ToolBarDye() {
   const palettes = useAppSelector(selectPalettes);
   const dispatch = useAppDispatch();
@@ -29,6 +35,7 @@ export function ToolBarDye() {
   const pickedDye = useAppSelector(selectDye);
   const homeIndex = useAppSelector(selectHomeIndex);
   const canvasRef = useRef<HTMLCanvasElement>();
+  const [show, setShow] = useState(false);
   useEffect(() => {
     const spriteSketch = getSprite("sketch");
     if (canvasRef.current) {
@@ -41,7 +48,6 @@ export function ToolBarDye() {
   },[canvasRef]);
   return (
     <div className="tool-bar">
-
       <div className="hide">
         <canvas height="100" width="300" ref={e => {
           canvasRef.current = e!
@@ -74,10 +80,15 @@ export function ToolBarDye() {
                     </DropdownButton>
                     </li> */}
             <div className='select_board'>
-              <Dropdown as={ButtonGroup}>
-                <Button className='btn_left'>{palettes[pickedCategory].name} / {palettes[pickedCategory].palettes[pickedPalette].name}</Button>
-                <Dropdown.Toggle split className='btn_right' id="dropdown-custom-1" />
-                <Dropdown.Menu className="super-colors">
+              
+              <div className='dropdown'>
+                <div  className='btn_left'>{palettes[pickedCategory].name} / {palettes[pickedCategory].palettes[pickedPalette].name}</div>
+                <div  className='btn_right' id="dropdown-custom-1"  onClick={()=>{
+                    setShow(true);
+                }}/>
+
+                
+                {/* <Dropdown.Menu className="super-colors">
 
                   {palettes.map((p, idx) =>
                     <Dropdown.Item onClick={() => setPickedCategory(idx)}>{palettes[idx].name}</Dropdown.Item>
@@ -89,8 +100,8 @@ export function ToolBarDye() {
                     <Dropdown.Item onClick={() => setPickedPalette(idx)}>{p.name}</Dropdown.Item>
                   )
                   }
-                </Dropdown.Menu>
-              </Dropdown>
+                </Dropdown.Menu> */}
+              </div>
 
 
               {/*
@@ -133,10 +144,11 @@ export function ToolBarDye() {
                   }
                 </div>
               </div>
-            </div>
-            <div className='pixel'>
+              <div className='pixel'>
               <li id='PPH'>{palettes[pickedCategory].palettes[pickedPalette].pph}</li>
             </div>
+            </div>
+            
 
           </ul>
         </li>
@@ -144,7 +156,8 @@ export function ToolBarDye() {
       </ul>
 
       <Sketch main="building" road="road" background={1} canvas={canvasRef} ></Sketch>
-
+      <PaletteSelect show={show}
+        onHide={() => setShow(false)} ></PaletteSelect>
     </div>
   );
 }
