@@ -15,7 +15,7 @@ export function Events() {
   return (
     <div className ="guest-info">
     {events.slice(0,3).map((e,i) =>
-        <div key={`event-${i}`} className="event">
+        <div  key={`event-${i}`} className="event">
           <AlienAvator></AlienAvator> <EventInfo event={e}></EventInfo> {e.time}
         </div>
     )}

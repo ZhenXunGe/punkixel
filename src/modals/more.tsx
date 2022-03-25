@@ -13,59 +13,19 @@ import CANCEL from '../images/modal/protect/CANCEL.png';
 import CHOOSE from '../images/modal/protect/CHOOSE.png';
 import './style.scss';
 import { getSprite } from "../sprite/spriteSlice";
-
-interface MinionSelector {
-  setminion: (m: string) => void;
-}
-
-interface SingleSelect {
-  current: string;
-  setminion: (m: string) => void;
-  mId: string;
-}
-
-export function SingleListItem(m: SingleSelect) {
-  let minion = getWorld().getMinion(m.mId)!;
-  let sprites = getSprite("ufo");
-  let ufo = sprites.getFrame("default", minion.style).src;
-  
-  if (minion.location === null) {
-    return (
-      <li className={`${m.mId === m.current?'selected':'' }`} onClick={() => {m.setminion(m.mId);
-      console.log(m.mId,m.current);
-      }}
-      //  href={"#" + minion.id}
-      > <img src={ufo}></img>
-        <span>{minion.id} is now idling. [speed: {minion.power}]</span>
-      </li>);
-  } else {
-    return (<li > 
-      <img src={ufo}></img> 
-      <span>is now protecting block {minion.location}. [contribution:{minion.contribution} ] </span>
-      </li>);
-  }
-}
-function MinionSelector(s: MinionSelector) {
-  const inventory = useAppSelector(selectInventory);
-  const [current, setCurrent] = useState("none");
-  const setMinion = (mid: string) => {
-    setCurrent(mid);
-    s.setminion(mid);
-    
-  }
-  return (
-    <ul className="minions"
-    // defaultActiveKey={"#" + current}
-    >
-      {inventory.filter((m) => m !== null).map((m, i) => {
-        return <SingleListItem current={current} setminion={setMinion} mId={m!} key={m!}></SingleListItem>
-      })}
-      
-    </ul>)
+import bg from '../images/modal/more/background.png';
+interface MORE {
+  name: string;
+  description: string;
+  speed:number;
+  favourate:string;
+  imgsrc:string;
 }
 
 
-export default function Contribute() {
+
+
+export default function More(props:MORE) {
   const [show, setShow] = useState(false);
   const [minionId, setMinionId] = useState<string | null>(null);
   const inventory = useAppSelector(selectInventory);
@@ -86,8 +46,8 @@ export default function Contribute() {
       {/* <Button variant="primary" onClick={handleShow} className="right">
         Protect This Block
       </Button> */}
-      <button className="protect_btn" onClick={handleShow}>
-        <img src={PROTECT} ></img>
+      <button className="more" onClick={handleShow}>
+        {/* <img src={PROTECT} ></img> */}
       </button>
       {/* <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
@@ -110,23 +70,29 @@ export default function Contribute() {
         <Modal.Body className="show-grid">
           <Container>
             <button className="closeBtn" onClick={handleClose}></button>
-            <div className="select_area">
-              <div className="protect_area">
-                <div className="headerTitle">
-                  <img src={header} ></img>
-                </div>
-                {/* <ul className="minions"> */}
-                <MinionSelector setminion={setMinionId}></MinionSelector>
-                
-                {/* </ul> */}
+            <div className="more_area">
+              <img src={bg} className="more_background" />
+              <div className="more_left">
+                <img src={props.imgsrc}  ></img>
+                <div className='monsterName'>{props.name}</div>
+              </div>
+              <div className="more_right">
+                <ul className="skill">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+                <ul className="proto">
+                  <li>{props.speed}</li>
+                  <li>{props.favourate}</li>
+                </ul>
+              <div className="desc">
+                <span>
+                  {props.description}
+                </span></div>
               </div>
             </div>
-            <div className="footer">
-              <img onClick={handleClose} className="cancel" src={CANCEL} />
-              <img
-              //  style={{cursor:minionId!==null?'not-allowed':'pointer',}}
-               onClick={handleConfirm} className="choose" src={CHOOSE} />
-            </div>
+
           </Container>
         </Modal.Body>
 

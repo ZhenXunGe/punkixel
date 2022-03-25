@@ -10,9 +10,9 @@ import { WorldPanel } from '../components/WorldPanel';
 import { VotePanel } from '../components/VotePanel';
 import { MarketPanel } from '../components/MarketPanel';
 import { Events } from '../components/Events';
+import  More from '../modals/more'
 
-
-import alien from "../sprite/monster/run/skeleton-03_run_00.png";
+import alien_ from "../sprite/monster/run/skeleton-03_run_00.png";
 
 import './style.scss';
 import btm_left from '../images/bottom_left.png';
@@ -49,9 +49,10 @@ function AlienInfo() {
     <div className='summary'>
     <div style={{color:'white'}}> {alien.name} from planet 0x3245 is about to arrive Z-city within arount 20 minutes </div>
     {/* <div> {alien.name} carries plenty of native rocks from planet 0x3245 which is the receipt of dye [#dye2] [#dye3]</div> */}
-    <button className='more'>
-      {/* <p>MORE</p> */}
-      </button>
+    {/* <button className='more'>
+      </button> */}
+      <More imgsrc={alien_} name={alien.name} description={`${alien.name} from planet 0x3245 is about to arrive Z-city within arount 20 minutes
+      ${alien.name} carries plenty of native rocks from planet 0x3245 which is the receipt of dye [#dye2] [#dye3]`} speed={alien.speed} favourate={alien.favourate} ></More>
     </div>
   </div>);
 }

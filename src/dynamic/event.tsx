@@ -81,7 +81,9 @@ export interface EventInfoProps {
 
 export function EventInfo(props: EventInfoProps) {
     let event = props.event;
-    if (event.id == AlienDropEvent) return DropEventInfo(event);
+    if (event.id == AlienDropEvent) 
+    // return DropEventInfo(event);
+    return (<>{event.description}</>)
     else {
         return (<>{event.description}</>)
     }
