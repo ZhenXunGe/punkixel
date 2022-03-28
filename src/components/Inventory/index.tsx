@@ -1,6 +1,6 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectInventory } from '../../data/statusSlice';
+import { selectInventory, selectInventoryUpdater } from '../../data/statusSlice';
 import { Minion } from "../../data/minion";
 import { ListGroup } from 'react-bootstrap';
 import getWorld from '../../data/world';
@@ -150,6 +150,7 @@ export function SingleListItem(m: SingleSelect) {
 export function MinionSelector(s: MinionSelector) {
   const inventory = useAppSelector(selectInventory);
   const [current, setCurrent] = useState("none");
+  console.log('selector',inventory)
   const setMinion = (mid: string) => {
     setCurrent(mid);
     s.setminion(mid);
@@ -164,11 +165,23 @@ export function MinionSelector(s: MinionSelector) {
 export default function Inventory() {
   const dispatch = useAppDispatch();
   const inventory = useAppSelector(selectInventory);
+  const inventory_updater = useAppSelector(selectInventoryUpdater);
+  const [forceUpdate,setfForceUpdate] = useState(true);
+  useEffect(()=>{
+    if(inventory_updater) {
+      setfForceUpdate(false);
+      setTimeout(() => {
+        setfForceUpdate(true); 
+      }, 0);
+    }
+  },[inventory_updater]);
+
+  console.log('inventory',inventory)
   return (
     <>
-      {inventory.map((m, i) => {
+      {forceUpdate?inventory.map((m, i) => {
         return <SingleItem mId={m} index={i} key={m == null ? `inventory-minion-${i}` : m}></SingleItem>
-      })}
+      }):null}
     </>
   );
 }

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button, Container, ListGroup, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { selectInventory, } from "../data/statusSlice";
+import { selectInventory, selectInventoryUpdater, } from "../data/statusSlice";
 // import { MinionSelector } from "../components/Inventory";
 import { addEvent, selectViewIndex, signalPlaceMinion } from "../dynamic/dynamicSlice";
 import { ProtectingEvent } from "../dynamic/event";
@@ -13,6 +13,7 @@ import CANCEL from '../images/modal/protect/CANCEL.png';
 import CHOOSE from '../images/modal/protect/CHOOSE.png';
 import './style.scss';
 import { getSprite } from "../sprite/spriteSlice";
+import {updateInventory} from '../data/statusSlice';
 
 interface MinionSelector {
   setminion: (m: string) => void;
@@ -71,14 +72,17 @@ export default function Contribute() {
   const inventory = useAppSelector(selectInventory);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const inventory_updater = useAppSelector(selectInventoryUpdater);
   let ratio = 4;
   const dispatch = useAppDispatch();
   const viewIndex = useAppSelector(selectViewIndex);
   const handleConfirm = () => {
+    console.log({ mId: minionId!, viewIndex: viewIndex })
+    dispatch(updateInventory({bol:true}));
     dispatch(signalPlaceMinion({ mId: minionId!, viewIndex: viewIndex }));
     dispatch(addEvent(ProtectingEvent("GruPlayer 1", getWorld().getInstance(viewIndex))));
     setShow(false);
+    dispatch(updateInventory({bol:false}));
   }
   return (
 
@@ -116,7 +120,7 @@ export default function Contribute() {
                   <img src={header} ></img>
                 </div>
                 {/* <ul className="minions"> */}
-                <MinionSelector setminion={setMinionId}></MinionSelector>
+                <MinionSelector  setminion={setMinionId}></MinionSelector>
                 
                 {/* </ul> */}
               </div>
@@ -134,3 +138,5 @@ export default function Contribute() {
     </>
   );
 }
+
+

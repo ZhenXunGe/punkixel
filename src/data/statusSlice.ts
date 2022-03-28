@@ -22,6 +22,7 @@ export interface StatusState {
     dye_focus: number;
     homeIndex: number;
     inventory: Array<string | null>;
+    inventory_updater: boolean;
 }
 
 const initialState: StatusState = {
@@ -46,6 +47,7 @@ const initialState: StatusState = {
     dye_focus: 0,
     reward: 0,
     inventory: [],
+    inventory_updater: false,
     homeIndex: 1,
 };
 
@@ -71,6 +73,9 @@ export const statusSlice = createSlice({
       };
       state.contribution = total;
     },
+    updateInventory: (state, d) => {
+      state.inventory_updater = d.payload.bol;
+    },
     pickColor: (state, d) => {
       state.dye_focus = d.payload;
     },
@@ -87,7 +92,7 @@ export const statusSlice = createSlice({
 });
 
 export const { updatePPH, pickColor,
-    updateStatus,
+    updateStatus,updateInventory,
 } = statusSlice.actions;
 
 export const selectEnergy = (state: RootState) => state.status.energy;
@@ -100,5 +105,6 @@ export const selectDye = (state: RootState) => state.status.dye_focus;
 export const selectPalettes = (state: RootState) => state.status.palettes;
 export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
 export const selectInventory = (state: RootState) => state.status.inventory;
+export const selectInventoryUpdater = (state: RootState) => state.status.inventory_updater;
 export const selectContribution = (state: RootState) => state.status.contribution;
 export default statusSlice.reducer;
