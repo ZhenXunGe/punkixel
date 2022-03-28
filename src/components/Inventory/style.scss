@@ -1,38 +1,45 @@
 @import '../../styles/common.scss';
+
 .left-menu div.protector1 {
     margin-top: -5px;
     position: relative;
     width: 204px;
     height: 95px;
     background-image: url('../../images/protectors/minion1.png');
-    &:first-child{
+
+    &:first-child {
         margin-top: -8px;
     }
-    div.right{
+
+    div.right {
         color: $fontcolor;
         // padding-left: 11px;
         width: 68px;
         margin-left: 90px;
         text-align: center;
         padding-top: 8px !important;
-        .item{
+
+        .item {
             margin-top: 10px;
         }
     }
+
     .tag {
-        img{
-        position: absolute;
-        width: 12px;
-        height: 12px;
-        left: 15px;
-        top: 65px;
-        z-index: 99;
+        img {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            left: 15px;
+            top: 65px;
+            z-index: 99;
         }
+
         // background-size: auto 100%;
         // background-image: url("../../images/protectors/protector_tag.png");
     }
 
     .avator {
+
         // position: absolute;
         // width: 56px;
         // height: 69px;
@@ -40,7 +47,7 @@
         // top: 12px;
         // background-size: auto 100%;
         // background-image: url("../../images/protectors/protector_avator.png");
-        img{
+        img {
             position: absolute;
             width: 56px;
             height: 69px;
@@ -48,7 +55,8 @@
             top: 12px;
         }
     }
-    .avatorbg{
+
+    .avatorbg {
         position: absolute;
         width: 154px;
         height: 79px;
@@ -58,13 +66,27 @@
         background-size: auto 100%;
         background-image: url("../../images/protectors/protector_border2.png");
     }
-    .btn{
+
+    .btn {
         position: absolute;
         width: 18px;
         height: 71px;
         left: 150px;
         top: 5px;
+
+
         // background-size: 18px 71px;
         // background-image: url("../../images/protectors/Unlock.png");
+    }
+
+    .btn:focus,
+    .btn:active:focus,
+    .btn.active:focus,
+    .btn.focus,
+    .btn:active.focus,
+    .btn.active.focus {
+        outline: none;
+        border-color: transparent; // 若是本身具有 border 请删除此属性
+        box-shadow: none;
     }
 }
