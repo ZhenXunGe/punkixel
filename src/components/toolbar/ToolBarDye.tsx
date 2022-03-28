@@ -36,6 +36,7 @@ export function ToolBarDye() {
   const homeIndex = useAppSelector(selectHomeIndex);
   const canvasRef = useRef<HTMLCanvasElement>();
   const [show, setShow] = useState(false);
+  const [alertContext, setAlertContext] = useState("");
   useEffect(() => {
     const spriteSketch = getSprite("sketch");
     if (canvasRef.current) {
@@ -156,7 +157,7 @@ export function ToolBarDye() {
       </ul>
 
       <Sketch main="building" road="road" background={1} canvas={canvasRef} ></Sketch>
-      <PaletteSelect show={show}
+      <PaletteSelect   pickedCategory={pickedCategory} pickedPalette={pickedPalette} show={show} setPickedCategory={setPickedCategory}  setPickedPalette={setPickedPalette} 
         onHide={() => setShow(false)} ></PaletteSelect>
     </div>
   );

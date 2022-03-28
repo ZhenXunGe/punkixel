@@ -10,12 +10,17 @@ import { getSprite } from "../sprite/spriteSlice";
 interface IProps {
   show: boolean;
   onHide: () => void;
+  setPickedPalette:(val:number)=>void;
+  setPickedCategory:(val:number)=>void;
+  pickedCategory:number;
+  pickedPalette:number;
 }
 
 export function PaletteSelect(props: IProps) {
   const palettes = useAppSelector(selectPalettes);
-  const [pickedCategory, setPickedCategory] = useState(0);
-  const [pickedPalette, setPickedPalette] = useState(0);
+  // const [pickedCategory, setPickedCategory] = useState(0);
+  // const [pickedPalette, setPickedPalette] = useState(0);
+  const { show, onHide, setPickedPalette, setPickedCategory, pickedCategory, pickedPalette } = props;
   const canvasRef = useRef<HTMLCanvasElement>();
   const [alertContext, setAlertContext] = useState("");
   useEffect(() => {
@@ -31,7 +36,7 @@ export function PaletteSelect(props: IProps) {
   return (
     <>
 
-      <Modal show={props.show} aria-labelledby="contained-modal-title-vcenter" centered dialogClassName="modal-90w">
+      <Modal show={show} aria-labelledby="contained-modal-title-vcenter" centered dialogClassName="modal-90w">
 
         {/* <Modal.Header >
           <Modal.Title id="contained-modal-title-vcenter">
@@ -45,7 +50,7 @@ export function PaletteSelect(props: IProps) {
               <div className="left">
                 <ul>
                   {palettes.map((p, idx) =>
-                    <li className={`category ${idx == pickedCategory ? 'selected' : ''}`} onClick={() => setPickedCategory(idx)}>{palettes[idx].name}</li>
+                    <li className={`category ${idx == pickedCategory ? 'selected' : ''}`} onClick={() => {setPickedPalette(0);setPickedCategory(idx)}}>{palettes[idx].name}</li>
                   )
                   }
                 </ul>
@@ -56,9 +61,11 @@ export function PaletteSelect(props: IProps) {
                     <li className={`palette ${idx == pickedPalette ? 'selected' : ''}`} onClick={() => {
                       setAlertContext(`${palettes[pickedCategory].name} / ${palettes[pickedCategory].palettes[pickedPalette].name}`);
                       setPickedPalette(idx);
-                    
-                  
-                    }}>
+                    }}
+                    onDoubleClick={() => {
+                      onHide();
+                    }}
+                    >
                       <div className="paletteItem">
                         {p.name}
                       </div>
