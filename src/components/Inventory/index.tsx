@@ -109,7 +109,7 @@ export function SingleItem(m: single) {
             <img src={protector_tag} ></img>
           </div>
           <div className='avator'>
-            <img src={protector_avator}></img>
+            <img src={ufo}></img>
           </div>
           <button className='btn'>  
             <img src={Inuse}></img>
