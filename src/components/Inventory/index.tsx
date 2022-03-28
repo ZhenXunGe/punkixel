@@ -78,9 +78,9 @@ export function SingleItem(m: single) {
           <div className='avator'>
           <img src={ufo}></img>
           </div>
-          <button className='btn'>
+          <div className='btn'>
             <img src={Idle}></img>
-          </button>
+          </div>
           <div className="right">
             <div className='item'>{minion.power}</div>
             <div className='item'>{minion.frequency}</div>
@@ -111,9 +111,9 @@ export function SingleItem(m: single) {
           <div className='avator'>
             <img src={ufo}></img>
           </div>
-          <button className='btn'>  
+          <div className='btn'>  
             <img src={Inuse}></img>
-          </button>
+          </div>
           <div className="right">
             <div className='item'>{minion.power}</div>
             <div className='item'>{minion.frequency}</div>
