@@ -39,7 +39,8 @@ export default function Sketch(prop: SketchProps) {
     d.sketchWithStyle(canvasRef.current!,spriteSketch);
     //d.resetSketch();
     */
-    dispatch(signalSketch())
+    dispatch(signalSketch());
+    setShow(false);
   };
   return (
 

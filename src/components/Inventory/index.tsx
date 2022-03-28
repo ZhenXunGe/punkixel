@@ -27,6 +27,9 @@ interface single {
 }
 export function SingleItem(m: single) {
   if (m.mId === null) {
+    
+    let sprites = getSprite("ufo");
+    let ufo = sprites.getFrame("default", 0).src;
     return (
       // <div className="protector">
       //   <div className="left">
@@ -51,7 +54,7 @@ export function SingleItem(m: single) {
         {/* <button className='btn'>
           <img src={Unlock_}></img>
         </button> */}
-        <Unlock  uid="solo" index={m.index}></Unlock>
+        <Unlock avator={ufo} uid="solo" index={m.index}></Unlock>
         <div className="right">
           <div className='item'>???</div>
           <div className='item'>???</div>

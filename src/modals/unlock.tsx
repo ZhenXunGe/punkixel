@@ -4,16 +4,18 @@ import { Button, Container, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import getWorld from "../data/world";
 import Unlock_ from "../images/protectors/Unlock.png";
+import mod_ice from "../images/modal/unlock/ice.png";
 interface UnlockProps {
   uid: string;
   index: number;
+  avator: string;
 }
 
 export default function Unlock(prop: UnlockProps) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const [position, setPosition] = useState(0);
   let ratio = 4;
   const dispatch = useAppDispatch();
   const handleConfirm = () => {
@@ -51,23 +53,27 @@ export default function Unlock(prop: UnlockProps) {
           <Container>
             <button className="closeBtn" onClick={handleClose}></button>
             <div className="unlock_area">
-              <img className="minion_avator" ></img>
+              <img src={prop.avator} className="minion_avator" ></img>
               <div className="minion_pro">
                 <ul className="minion_proto">
                   <li>200</li>
                   <li>night view</li>
                 </ul>
                 <ul className="minion_position">
-                  <li></li>
-                  <li></li>
+                  <li id={`${position==0?'selected':''}`} onClick={()=>{console.log('set sky');setPosition(0)}}></li>
+                  <li id={`${position==1?'selected':''}`} onClick={()=>{console.log('set land');setPosition(1)}}></li>
                 </ul>
               </div>
               <div className="bottom">
                 <ul className="modifier">
-                  <li></li>
-                  <li></li>
+                  <li>
+                    <img style={{width:'50px',height:'50px',}} src={mod_ice} />
+                  </li>
+                  <li>
+                    <img /> 
+                  </li>
                 </ul>
-                <img onClick={handleConfirm} className="unlock"></img>
+                <div onClick={handleConfirm} className="unlock"></div>
               </div>
 
             </div>
