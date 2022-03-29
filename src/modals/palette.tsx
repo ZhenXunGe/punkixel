@@ -18,9 +18,9 @@ export default function PaletteInfo(prop:PaletteProps) {
   return (
 
     <>
-      <div className="button" onClick={() => handleShow()}>
-            {prop.paletteId}
-      </div>
+      <span className="button" onClick={() => handleShow()}>
+            [{prop.paletteId}] 
+      </span>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Palette {palette.name}</Modal.Title>

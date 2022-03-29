@@ -82,7 +82,7 @@ export class World {
 
   flipWeather() {
     let w = ['rain', 'default', 'snow'];
-    let r = w[Math.floor(Math.random()*3)];
+    let r = w[Math.floor(Math.random() * 3)];
     this.weather = r;
   }
 
@@ -97,20 +97,20 @@ export class World {
   registerMinion(m: Minion) {
     this.minions.set(m.id, m);
   }
-  getMinion(id: string) :Minion {
+  getMinion(id: string): Minion {
     return this.minions.get(id)!;
   }
 
   /* Each time a bullet hit alien, the contribution of the owner of the bullet is increased */
-  incMinionContribute(id: string, power:number){
+  incMinionContribute(id: string, power: number) {
     let m = this.minions.get(id)!;
-    let n = {...m, contribution: m.contribution + power};
+    let n = { ...m, contribution: m.contribution + power };
     this.minions.set(m.id, n);
   }
 
   clearMinionContribute(id: string) {
     let m = this.minions.get(id)!;
-    let n = {...m, contribution: 0};
+    let n = { ...m, contribution: 0 };
     this.minions.set(m.id, n);
   }
 
@@ -119,8 +119,19 @@ export class World {
    */
   placeMinion(mId: string, viewIndex: number) {
     let m = this.minions.get(mId)!;
-    let n = {...m, location: viewIndex, contribution: 0};
+    let n = { ...m, location: viewIndex, contribution: 0 };
     this.minions.set(m.id, n);
+  }
+
+  updateMinionPosition(mId: string) {
+    let m = this.minions.get(mId)!;
+    if (m.type !== "land") {
+      let pos_x = m.x + (1 - Math.floor(Math.random() * 3)) * 5;
+      if (pos_x < 0) { pos_x = 0; };
+      if (pos_x > 900) { pos_x = 900; };
+      let n = { ...m, contribution: 0, x: pos_x };
+      this.minions.set(m.id, n);
+    }
   }
 
   unlockMinion(owner: string, index: number) {
@@ -128,7 +139,7 @@ export class World {
     let player = this.players.get(owner)!;
     let inventory = [...player.inventory];
     inventory[index] = r.id;
-    let update = {...player, inventory: inventory};
+    let update = { ...player, inventory: inventory };
     this.players.set(player.id, update);
   }
 
@@ -136,7 +147,7 @@ export class World {
     if (owner == "solo") {
       let player = this.players.get(owner)!;
       console.log("updating rewords....");
-      let update = {...player, punkxiel: player.punkxiel + reward};
+      let update = { ...player, punkxiel: player.punkxiel + reward };
       this.players.set(player.id, update);
     }
   }
@@ -149,7 +160,7 @@ export class World {
         let paletteIndex = fromDrop(drop);
         let palette = getPalette(fromDrop(drop));
         let category = (paletteIndex - paletteIndex % 16) / 16;
-        let ps:ColorCategory = {
+        let ps: ColorCategory = {
           ...palettes[category],
           palettes: [...palettes[category].palettes, palette]
         }
@@ -161,11 +172,11 @@ export class World {
     }
   }
 
-  spentPunkxiel(sender: string, cost:number) {
+  spentPunkxiel(sender: string, cost: number) {
     if (sender == "solo") {
       let player = this.players.get(sender)!;
       console.log("updating rewords....");
-      let update = {...player, punkxiel: player.punkxiel - cost};
+      let update = { ...player, punkxiel: player.punkxiel - cost };
       this.players.set(player.id, update);
     }
   }
@@ -177,7 +188,7 @@ export default function getWorld() {
 
 const world = new World(0);
 world.loadInstance();
-let player =  {
+let player = {
   id: "solo",
   energy: 50,
   punkxiel: 1000,
@@ -185,17 +196,17 @@ let player =  {
   pph: 0,
   voucher: 1,
   palettes: [{
-    name:"basic",
+    name: "basic",
     palettes: basic_palettes,
   },
   {
-    name:"spin",
+    name: "spin",
     palettes: [
       liquid_green_palette,
       liquid_blue_palette,]
   }],
   reward: 0,
-  inventory: [randomMinion("solo", world).id, randomMinion("solo",world).id, null, null, null],
+  inventory: [randomMinion("solo", world).id, randomMinion("solo", world).id, null, null, null],
   homeIndex: 1,
 };
 
@@ -211,7 +222,7 @@ function BuildTestInstances(
   let instance_list = new Array<Instance>();
   for (var i = 0; i < 5; i++) {
     let instance = EmptyInstance(`instance_${i}`, world);
-    if (i ==1) {
+    if (i == 1) {
       instance.owner = "solo";
     }
     let d = new Drawer(instance.content, i * individualWidth, cursor);
