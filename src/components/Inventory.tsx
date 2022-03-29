@@ -29,7 +29,7 @@ export function SingleItem(m: single) {
   } else {
     let minion = getWorld().getMinion(m.mId)!;
     let sprites = getSprite("ufo");
-    let ufo = sprites.getFrame("default", minion.style).src;
+    let ufo = sprites.getFrame(minion.type, minion.style).src;
     if (minion.location === null) {
       return (
         <div className="protector">
@@ -79,7 +79,7 @@ interface SingleSelect {
 export function SingleListItem(m: SingleSelect) {
   let minion = getWorld().getMinion(m.mId)!;
   let sprites = getSprite("ufo");
-  let ufo = sprites.getFrame("default", minion.style).src;
+  let ufo = sprites.getFrame(minion.type, minion.style).src;
   if (minion.location === null) {
     return (<ListGroup.Item onClick={() => m.setminion(m.mId)} href={"#" + minion.id}> <img src={ufo}></img> {minion.id} is now idling. [speed: {minion.power}] </ListGroup.Item>);
   } else {

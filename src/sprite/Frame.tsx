@@ -60,7 +60,7 @@ export default function Frame(prop: IProps) {
       }
       minions.map((m,i) => {
         let minion = getWorld().getMinion(m);
-        prop.minion?.paint(prop.canvasRef?.current!, minion.x, minion.y, minion.style);
+        prop.minion?.paintAtClip(prop.canvasRef?.current!, minion.type, minion.x, minion.y, minion.style);
         minion.countingdown--;
         if (minion.countingdown <=0) {
             minion.countingdown = minion.frequency;
