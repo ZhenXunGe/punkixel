@@ -2,7 +2,7 @@
 
 .bottom_left {
     // width: 20px;
-    
+
     //     height: 20px;
     //     overflow: visible;
     img {
@@ -11,7 +11,7 @@
         // width: 20px;
         // height: 20px;
         // overflow: visible;
-        
+
         left: 199px;
     }
 }
@@ -23,14 +23,16 @@
         right: 0px;
     }
 }
-.mid_left{
+
+.mid_left {
     img {
         position: absolute;
         bottom: 167px;
         left: 192px;
-    } 
+    }
 }
-.righttube {
+
+.right_v {
     img {
         position: absolute;
         top: 125px;
@@ -38,6 +40,13 @@
     }
 }
 
+.right_h {
+    img {
+        position: absolute;
+        top: 224px;
+        right: 17px;
+    }
+}
 .alien-info {
     position: absolute;
     padding: 10px;
@@ -47,7 +56,7 @@
     height: 250px;
     width: 370px;
     z-index: 999;
-    color: #deb98e;// $fontcolor;
+    color: #deb98e; // $fontcolor;
     font-size: 12px;
     // background-color:rgba(173, 173, 173, 0.345);
     background-color: rgba(255, 255, 255, 0);
@@ -75,59 +84,65 @@
             padding-left: 84px;
             width: 300px;
             height: 25px;
+
             // float: left;
             // display:inline;
             .skills {
+                margin-top: 2px;
+                margin-left: 1px;
 
                 li {
                     text-align: center;
-                    width: 25px;
-                    height: 25px;
+                    width: 24px;
+                    height: 24px;
                     margin-left: 9px;
+                    border-radius: 23%;
                     background-color: bisque;
                     display: inline-block
                 }
             }
-            
+
         }
+
         .right {
             display: inline-block;
-            margin-left: 15px;
-            margin-top: 8px;
+            margin-left: 8px;
+            margin-top: 6px;
             width: 230px;
             font-weight: bold;
             // float: right;
             // color: $alieninfo_blue;
             -webkit-transform: scale(0.6);
-        
+
             // font-weight: bold;
             .speed {
                 margin-left: 0px;
                 float: left;
             }
-        
+
             .strack {
                 float: right;
                 margin-right: 14px;
             }
-        
+
             // border:1px solid gray;
         }
     }
 }
 
 .alien-info .alien-basic-avator {
-    margin-top: 48px;
+    margin-top: 40px;
+    margin-left: 8px;
     float: left;
-    height: 110px;
-    width: 110px;
+    height: 108px;
+    width: 108px;
 
 }
 
 .alien-info img {
 
-    height: 110px;
-    width: 110px;
+    height: 108px;
+    width: 108px;
 }
 
 // .alien-info div

@@ -18,7 +18,7 @@
 .tool-bar {
     position: absolute;
     top: 30px;
-    height: 500px;
+    // height: 500px;
     padding-top: 23px;
     // background-color: #777;
     background-color: rgba(255, 255, 255, 0);
@@ -126,7 +126,8 @@
                             height: 70px;
                             display: inline-block;
                             .dye-item {
-                                margin-left: -5px;
+                                // margin-left: -5px;   for bottle
+                                margin-left: 0px;
                                 display: inline-block;
                                 // padding-top: 10px;
                                 // border: 1px solid gray;

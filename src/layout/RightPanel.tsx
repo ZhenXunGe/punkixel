@@ -18,6 +18,8 @@ import btm_left from '../images/bottom_left.png';
 import btm_right from '../images/bottom_right.png';
 import righttube from '../images/righttube.png';
 import mid_left from '../images/mid_left.png';
+import right_v from '../images/right_v.png';
+import right_h from '../images/right_h.png';
 import { selectUpcomingAlien } from '../dynamic/dynamicSlice';
 import { getSprite } from '../sprite/spriteSlice';
 
@@ -71,8 +73,11 @@ export function RightPanel() {
       <div className="mid_left">
         <img src={mid_left}></img>
       </div>
-      <div className='righttube'>
-        <img src={righttube}></img>
+      <div className='right_v'>
+        <img src={right_v}></img>
+      </div>
+      <div className='right_h'>
+        <img src={right_h}></img>
       </div>
       <div className='bottom_left'>
         <img src={btm_left}></img>

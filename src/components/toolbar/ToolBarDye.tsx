@@ -123,10 +123,10 @@ export function ToolBarDye() {
                         <li id={`${d.color == ofDyeIndex(pickedDye).color && pickedBottle==idx ? 'selected':''}`}>
                           <div className={`dye-item ${3===idx?'mid':''}  ${d.color == ofDyeIndex(pickedDye).color && pickedBottle==idx ? 'selected':''}`}
                             style={{
-                              backgroundImage: d.color == ofDyeIndex(pickedDye).color ? `url(${bottle_border})`:``,
+                              // backgroundImage: d.color == ofDyeIndex(pickedDye).color ? `url(${bottle_border})`:``,
                               // marginTop:d.color == ofDyeIndex(pickedDye).color && pickedBottle==idx ? '10px':'0px',
-                              // backgroundColor: `rgb(${d.color[0]}, ${d.color[1]}, ${d.color[2]})`,
-                              // border: d.color == ofDyeIndex(pickedDye).color ? '1px solid red' : '1px solid gray',
+                              backgroundColor: `rgb(${d.color[0]}, ${d.color[1]}, ${d.color[2]})`,
+                              border: d.color == ofDyeIndex(pickedDye).color ? '1px solid red' : '1px solid gray',
                             }}
                             onClick={() => {
                               dispatch(pickColor(toDyeIndex(palette.idx, + idx)))
