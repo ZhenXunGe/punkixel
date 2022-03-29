@@ -7,9 +7,18 @@ import { individualWidth } from '../../data/draw';
 import getWorld from '../../data/world';
 import { selectViewIndex } from '../../dynamic/dynamicSlice';
 import minion from "../../sprite/ufo/ufo0.png";
+import { Minion } from '../../data/minion';
+import { getSprite } from '../../sprite/spriteSlice';
 
-export function MinionAvator() {
-    return (<div className="minion-avator"><img src={minion} className="minion-avator"></img></div>)
+interface IProps {
+  mId:string;
+}
+
+export function MinionAvator(props:IProps) {
+  let minion = getWorld().getMinion(props.mId);
+  let sprites = getSprite("ufo");
+  let minion_url = sprites.getFrame(minion.type, minion.style).src;
+  return (<div className="minion-avator"><img src={minion_url} className="minion-avator"></img></div>)
 }
 
 
@@ -26,7 +35,7 @@ export function ToolBarWeapon() {
             <li>
                 <ul className="inline-brick">
                     {minions.map((m) => {
-                        return <li key={getWorld().getMinion(m).id}><MinionAvator></MinionAvator></li>;
+                        return <li key={getWorld().getMinion(m).id}><MinionAvator mId={m}></MinionAvator></li>;
                     })}
                     <li> {minions.length} minions are protecting this block. </li>
                     <li> Total Damage: {damage} </li>

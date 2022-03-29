@@ -6,13 +6,6 @@ type MinionType = "ufo" | "airballoon" | "land";
 
 const minionTypeList:MinionType[] = ["ufo", "airballoon", "land"];
 
-function randomModifier(): Array<Modifier> {
-  let r = Math.floor(Math.random()*2);
-  if (r==1) {
-    return ["track", "splash"];
-  }
-  return ["straight", "splash"];
-}
 
 export interface Minion {
   owner: string; //owner block number
@@ -48,15 +41,35 @@ function generateRandomPos(t: MinionType) {
 
 function generateBulletPos(t:MinionType) {
   if(t==="ufo") {
-    return [25,50];
+    return [25,40];
   } else if (t==="land") {
-    return [25,0];
+    return [25,15];
   } else if (t==="airballoon") {
-    return [25,50];
+    return [25,35];
   } else {
     return [0,0];
   }
 }
+
+function randomModifier(): Array<Modifier> {
+  let r = Math.floor(Math.random()*2);
+  if (r==1) {
+    return ["track", "splash"];
+  }
+  return ["straight", "splash"];
+}
+
+function generateModifier(t:MinionType):Modifier {
+  if(t==="ufo") {
+    return "track";
+  } else if (t==="land") {
+    return "straight";
+  } else if (t==="airballoon") {
+    return "straight";
+  }
+  return "straight";
+}
+
 
 export function randomMinion(owner:string, world:World): Minion {
   let minionType = minionTypeList[Math.floor(Math.random()*3)];
@@ -73,7 +86,7 @@ export function randomMinion(owner:string, world:World): Minion {
       location:null,
       id:id,
       owner:owner,
-      modifier:randomModifier(),
+      modifier:[generateModifier(minionType)],
       contribution:0,
       style: Math.floor(Math.random()*5),
       bulletPos: generateBulletPos(minionType),

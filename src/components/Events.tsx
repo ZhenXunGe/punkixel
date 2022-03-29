@@ -4,7 +4,7 @@ import { selectEvents } from '../dynamic/dynamicSlice';
 import { EventInfo } from '../dynamic/event';
 import { selectPanel } from '../layout/layoutSlice';
 
-import alien from "../sprite/monster/run/skeleton-03_run_00.png";
+import alien from "../sprite/monster/run/1.png";
 
 export function AlienAvator() {
     return (<div className="minion-avator"><img src={alien} className="minion-avator"></img></div>)

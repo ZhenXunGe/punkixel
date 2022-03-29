@@ -155,7 +155,7 @@ export class Drawer {
         drawBuildings(this, canvas, template, item.w, item.h, item.x, item.y, -2, main);
       }
       for (var item of items_front) {
-        drawBuildings(this, canvas, template, item.w, item.h, item.x, item.y, 0,  main);
+        drawBuildings(this, canvas, template, item.w, item.h, item.x, item.y, 0,  main+"front");
       }
       drawRoad(this, template, canvas, road);
     }

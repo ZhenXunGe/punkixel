@@ -60,7 +60,7 @@ export default function Frame(prop: IProps) {
       getWorld().updateMinionPosition(m);
     });
 
-    prop.monster?.paint(prop.canvasRef?.current!, pos, 320, timeClock);
+    prop.monster?.paint(prop.canvasRef?.current!, pos, 285, timeClock);
 
     for (var b of allBullets()) {
         /*if (Math.abs(b.x-pos-43) + Math.abs(b.y - 340) <20) {
