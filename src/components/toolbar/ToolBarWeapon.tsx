@@ -8,8 +8,18 @@ import getWorld from '../../data/world';
 import { selectViewIndex } from '../../dynamic/dynamicSlice';
 import minion from "../../sprite/ufo/ufo0.png";
 import './style.scss';
-export function MinionAvator() {
-  return (<div className="minion-avator"><img src={minion} className="minion-avator"></img></div>)
+import { Minion } from '../../data/minion';
+import { getSprite } from '../../sprite/spriteSlice';
+
+interface IProps {
+  mId:string;
+}
+
+export function MinionAvator(props:IProps) {
+  let minion = getWorld().getMinion(props.mId);
+  let sprites = getSprite("ufo");
+  let minion_url = sprites.getFrame(minion.type, minion.style).src;
+  return (<div className="minion-avator"><img src={minion_url} className="minion-avator"></img></div>)
 }
 
 
@@ -27,7 +37,7 @@ export function ToolBarWeapon() {
           <ul className="inline-brick world">
             <div className='minionList'>
               {minions.map((m) => {
-                return <li className='minionItem' key={getWorld().getMinion(m).id}><MinionAvator></MinionAvator></li>;
+                return <li className='minionItem' key={getWorld().getMinion(m).id}><MinionAvator  mId={m}></MinionAvator></li>;
               })}
             </div>
             <div className='minionDamage'>

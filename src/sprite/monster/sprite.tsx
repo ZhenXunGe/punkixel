@@ -1,18 +1,17 @@
 
 import { Sprite } from '../sprite';
-import Run0 from "./run/skeleton-03_run_00.png";
-import Run1 from "./run/skeleton-03_run_01.png";
-import Run2 from "./run/skeleton-03_run_02.png";
-import Run3 from "./run/skeleton-03_run_03.png";
-import Run4 from "./run/skeleton-03_run_04.png";
-import Run5 from "./run/skeleton-03_run_05.png";
-import Run6 from "./run/skeleton-03_run_06.png";
-import Run7 from "./run/skeleton-03_run_07.png";
-import Run8 from "./run/skeleton-03_run_08.png";
-import Run9 from "./run/skeleton-03_run_09.png";
-import Run10 from "./run/skeleton-03_run_10.png";
-import Run11 from "./run/skeleton-03_run_11.png";
-import Run12 from "./run/skeleton-03_run_12.png";
+import Run0 from "./run/1.png";
+import Run1 from "./run/2.png";
+import Run2 from "./run/3.png";
+import Run3 from "./run/4.png";
+import Run4 from "./run/5.png";
+import Run5 from "./run/6.png";
+import Run6 from "./run/7.png";
+import Run7 from "./run/8.png";
+import Run8 from "./run/9.png";
+import Run9 from "./run/10.png";
+import Run10 from "./run/11.png";
+import Run11 from "./run/12.png";
 
 import Dizzy0 from "./dizzy/skeleton-07_dizzy_00.png";
 import Dizzy1 from "./dizzy/skeleton-07_dizzy_01.png";
@@ -39,7 +38,7 @@ import Dizzy20 from "./dizzy/skeleton-07_dizzy_20.png";
 
 
 export const clips = [
-  {name:"run", src: [Run0, Run1, Run2, Run3, Run4, Run5, Run6, Run7, Run8, Run9, Run10, Run11, Run12]},
+  {name:"run", src: [Run0, Run1, Run2, Run3, Run4, Run5, Run6, Run7, Run8, Run9, Run10, Run11]},
   {name:"dizzle", src: [
     Dizzy0, Dizzy1, Dizzy2, Dizzy3, Dizzy4, Dizzy5, Dizzy6, Dizzy7, Dizzy8, Dizzy9,
     Dizzy10, Dizzy11, Dizzy12, Dizzy13, Dizzy14, Dizzy15, Dizzy16, Dizzy17, Dizzy18, Dizzy19,

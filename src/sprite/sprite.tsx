@@ -76,8 +76,11 @@ export class Sprite {
       }
     }
     paintAt(canvas:HTMLCanvasElement, x:number, y:number, f:number) {
-      if (this.sheet[this.currentClip]) {
-        let frame = this.sheet[this.currentClip][f];
+      this.paintAtClip(canvas, this.currentClip, x, y, f);
+    }
+    paintAtClip(canvas:HTMLCanvasElement, clipName:string, x:number, y: number, f:number) {
+      if (this.sheet[clipName]) {
+        let frame = this.sheet[clipName][f];
         if (frame) {
         //console.log("frame is: ", frame);
         let ctx = canvas.getContext("2d");

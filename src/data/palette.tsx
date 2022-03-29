@@ -34,6 +34,10 @@ function buildPallete(dye: Dye, name: string, pph: number, index:number, rotatio
   }
 }
 
+function buildPalettes(colors: string[], weight: number) {
+  return colors.map((hexColor) => {return buildPaletteDye(hexColor, 1);});
+}
+
 const color_trans = [
     {color:[0xee, 0xee, 0xee], weight:1},
     {color:[0xff, 0xff, 0xff], weight:1}
@@ -50,175 +54,165 @@ const color_gray = [
     {color:[0x11, 0x11, 0x11], weight:1},
 ];
 
-const color_red = [
-    buildPaletteDye("#f9bdbb", 1),
-    buildPaletteDye("#f69988", 1),
-    buildPaletteDye("#f36c60", 1),
-    buildPaletteDye("#e84e40", 1),
-    buildPaletteDye("#e81c23", 1),
-    buildPaletteDye("#dd191d", 1),
-    buildPaletteDye("#d01716", 1),
-    buildPaletteDye("#c41411", 1),
-    // buildPaletteDye("#b0120a", 1),
-];
+const color_red = buildPalettes([
+      "#f9bdbb",
+      "#f69988",
+      "#f36c60",
+      "#e84c40",
+      "#e81c23",
+      "#dd191d",
+      "#d01716",
+      "#c41411",
+],1);
 
-const color_pink = [
-    buildPaletteDye("#f9bdbb", 1),
-    buildPaletteDye("#f69988", 1),
-    buildPaletteDye("#f36c60", 1),
-    buildPaletteDye("#e84e40", 1),
-    buildPaletteDye("#e81c23", 1),
-    buildPaletteDye("#dd191d", 1),
-    buildPaletteDye("#d01716", 1),
-    buildPaletteDye("#c41411", 1),
-    // buildPaletteDye("#b0120a", 1),
-];
+const color_pink = buildPalettes([
+      "#f8bbd0",
+      "#f48fb1",
+      "#f06292",
+      "#ec407a",
+      "#e91e63",
+      "#d81b60",
+      "#c2185b",
+      "#ad1457",
+],1);
 
-const color_purple = [
-    buildPaletteDye("#e1bee7", 1),
-    buildPaletteDye("#ce93d8", 1),
-    buildPaletteDye("#f36c60", 1),
-    buildPaletteDye("#e84e40", 1),
-    buildPaletteDye("#e81c23", 1),
-    buildPaletteDye("#dd191d", 1),
-    buildPaletteDye("#d01716", 1),
-    buildPaletteDye("#c41411", 1),
-    // buildPaletteDye("#b0120a", 1),
-];
+const color_purple = buildPalettes([
+      "#e1bee7",
+      "#ce93d8",
+      "#ba68c8",
+      "#ab47bc",
+      "#9c27b0",
+      "#8e24aa",
+      "#7b1fa2",
+      "#6a1b9a",
+],1);
 
 
-const color_indigo = [
-    buildPaletteDye("#f9bdbb", 1),
-    buildPaletteDye("#f69988", 1),
-    buildPaletteDye("#f36c60", 1),
-    buildPaletteDye("#e84e40", 1),
-    buildPaletteDye("#e81c23", 1),
-    buildPaletteDye("#dd191d", 1),
-    buildPaletteDye("#d01716", 1),
-    buildPaletteDye("#c41411", 1),
-    // buildPaletteDye("#b0120a", 1),
-];
-
-const color_blue = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
-
-const color_lightblue = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
-
-const color_cyan = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
-
-const color_teal = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
-
-const color_green = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
-
-const color_lightgreen = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
-
-const color_lime = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
-
-const color_yellow = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
+const color_indigo = buildPalettes([
+      "#c5cae9",
+      "#9fa8da",
+      "#7986cb",
+      "#5c6bc0",
+      "#3f51b5",
+      "#3949ab",
+      "#303f9f",
+      "#283593",
+],1);
 
 
-const color_amber = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
+const color_blue = buildPalettes([
+      "#d0d9ff",
+      "#afbfff",
+      "#91a7ff",
+      "#738ffe",
+      "#5677fc",
+      "#4e6cef",
+      "#455ede",
+      "#3b50ce",
+],1);
 
-const color_orange = [
-    buildPaletteDye("#d0d9ff", 1),
-    buildPaletteDye("#afbfff", 1),
-    buildPaletteDye("#91a7ff", 1),
-    buildPaletteDye("#738ffe", 1),
-    buildPaletteDye("#5677fc", 1),
-    buildPaletteDye("#4e6cef", 1),
-    buildPaletteDye("#455ede", 1),
-    buildPaletteDye("#3b50ce", 1),
-    // buildPaletteDye("#2a36b1", 1),
-];
+const color_lightblue = buildPalettes([
+      "#b3e5fc",
+      "#81d4fa",
+      "#4fc3f7",
+      "#29b6f6",
+      "#03a9f4",
+      "#039be5",
+      "#0288d1",
+      "#0277bd",
+],1);
+
+const color_cyan = buildPalettes([
+        "#b2ebf2",
+        "#80deea",
+        "#4dd0e1",
+        "#26c6da",
+        "#00bcd4",
+        "#00acc1",
+        "#0097a7",
+        "#00838f",
+],1);
+
+const color_teal = buildPalettes([
+        "#b2dfdb",
+        "#80cdc4",
+        "#4db6ac",
+        "#26a69a",
+        "#009688",
+        "#00897b",
+        "#00796b",
+        "#00695c",
+],1);
+
+const color_green = buildPalettes([
+        "#a3e9a4",
+        "#72d572",
+        "#42bd41",
+        "#2baf2b",
+        "#259b24",
+        "#0a8f08",
+        "#0a7e07",
+        "#056f00",
+],1);
+
+const color_lightgreen = buildPalettes([
+        "#dcedc8",
+        "#c5e1a5",
+        "#aed581",
+        "#9ccc65",
+        "#8bc34a",
+        "#7cb342",
+        "#689f38",
+        "#558b2f",
+],1);
+
+const color_lime = buildPalettes([
+        "#f0f4c3",
+        "#e6ee9c",
+        "#dce775",
+        "#d4e157",
+        "#cddc39",
+        "#c0ca33",
+        "#afb42b",
+        "#9e9d24",
+],1);
+
+const color_yellow = buildPalettes([
+        "#fff9c4",
+        "#fff59d",
+        "#fff176",
+        "#ffee58",
+        "#ffeb3b",
+        "#fdd835",
+        "#fbc02d",
+        "#f9a825",
+
+],1);
+
+
+const color_amber = buildPalettes([
+        "#ffecb3",
+        "#ffe082",
+        "#ffd54f",
+        "#ffca28",
+        "#ffc107",
+        "#ffb300",
+        "#ffa000",
+        "#ff8f00",
+
+
+],1);
+
+const color_orange = buildPalettes([
+        "#ffe0b2",
+        "#ffcc80",
+        "#ffb74d",
+        "#ffa726",
+        "#ff9800",
+        "#fb8c00",
+        "#f57c00",
+        "#ef6c00",
+],1);
 
 const color_liquid_green = [
     {color:[0x0, 0xff, 0x00], weight:4},
@@ -326,24 +320,49 @@ export function toDyeColor(index: number, shine: number) {
 }
 
 export function findColor(r:number, g:number, b:number) {
-  for (var i=0; i<dye_table.length; i++) {
+  let idx = 0;
+  let min = 100000;
+  for (var i=1; i<dye_table.length; i++) {
     let palette = dye_table[i];
     for (var d=0; d<palette.dye.length; d++) {
       let dye = palette.dye[d];
-      if ((dye.color[0] - r) + (dye.color[1] - g) + (dye.color[2] - b) < 20) {
-        return toDyeIndex(i, d);
+      let distance = Math.sqrt(
+          Math.pow(dye.color[0] - r,2)
+          + Math.pow(dye.color[1] - g,2)
+          + Math.pow(dye.color[2] - b,2)
+          );
+      if (distance < min) {
+        idx = toDyeIndex(i, d);
+        min = distance;
       }
     }
   }
+  if(min > 30) {
+    //console.log("can not find color",r,g,b,min);
+    findGrayColor(r, g, b);
+  } else {
+    //console.log("find color", r, g, b, min);
+  }
+  return idx;
 }
-  export function findGrayColor(r:number, g:number, b:number) {
-      let palette = dye_table[1];
-      for (var d=0; d<palette.dye.length; d++) {
-        let dye = palette.dye[d];
-        if ((dye.color[0] - r) + (dye.color[1] - g) + (dye.color[2] - b) < 20) {
-          return toDyeIndex(1, d);
-        }
-      }
-
-  return 0;
+export function findGrayColor(r: number, g: number, b: number) {
+  let palette = dye_table[1];
+  let idx = 0;
+  let min = 100000;
+  for (var d = 0; d < palette.dye.length; d++) {
+    let dye = palette.dye[d];
+    let distance = Math.sqrt(
+      Math.pow(dye.color[0] - r,2)
+      + Math.pow(dye.color[1] - g,2)
+      + Math.pow(dye.color[2] - b,2)
+      );
+    if (distance < min) {
+      idx = toDyeIndex(1, d);
+      min = distance;
+    }
+  }
+  if (min > 50) {
+    return 0;
+  }
+  return idx;
 }

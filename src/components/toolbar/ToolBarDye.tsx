@@ -14,12 +14,13 @@ import {
 } from '../../data/statusSlice';
 import { ofDyeIndex, toDyeColor, toDyeIndex } from '../../data/palette';
 import Sketch from "../../modals/sketch";
+import getWorld from '../../data/world';
+import { getSprite } from '../../sprite/spriteSlice';
 
 import bottle from '../../images/home/bottle.png';
 import bottle_border from '../../images/home/bottle_border.png';
 
-import getWorld from '../../data/world';
-import { getSprite } from '../../sprite/spriteSlice';
+
 
 
 

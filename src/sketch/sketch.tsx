@@ -1,5 +1,5 @@
 import { Drawer } from "../data/draw";
-import { findGrayColor } from "../data/palette";
+import { findColor, findGrayColor } from "../data/palette";
 import { Sprite } from "../sprite/sprite";
 import build01 from "./resource/sketch-gray-01.png";
 import build02 from "./resource/sketch-gray-02.png";
@@ -8,12 +8,32 @@ import build04 from "./resource/sketch-gray-04.png";
 import build05 from "./resource/sketch-gray-05.png";
 import build06 from "./resource/sketch-gray-06.png";
 
+
+import buildfront01 from "./resource/sketch-color-01.png";
+import buildfront02 from "./resource/sketch-color-02.png";
+import buildfront03 from "./resource/sketch-color-03.png";
+import buildfront04 from "./resource/sketch-color-04.png";
+import buildfront05 from "./resource/sketch-color-05.png";
+import buildfront06 from "./resource/sketch-color-06.png";
+import buildfront07 from "./resource/sketch-color-07.png";
+import buildfront08 from "./resource/sketch-color-08.png";
+import buildfront09 from "./resource/sketch-color-09.png";
+import buildfront10 from "./resource/sketch-color-10.png";
+import buildfront11 from "./resource/sketch-color-11.png";
+import buildfront12 from "./resource/sketch-color-12.png";
+import buildfront13 from "./resource/sketch-color-13.png";
+
+
 import road01 from "./resource/sketch-road-01.png";
 import road02 from "./resource/sketch-road-02.png";
 import road03 from "./resource/sketch-road-03.png";
 import road04 from "./resource/sketch-road-04.png";
 export const clips = [
   { name: "building", src: [build01, build02, build03, build04, build05, build06] },
+  { name: "buildingfront", src: [
+    buildfront01, buildfront02, buildfront03, buildfront04, buildfront05, buildfront06,
+    buildfront07, buildfront08, buildfront09, buildfront10, buildfront11, buildfront12, buildfront13
+  ] },
   { name: "road", src: [road01, road02, road03, road04] }
 ]
 
@@ -93,7 +113,11 @@ export function drawBuildings(
       let a = pixels.data[idx + 3];
       let dyeidx = 0;
       if (a != 0) {
-        dyeidx = findGrayColor(r, g, b);
+        if (gray) {
+          dyeidx = findGrayColor(r, g, b);
+        } else {
+          dyeidx = findColor(r, g, b);
+        }
         drawer.setBackgroundPixelByCor(sx + x, sy + height - y - 1, dyeidx + gray);
       }
       //drawer.setPixelByCor(sx+x, sy+height-y, 18);\
