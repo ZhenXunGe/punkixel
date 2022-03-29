@@ -29,7 +29,7 @@ export function SingleItem(m: single) {
   if (m.mId === null) {
     
     let sprites = getSprite("ufo");
-    let ufo = sprites.getFrame("default", 0).src;
+    // let ufo = sprites.getFrame("default", 0).src;
     return (
       // <div className="protector">
       //   <div className="left">
@@ -54,7 +54,7 @@ export function SingleItem(m: single) {
         {/* <button className='btn'>
           <img src={Unlock_}></img>
         </button> */}
-        <Unlock avator={ufo} uid="solo" index={m.index}></Unlock>
+        <Unlock avator='FFF' uid="solo" index={m.index}></Unlock>
         <div className="right">
           <div className='item'>???</div>
           <div className='item'>???</div>
@@ -65,7 +65,7 @@ export function SingleItem(m: single) {
   } else {
     let minion = getWorld().getMinion(m.mId)!;
     let sprites = getSprite("ufo");
-    let ufo = sprites.getFrame("default", minion.style).src;
+    let ufo = sprites.getFrame(minion.type, minion.style).src;
     console.log(minion.location);
     if (minion.location === null) {
       return (
@@ -138,7 +138,7 @@ interface SingleSelect {
 export function SingleListItem(m: SingleSelect) {
   let minion = getWorld().getMinion(m.mId)!;
   let sprites = getSprite("ufo");
-  let ufo = sprites.getFrame("default", minion.style).src;
+  let ufo = sprites.getFrame(minion.type, minion.style).src;
   if (minion.location === null) {
     return (<ListGroup.Item onClick={() => m.setminion(m.mId)} href={"#" + minion.id}> <img src={ufo}></img> {minion.id} is now idling. [speed: {minion.power}] </ListGroup.Item>);
   } else {
