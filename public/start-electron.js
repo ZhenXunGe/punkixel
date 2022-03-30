@@ -12,7 +12,8 @@ const createWindow = () => {
   const appUrl = isDev ? 'http://localhost:3000' :
     `file://${path.join(__dirname, '../build/index.html')}`
   mainWindow.loadURL(appUrl)
-  mainWindow.setSize(1280,900)
+  mainWindow.setSize(1210,844)
+  mainWindow.setResizable(false)
   mainWindow.setMenu(null)
   //mainWindow.maximize()
   //mainWindow.setFullScreen(true)
