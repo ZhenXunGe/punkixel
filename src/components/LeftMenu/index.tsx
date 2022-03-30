@@ -48,7 +48,7 @@ export function LeftMenu() {
           }`} onClick={() => {setCurrentPanel('rank');dispatch(vote())}}>
           <img src={currentpanel==='rank' ? RANK_ACT:RANK_UNACT}></img>
         </button>
-        <button className={`button-icon right bottom ${
+        <button disabled className={`button-icon right bottom ${
             'market' === currentpanel ? "active" : "unact"
           }`} onClick={() =>{setCurrentPanel('market'); dispatch(market())}}>
           <img src={currentpanel==='market' ? MARKET_ACT:MARKET_UNACT}></img>

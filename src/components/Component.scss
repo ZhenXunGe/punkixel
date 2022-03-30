@@ -123,12 +123,16 @@ div.application {
 
 
 .ranking-list {
+
+    width: 999px;
+    height: 417px;
     position: absolute;
-    top: 30px;
-    bottom: 10px;
-    background-color: #aaa;
+    top: 240px;
+    // bottom: 10px;
+    // background-color: #aaa;
+    background-image: url('../images/rank/rank_tmp.png');
     right: 0px;
-    left: 208px;
+    left: 199px;
 }
 
 
