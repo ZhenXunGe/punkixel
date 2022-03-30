@@ -16,6 +16,7 @@ import { getSprite } from "../sprite/spriteSlice";
 import {updateInventory} from '../data/statusSlice';
 import scroll_btn from '../images/modal/roll_button.png'
 import { url } from "inspector";
+import { world } from "../layout/layoutSlice";
 interface MinionSelector {
   setminion: (m: string) => void;
 }
@@ -133,6 +134,7 @@ export default function Contribute() {
   const viewIndex = useAppSelector(selectViewIndex);
   const handleConfirm = () => {
     console.log({ mId: minionId!, viewIndex: viewIndex })
+    getWorld().spentPunkxiel("solo", 100);
     dispatch(updateInventory({bol:true}));
     dispatch(signalPlaceMinion({ mId: minionId!, viewIndex: viewIndex }));
     dispatch(addEvent(ProtectingEvent("GruPlayer 1", getWorld().getInstance(viewIndex))));

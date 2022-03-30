@@ -29,6 +29,7 @@ export class World {
   instances: Array<Instance>;
   minions: Map<string, Minion>;
   players: Map<string, Player>;
+  sketched: boolean;
   constructor(cor: number) {
     var that = this;
     this.cursor = cor;
@@ -36,6 +37,15 @@ export class World {
     this.players = new Map<string, Player>();
     this.instances = [];
     this.weather = "normal";
+    this.sketched = false;
+  }
+  initSketch() {
+    if (this.sketched === false) {
+      this.sketched = true;
+      return true;
+    } else {
+      return false;
+    }
   }
   getInstance(center_position: number) {
     return this.instances[Math.floor(center_position / individualWidth)];
@@ -173,9 +183,9 @@ export class World {
   }
 
   spentPunkxiel(sender: string, cost: number) {
+    console.log("spent punkxiel");
     if (sender == "solo") {
       let player = this.players.get(sender)!;
-      console.log("updating rewords....");
       let update = { ...player, punkxiel: player.punkxiel - cost };
       this.players.set(player.id, update);
     }
