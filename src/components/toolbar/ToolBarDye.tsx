@@ -40,7 +40,7 @@ export function ToolBarDye() {
   const [alertContext, setAlertContext] = useState("");
   useEffect(() => {
     const spriteSketch = getSprite("sketch");
-    if (canvasRef.current) {
+    if (canvasRef.current && getWorld().initSketch()) {
       for(var i=0;i<getWorld().instances.length;i++){
         let d = getWorld().getInstance(i*individualWidth).drawer;
         d.resetSketch();

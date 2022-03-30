@@ -19,6 +19,7 @@ export default function Unlock(prop: UnlockProps) {
   let ratio = 4;
   const dispatch = useAppDispatch();
   const handleConfirm = () => {
+    getWorld().spentPunkxiel("solo", 1000);
     getWorld().unlockMinion(prop.uid, prop.index);
     setShow(false);
   }
