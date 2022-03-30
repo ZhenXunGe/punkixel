@@ -1,4 +1,5 @@
 import { Sprite } from "../sprite/sprite";
+import { getSprite } from "../sprite/spriteSlice";
 
 const distance = (a: [number, number], b: [number, number]) => {
   let dx = a[0] - b[0];
@@ -76,14 +77,23 @@ export class StraightBullet implements BulletInfo {
     }
   }
   paint(canvas: CanvasRenderingContext2D, ins: Sprite) {
-    canvas.save();
-    canvas.translate(this.x, this.y);
-    canvas.rotate(this.rotate * (Math.PI) / 180);
-    canvas.strokeStyle = "#FF3300";
-    canvas.strokeRect(0 - this.bomb * 3, 0 - this.bomb * 3, 5 + this.bomb * 6, 5 + this.bomb * 6);
-    canvas?.restore();
+    if (this.bomb == 0) {
+      canvas.save();
+      canvas.translate(this.x, this.y);
+      canvas.rotate(this.rotate * (Math.PI) / 180);
+      canvas.strokeStyle = "#FF3300";
+      canvas.strokeRect(0, 0, 5, 5);
+      canvas?.restore();
+    } else {
+      canvas.save();
+      canvas.translate(this.x, this.y);
+      let splash = getSprite("splash");
+      canvas.rotate(this.rotate * (Math.PI) / 180);
+      let img = splash.getFrame("default", this.bomb);
+      canvas.drawImage(img, 0, 0, 16, 16)
+      canvas?.restore();
+    }
   }
-
 }
 
 
@@ -167,9 +177,10 @@ export class TrackBullet implements BulletInfo {
     } else {
       canvas.save();
       canvas.translate(this.x, this.y);
+      let splash = getSprite("splash");
       canvas.rotate(this.rotate * (Math.PI) / 180);
-      canvas.strokeStyle = "#FF0000";
-      canvas.strokeRect(0 - this.bomb * 3, 0 - this.bomb * 3, 5 + this.bomb * 6, 5 + this.bomb * 6);
+      let img = splash.getFrame("default", this.bomb);
+      canvas.drawImage(img, 0, 0, 25, 25)
       canvas?.restore();
     }
   }
