@@ -12,6 +12,7 @@ div.screen {
     left: 0px;
     right: 0px;
     background-color: #666;
+    overflow: none;
 }
 
 div.application {
@@ -24,6 +25,7 @@ div.application {
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+    overflow: none;
 }
 
 
