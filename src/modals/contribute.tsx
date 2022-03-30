@@ -28,7 +28,7 @@ interface SingleSelect {
 export function SingleListItem(m: SingleSelect) {
   let minion = getWorld().getMinion(m.mId)!;
   let sprites = getSprite("ufo");
-  let ufo = sprites.getFrame("default", minion.style).src;
+  let ufo = sprites.getFrame(minion.type, minion.style).src;
   
   if (minion.location === null) {
     return (
