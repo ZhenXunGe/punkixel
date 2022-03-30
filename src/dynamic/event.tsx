@@ -3,7 +3,7 @@ import { Alien } from "../data/alien";
 import { Instance } from "../data/instance";
 import getWorld from "../data/world";
 import PaletteInfo from "../modals/palette";
-
+import './style.scss';
 
 
 export interface Event {
@@ -68,10 +68,10 @@ function DropEventInfo(event: Event) {
     console.assert(event.id === AlienDropEvent);
     let instance = getWorld().getInstanceById(event.source[1])!;
     return(
-        <>
-        Dye {event.source.slice(2).map((d:any) =><PaletteInfo paletteId={d} key={d}></PaletteInfo>)} 
-        dropped in {instance.info.id} and were collected by {instance.info.owner}
-        </>
+        <div className="dropEvent">
+        <span>Dye&nbsp;</span>{event.source.slice(2).map((d:any) =><PaletteInfo paletteId={d} key={d}></PaletteInfo>)} 
+        <span>&nbsp;dropped in {instance.info.id} and were collected by {instance.info.owner}</span>
+        </div>
         );
 }
 
@@ -83,6 +83,6 @@ export function EventInfo(props: EventInfoProps) {
     let event = props.event;
     if (event.id == AlienDropEvent) return DropEventInfo(event);
     else {
-        return (<>{event.description}</>)
+        return (<div className="dropEvent">{event.description}</div>)
     }
 }
