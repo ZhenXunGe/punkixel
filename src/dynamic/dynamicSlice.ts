@@ -78,7 +78,7 @@ export const dynamicSlice = createSlice({
           state.damage += b.power;
           if (state.damage > 200) {
             state.alien.status = "dizzle";
-            state.alien.dizzle = 20;
+            state.alien.dizzle = 18;
             state.damage = 0;
             let instance = getWorld().getInstance(state.viewIndex*individualWidth);
             instance.calculateRewards(100, state.alien.drop);

@@ -15,11 +15,11 @@ import minion3 from '../../images/protectors/minion3.png';
 import minion4 from '../../images/protectors/minion4.png';
 import minion5 from '../../images/protectors/minion5.png';
 import Inuse from '../../images/protectors/Inuse.png';
-import Unlock_ from '../../images/protectors/Unlock.png';
 import Idle from '../../images/protectors/Idle.png';
 import protector_avator from '../../images/protectors/protector_avator.png';
 import protector_border from '../../images/protectors/protector_border.png';
 import protector_tag from '../../images/protectors/protector_tag.png';
+import unknown from '../../images/protectors/unknown.png';
 
 interface single {
   mId: string | null;
@@ -27,7 +27,6 @@ interface single {
 }
 export function SingleItem(m: single) {
   if (m.mId === null) {
-    
     let sprites = getSprite("ufo");
     // let ufo = sprites.getFrame("default", 0).src;
     return (
@@ -48,13 +47,9 @@ export function SingleItem(m: single) {
           <img src={protector_tag} ></img>
         </div>
         <div className='avator'>
-        {/* <img src={protector_avator}></img> */}
-        <img src="FFF"></img>
+        <img src={unknown}></img>
         </div>
-        {/* <button className='btn'>
-          <img src={Unlock_}></img>
-        </button> */}
-        <Unlock avator='FFF' uid="solo" index={m.index}></Unlock>
+        <Unlock avator={unknown} uid="solo" index={m.index}></Unlock>
         <div className="right">
           <div className='item'>???</div>
           <div className='item'>???</div>
@@ -111,7 +106,7 @@ export function SingleItem(m: single) {
           <div className='avator'>
             <img src={ufo}></img>
           </div>
-          <div className='btn'>  
+          <div className='btn'>
             <img src={Inuse}></img>
           </div>
           <div className="right">

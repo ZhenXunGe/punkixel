@@ -134,7 +134,6 @@ export function ToolBarDye() {
                             }
                             }
                           >
-                            <img src={bottle}></img>
                           </div>
 
                         </li>

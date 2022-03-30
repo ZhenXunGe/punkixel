@@ -7,7 +7,7 @@
     // right: 0px;
     height: 30px;
     background-color: rgba(255, 255, 255, 0);
-
+    
     ul {
         padding: 0;
         margin: 0px;
@@ -16,10 +16,12 @@
 
         li {
             display: inline-block;
-            width: 101px;
-            text-align: center;
-            padding-left: 25px;
-            color: $fontcolor;
+            width: 104px;
+            text-align: left;
+            padding-left: 30px;
+            color: #fef4d6;
+            font-size:14px;
+            font-weight:800;
         }
 
         // li:first-child {
