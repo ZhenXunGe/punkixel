@@ -14,7 +14,8 @@ import CHOOSE from '../images/modal/protect/CHOOSE.png';
 import './style.scss';
 import { getSprite } from "../sprite/spriteSlice";
 import {updateInventory} from '../data/statusSlice';
-
+import scroll_btn from '../images/modal/roll_button.png'
+import { url } from "inspector";
 interface MinionSelector {
   setminion: (m: string) => void;
 }
@@ -47,22 +48,76 @@ export function SingleListItem(m: SingleSelect) {
   }
 }
 function MinionSelector(s: MinionSelector) {
+  
   const inventory = useAppSelector(selectInventory);
   const [current, setCurrent] = useState("none");
+  const [firstPos, setFirstPos] = useState(0); 
+  const [lastPos, setLastPos] = useState(2); 
+  var unlock_lenth = inventory.filter((m) => m !== null).length;
   const setMinion = (mid: string) => {
     setCurrent(mid);
     s.setminion(mid);
     
+  };
+  const adjust = (_scroll: number) => {
+    unlock_lenth = inventory.filter((m) => m !== null).length;
+    if (_scroll == 1) { // up
+      if (firstPos > 0) {
+        setFirstPos(firstPos - 1);
+        setLastPos(lastPos - 1);
+      }
+    }else if(_scroll == -1){
+      if(lastPos < unlock_lenth - 1){
+        setFirstPos(firstPos + 1);
+        setLastPos(lastPos + 1);
+      }
+    }
+    
+  }
+  const calcHeight = () => {
+    let height = 256;
+    if(firstPos == 0){
+      return 0;
+    }else if(lastPos == unlock_lenth - 1){
+      return height-51;
+    }else{
+     
+      return (height/(unlock_lenth-2)*firstPos);
+    }
   }
   return (
+    <div>
+
     <ul className="minions"
     // defaultActiveKey={"#" + current}
     >
       {inventory.filter((m) => m !== null).map((m, i) => {
+
+        if( i >= firstPos && i <= lastPos){
         return <SingleListItem current={current} setminion={setMinion} mId={m!} key={m!}></SingleListItem>
+        }
       })}
       
-    </ul>)
+    </ul>
+    {unlock_lenth>3?<div className="scrollOut">
+    <div className="scrollTop" onClick={()=>adjust(1)}></div>
+    <div className="scrollIn">
+    <div className="scrollButton" style={{
+      width:'35px',
+      height:'51px',
+      float:'left',
+      backgroundImage: `url(${scroll_btn})`,
+      // backgroundColor:'#fff',
+      marginTop: calcHeight(),
+    }}> 
+    </div>
+    </div>
+    <div className="scrollBottom" onClick={()=>adjust(-1)}></div>
+    </div>:<></>}
+
+    
+    </div>
+    )
 }
 
 
@@ -123,6 +178,7 @@ export default function Contribute() {
                 <MinionSelector  setminion={setMinionId}></MinionSelector>
                 
                 {/* </ul> */}
+                
               </div>
             </div>
             <div className="footer">

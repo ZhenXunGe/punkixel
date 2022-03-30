@@ -37,7 +37,7 @@
         }
 
         .select_area {
-            width: 748px;
+            width: 754px;
             height: 421px;
             margin-left: 45px;
             display: flex;
@@ -77,27 +77,11 @@
 
             .right {
                 height: 408px;
-                width: 504px;
+                width: 510px;
                 // background-color: rgb(116, 151, 151);
                 margin-left: 24px;
                 margin-top: 30px;
-                overflow-y: scroll;
-
-                &::-webkit-scrollbar {
-
-                    width: 30px;
-
-                    // background-color:#fff;
-                    background-image: url('../images/modal/roll_axis.png');
-
-                }
-
-                &::-webkit-scrollbar-thumb {
-                    // background-repeat: no-repeat;
-
-                    background-image: url('../images/modal/roll_button.png');
-                }
-
+               
                 ul {
                     list-style: none;
                     padding: 0;
@@ -164,6 +148,46 @@
                         }
                     }
                 }
+                .scrollOut{
+                    height: 408px;
+                    width: 35px;
+                    position: absolute;
+                    top: 90px;
+                    background: transparent;
+                    left: 793px;
+                    .scrollTop{
+                        height: 21px;
+                        width: 35px;
+                        background-image: url('../images/modal/roll_axis_top.png');
+                        cursor: pointer;
+                        // background-repeat: no-repeat;
+                        // background-position: 50% 0;
+                        // background-size: 35px 22px;
+                    }
+                    .scrollIn{
+                        // margin-top: 22px;
+                        height: 364px;
+                        width: 35px; 
+                        background-image: url('../images/modal/roll_axis.png');
+                        // left: 793px;
+                    }
+                    .scrollButton{
+                        width:35px;
+                        height:51px;
+                        // float: left;
+                        // backgroundImage: '../images/modal/roll_button.png',
+                        background-color:'#fff',
+                    }
+                    .scrollBottom{
+                        height: 21px;
+                        width: 35px;
+                        background-image: url('../images/modal/roll_axis_bottom.png');
+                        cursor: pointer;
+                        // background-repeat: no-repeat;
+                        // background-position: 50% 278px;
+                        // background-size: 35px 22px;
+                    }
+                }
             }
 
             .protect_area {
@@ -181,30 +205,39 @@
 
                 .minions {
 
-                    width: 750px;
+                    width: 755px;
                     height: 300px;
                     // background-color: aquamarine;
                     list-style: none;
-                    overflow-y: scroll;
+                    // overflow-y: scroll;
 
-                    &::-webkit-scrollbar {
+                    // &::-webkit-scrollbar {
 
-                        width: 30px;
+                    //     width: 35px;
+                    //     z-index: 100;
 
-                        // background-color:#fff;
-                        background-image: url('../images/modal/roll_axis.png');
-
-                    }
-
-                    &::-webkit-scrollbar-thumb {
-                        // background-repeat: no-repeat;
-
-                        background-image: url('../images/modal/roll_button.png');
-                    }
+                    //     // background-color:#fff;
+                    //     // background-image: url('../images/modal/roll_axis.png');
+                    //     // background-image: url('../images/modal/roll_axis_top.png'),url('../images/modal/roll_axis.png'),url('../images/modal/roll_axis_bottom.png');
+                         
+                      
+                    // }
+                    // &::-webkit-scrollbar-button{
+                    //     background-color: transparent;
+                    //     height: 22px;
+                    // }
+                    
+                    // &::-webkit-scrollbar-thumb {
+                    //     // background-repeat: no-repeat;
+                    //     // width: 40px;
+                    //     background-color: transparent;
+                    //     background-image: url('../images/modal/roll_button.png');
+                    // }
 
                     li {
+                        margin-top: -10px;
                         width: 687px;
-                        height: 111px;
+                        height: 110px;
                         background-repeat: no-repeat;
                         background-image: url('../images/modal/protect/minion_unact.png');
                         line-height: 110px;
@@ -226,7 +259,49 @@
                             background-image: url('../images/modal/protect/minion_act.png');
                         }
                     }
+                    
                 }
+                .scrollOut{
+                    height: 300px;
+                    width: 35px;
+                    position: absolute;
+                    top: 138px;
+                    background: transparent;
+                    left: 793px;
+                    .scrollTop{
+                        height: 21px;
+                        width: 35px;
+                        background-image: url('../images/modal/roll_axis_top.png');
+                        cursor: pointer;
+                        // background-repeat: no-repeat;
+                        // background-position: 50% 0;
+                        // background-size: 35px 22px;
+                    }
+                    .scrollIn{
+                        // margin-top: 22px;
+                        height: 256px;
+                        width: 35px; 
+                        background-image: url('../images/modal/roll_axis.png');
+                        // left: 793px;
+                    }
+                    .scrollButton{
+                        width:35px;
+                        height:51px;
+                        // float: left;
+                        // backgroundImage: '../images/modal/roll_button.png',
+                        background-color:'#fff',
+                    }
+                    .scrollBottom{
+                        height: 21px;
+                        width: 35px;
+                        background-image: url('../images/modal/roll_axis_bottom.png');
+                        cursor: pointer;
+                        // background-repeat: no-repeat;
+                        // background-position: 50% 278px;
+                        // background-size: 35px 22px;
+                    }
+                }
+                
             }
         }
 
