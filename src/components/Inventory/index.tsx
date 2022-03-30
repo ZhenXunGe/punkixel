@@ -27,7 +27,6 @@ interface single {
 }
 export function SingleItem(m: single) {
   if (m.mId === null) {
-    
     let sprites = getSprite("ufo");
     // let ufo = sprites.getFrame("default", 0).src;
     return (
@@ -111,7 +110,7 @@ export function SingleItem(m: single) {
           <div className='avator'>
             <img src={ufo}></img>
           </div>
-          <div className='btn'>  
+          <div className='btn'>
             <img src={Inuse}></img>
           </div>
           <div className="right">

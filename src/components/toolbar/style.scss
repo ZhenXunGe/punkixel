@@ -82,7 +82,7 @@
                     margin-top: 10px;
                     display: inline-block;
                     height: 44px;
-                    width: 326px;
+                    width: 346px;
                     background-color: rgba(255, 255, 255, 0);
                     
                     div.btn_left {
@@ -92,7 +92,7 @@
                         line-height: 44px;
                         text-align: center;
                         border: none;
-                        width: 275px;
+                        width: 260px;
                         height: 44px;
                         background-color: rgba(255, 255, 255, 0);
                         background-image: url('../../images/home/select_board.png');
@@ -100,11 +100,13 @@
     
                     div.btn_right {
                         display: inline-block;
-                        float: right;
+                        position:relative;
+                        left:-10px;
+                        float: left;
                         // margin-left: -7px;
                         cursor: pointer;
                         border: none;
-                        width: 51px;
+                        width: 82px;
                         height: 44px;
                         background-color: rgba(255, 255, 255, 0);
                         background-image: url('../../images/home/select_btn.png');
@@ -114,37 +116,33 @@
                     // float: right;
                     display: inline-block;
                     margin-left: 340px;
+                    margin-top: 15px;
                     // margin-top: -50px;
-                    width: 300px;
+                    width: 280px;
                     .select_right_inline{
                         // 
                         float: left;
-                        height: 70px;
-                        li{
+                        height: 31px;
+                        li {
                             // padding-top: 10px;
                             margin-top: 0px;
-                            height: 70px;
+                            height: 31px;
+                            width: 35px;
                             display: inline-block;
+                            background-image: url('../../images/home/dye.png');
                             .dye-item {
+                                border-radius:3px;
                                 // margin-left: -5px;   for bottle
                                 margin-left: 0px;
                                 display: inline-block;
                                 // padding-top: 10px;
                                 // border: 1px solid gray;
-                                width: 35px;
-                                height: 50px;
-                                margin-top: 5px;
-                                img{
-                                    
-                                    margin-top: 3px;
-                                    margin-left: 2px;
-                                    // margin-bottom: 20px;
-                                }
-                                &.mid{
-                                    // background-color: #4063dd;
-                                    margin-right: 20px;
-                                  
-                                }
+                                margin-top:4px;
+                                margin-left:6px;
+                                width: 26px;
+                                height: 24px;
+                                margin-right: 3px;
+
                             }
                             &#selected{
                                 // margin-top: 0px !important;
@@ -155,7 +153,6 @@
                                     // margin-left: 2px;
                                     padding-bottom: 5px;
                                 } 
-                            
                             }
                             // background-color: red;
                             // height: 50px !important;
@@ -168,7 +165,7 @@
                     width: 32px;
                     float: left;
                     display: inline-block;
-                    margin-top: -50px;
+                    margin-top: -35px;
                     margin-left: 630px;
                     li#PPH{
                         color: $fontcolor;
