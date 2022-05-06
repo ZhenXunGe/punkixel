@@ -1,6 +1,3 @@
-import { MainBoard } from './MainBoard';
-import { Status } from './Status';
-import { Thumbnail } from './Thumbnail';
 import React, { useState } from 'react';
 export function RankingList() {
   return (

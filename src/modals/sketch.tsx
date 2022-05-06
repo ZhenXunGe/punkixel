@@ -28,17 +28,19 @@ export default function Sketch(prop: SketchProps) {
   const dispatch = useAppDispatch();
   const handleConfirm = () => {
     const spriteSketch = getSprite("sketch");
+    /*
     for (var i = 0; i < getWorld().instances.length; i++) {
       let d = getWorld().getInstanceByIndex(i).drawer;
       d.resetSketch();
       d.sketchWithStyle(prop.canvas.current!, spriteSketch, main, road);
     }
-    /*
-    let d = world.getInstance(homeIndex*individualWidth).drawer;
-    d.reset();
-    d.sketchWithStyle(canvasRef.current!,spriteSketch);
-    //d.resetSketch();
     */
+    let homeIndex = getWorld().getPlayer("solo")!.homeIndex;
+    let instance = getWorld().getInstanceByIndex(homeIndex);
+    instance.info.basePPH = 200;
+    let d = instance.drawer;
+    d.resetSketch();
+    d.sketchWithStyle(prop.canvas.current!, spriteSketch, main, road);
     dispatch(signalSketch());
     setShow(false);
   };
@@ -48,44 +50,6 @@ export default function Sketch(prop: SketchProps) {
       <div className="sketch_btn" onClick={() => handleShow()}>
         <img src={sketch_btn}></img>
       </div>
-
-      {/* <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Sketch your block!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Sketch your block and get base PPH
-          <div>
-            main theme:
-          <DropdownButton title={main}>
-            {mainCategory.map((p) =>
-              <Dropdown.Item onClick={() => setMain(p)}>{p}</Dropdown.Item>
-            )
-            }
-          </DropdownButton>
-          </div>
-          <div>
-            main theme:
-          <DropdownButton title={road}>
-            {roadCategory.map((p) =>
-              <Dropdown.Item onClick={() => setRoad(p)}>{p}</Dropdown.Item>
-            )
-            }
-          </DropdownButton>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="Close" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="Confirm" onClick={handleConfirm}>
-            Sketch
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
-
-
-
       <Modal show={show} aria-labelledby="contained-modal-title-vcenter" centered dialogClassName="modal-90w">
 
         <Modal.Body className="show-grid">

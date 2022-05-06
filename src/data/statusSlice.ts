@@ -65,9 +65,14 @@ export const statusSlice = createSlice({
       state.punkxiel = player.punkxiel;
       state.inventory = player.inventory;
       state.palettes = player.palettes;
+      let instance = getWorld().getInstanceByIndex(player.homeIndex);
+      state.pph = instance.info.pph + instance.info.basePPH;
       let total = 0;
       for (var m of state.inventory) {
         if (m!==null) {
+          let world = getWorld();
+          let minion = world.getMinion(m);
+          //console.log("inventory", m, minion.contribution, getWorld().timestamp);
           total += getWorld().getMinion(m).contribution;
         }
       };

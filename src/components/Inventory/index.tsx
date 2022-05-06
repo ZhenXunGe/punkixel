@@ -8,51 +8,29 @@ import Unlock from '../../modals/unlock';
 import { getSprite } from '../../sprite/spriteSlice';
 
 import './style.scss';
-
-import minion1 from '../../images/protectors/minion1.png';
-import minion2 from '../../images/protectors/minion2.png';
-import minion3 from '../../images/protectors/minion3.png';
-import minion4 from '../../images/protectors/minion4.png';
-import minion5 from '../../images/protectors/minion5.png';
 import Inuse from '../../images/protectors/Inuse.png';
 import Idle from '../../images/protectors/Idle.png';
-import protector_avator from '../../images/protectors/protector_avator.png';
-import protector_border from '../../images/protectors/protector_border.png';
-import protector_tag from '../../images/protectors/protector_tag.png';
+import protector_modifier from '../../images/protectors/protector_tag.png';
 import unknown from '../../images/protectors/unknown.png';
+import hover4 from "../../images/layout/level_4.png";
 
 interface single {
   mId: string | null;
   index: number;
 }
+
 export function SingleItem(m: single) {
   if (m.mId === null) {
-    let sprites = getSprite("ufo");
     // let ufo = sprites.getFrame("default", 0).src;
     return (
-      // <div className="protector">
-      //   <div className="left">
-      //     <img src="FFF"></img>
-      //     <Unlock uid="solo" index={m.index}></Unlock>
-      //   </div>
-      //   <div className="right">
-      //     <div>power: ?</div>
-      //     <div>speed: ?</div>
-      //     <div>mod: ? </div>
-      //   </div>
-      // </div>
-      <div className='protector1'>
-        <div className='avatorbg'></div>
-        <div className='tag'>
-          <img src={protector_tag} ></img>
+      <div className='protector'>
+        <div className='left'>
+          <img className="avator" src={unknown}></img>
+          <img className="modifier" src={protector_modifier} ></img>
         </div>
-        <div className='avator'>
-        <img src={unknown}></img>
-        </div>
-        <Unlock avator={unknown} uid="solo" index={m.index}></Unlock>
         <div className="right">
-          <div className='item'>???</div>
-          <div className='item'>???</div>
+          <div className='item'>---</div>
+          <div className='item'>---</div>
           {/* <div>mod: t</div> */}
         </div>
       </div>
@@ -64,55 +42,27 @@ export function SingleItem(m: single) {
     console.log(minion.location);
     if (minion.location === null) {
       return (
-
-        <div className='protector1'>
-          <div className='avatorbg'></div>
-          <div className='tag'>
-            <img src={protector_tag} ></img>
-          </div>
-          <div className='avator'>
-          <img src={ufo}></img>
-          </div>
-          <div className='btn'>
-            <img src={Idle}></img>
+        <div className='protector'>
+          <div className='left'>
+            <img className="avator" src={ufo}></img>
+            <img className="modifier" src={protector_modifier} ></img>
           </div>
           <div className="right">
             <div className='item'>{minion.power}</div>
             <div className='item'>{minion.frequency}</div>
-            {/* <div>mod: t</div> */}
           </div>
         </div>
-        // <div className="protector">
-        //   <div className="left">
-        //     <img src={ufo}></img>
-        //     <div className="button">
-        //       IDLE
-        //     </div>
-        //   </div>
-        //   <div className="right">
-        //     <div>power: {minion.power}</div>
-        //     <div>speed: {minion.frequency}</div>
-        //     <div>mod: t </div>
-        //   </div>
-        // </div>
       );
     } else {
       return (
-        <div className='protector1'>
-          <div className='avatorbg'></div>
-          <div className='tag'>
-            <img src={protector_tag} ></img>
-          </div>
-          <div className='avator'>
-            <img src={ufo}></img>
-          </div>
-          <div className='btn'>
-            <img src={Inuse}></img>
+        <div className='protector'>
+          <div className='left'>
+            <img className="avator" src={ufo}></img>
+            <img className="modifier" src={protector_modifier} ></img>
           </div>
           <div className="right">
             <div className='item'>{minion.power}</div>
             <div className='item'>{minion.frequency}</div>
-            {/* <div>mod: t</div> */}
           </div>
         </div>
       );
@@ -120,6 +70,29 @@ export function SingleItem(m: single) {
   }
 }
 
+export function SingleItemBtn(m: single) {
+  if (m.mId === null) {
+    // let ufo = sprites.getFrame("default", 0).src;
+    return (
+        <Unlock avator={unknown} uid="solo" index={m.index} ></Unlock>
+    );
+  } else {
+    let minion = getWorld().getMinion(m.mId)!;
+    if (minion.location === null) {
+      return (
+        <div className='action'>
+          <img src={Idle}></img>
+        </div>
+      );
+    } else {
+      return (
+        <div className='action'>
+            <img src={Inuse}></img>
+        </div>
+      );
+    }
+  }
+}
 
 interface MinionSelector {
   setminion: (m: string) => void;
@@ -170,14 +143,20 @@ export default function Inventory() {
       }, 0);
     }
   },[inventory_updater]);
-
-  console.log('inventory',inventory)
   return (
-    <>
+    <div className="inventory">
+    <div className="inventory-content">
       {forceUpdate?inventory.map((m, i) => {
         return <SingleItem mId={m} index={i} key={m == null ? `inventory-minion-${i}` : m}></SingleItem>
       }):null}
-    </>
+    </div>
+    <img className="inventory-cover" src={hover4} ></img>
+    <div className="inventory-btn">
+    {forceUpdate?inventory.map((m, i) => {
+        return <SingleItemBtn mId={m} index={i} key={`btn-inventory-minion-${i}`}></SingleItemBtn>
+      }):null}
+    </div>
+    </div>
   );
 }
 

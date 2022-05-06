@@ -2,7 +2,8 @@ import { content_size, Drawer, individualHeight, individualWidth, Painter } from
 import { EmptyInstance, Instance } from "./instance";
 import { Minion, randomMinion } from "./minion";
 import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette } from "./palette";
-import background from "./back.jpg";
+import background from "../images/sky.jpg";
+import { textChangeRangeIsUnchanged } from "typescript";
 
 export function getBackground(index: number) {
   let backs = [background];
@@ -15,7 +16,6 @@ export interface Player {
   energy: number;
   punkxiel: number;
   ranking: number;
-  pph: number;
   voucher: number;
   reward: number;
   palettes: Array<ColorCategory>;
@@ -30,6 +30,7 @@ export class World {
   minions: Map<string, Minion>;
   players: Map<string, Player>;
   sketched: boolean;
+  timestamp: number;
   constructor(cor: number) {
     var that = this;
     this.cursor = cor;
@@ -38,6 +39,7 @@ export class World {
     this.instances = [];
     this.weather = "normal";
     this.sketched = false;
+    this.timestamp = new Date().getMilliseconds();
   }
   initSketch() {
     if (this.sketched === false) {
@@ -64,30 +66,25 @@ export class World {
   loadInstance() {
     this.instances = BuildTestInstances(() => { return this.cursor });
   }
-  rend(painter: Painter, pos: number) {
-    let center = Math.floor(pos / individualWidth);
-    let p_start = center - 3;
-    let p_end = center + 3;
-    console.log("start:", p_start, "end", p_end);
+  rend(painter: Painter, p_start: number, p_end: number, cursor: number) {
+    //console.log("start:", p_start, "end", p_end,"pos", cursor);
     for (var i = p_start; i <= p_end; i++) {
       if (i >= 0 && i < this.instances.length) {
         let ins = this.getInstance(i * individualWidth);
         ins.setDry(false);
-        ins.drawer.draw(painter);
+        ins.drawer.draw(painter, cursor);
+      }
+      if (i<0) {
+        let ins = this.getInstanceByIndex(i+this.instances.length);
+        ins.setDry(false);
+        ins.drawer.draw(painter, cursor + this.instances.length * individualWidth);
+      }
+      if (i>=this.instances.length) {
+        let ins = this.getInstanceByIndex(i-this.instances.length);
+        ins.setDry(false);
+        ins.drawer.draw(painter, cursor - this.instances.length * individualWidth);
       }
     }
-    let center2 = Math.floor(this.cursor / individualWidth);
-    let p_start2 = center2 - 3;
-    let p_end2 = center2 + 3;
-
-    for (var j = p_start2; j <= p_end2; j++) {
-      if (j >= 0 && j < this.instances.length) {
-        if (j < p_start || j > p_end) {
-          this.getInstance(j).setDry(true);
-        }
-      }
-    }
-    this.cursor = pos;
   }
 
   flipWeather() {
@@ -113,12 +110,13 @@ export class World {
 
   /* Each time a bullet hit alien, the contribution of the owner of the bullet is increased */
   incMinionContribute(id: string, power: number) {
-    let m = this.minions.get(id)!;
-    let n = { ...m, contribution: m.contribution + power };
+    let m = this.getMinion(id)!;
+    let n = { ...m, contribution: m.contribution + power};
     this.minions.set(m.id, n);
   }
 
   clearMinionContribute(id: string) {
+    console.log("clear contribute", id);
     let m = this.minions.get(id)!;
     let n = { ...m, contribution: 0 };
     this.minions.set(m.id, n);
@@ -140,7 +138,7 @@ export class World {
       if (pos_x < 0) { pos_x = 0; };
       if (pos_x > 900) { pos_x = 900; };
       let n = { ...m, contribution: 0, x: pos_x };
-      this.minions.set(m.id, n);
+      //this.minions.set(m.id, n);
     }
   }
 
@@ -269,3 +267,4 @@ function BuildTestInstances(
   }
   return instance_list;
 }
+

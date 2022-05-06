@@ -1,82 +1,70 @@
 @import '../../styles/common.scss';
 
-.left-menu div.protector1 {
-    margin-top: -5px;
-    position: relative;
-    width: 204px;
-    height: 95px;
-    background-image: url('../../images/protectors/minion1.png');
+.inventory {
+    position:absolute;
+    top:360px;
+    left:0px;
+    .inventory-cover {
+        position:absolute;
+        top:-5px;
+    }
+    .inventory-btn {
+        position:absolute;
+        top: 0px;
+        left: 160px;
+        .action {
+            padding-top:5px;
+        }
+    }
+}
 
+.inventory div.protector {
+    width: 204px;
+    height: 90px;
     &:first-child {
-        margin-top: -8px;
+        margin-top: 0px;
     }
 
+    div.left {
+        width:85px;
+        float:left;
+        margin: 22px 10px 0px 12px;
+        img.avator {
+            float:left;
+            margin-left:10px;
+            width: 45px;
+            height: 45px;
+        }
+        img.modifier {
+            clear:both;
+            float:left;
+            margin-left: 80px;
+            margin-top:0px;
+            width:12px;
+            height:12px;
+        }
+    }
     div.right {
         color: $fontcolor;
         // padding-left: 11px;
-        width: 68px;
-        margin-left: 90px;
-        text-align: center;
-        padding-top: 8px !important;
-
+        width: 40px;
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 800;
+        text-align: left;
+        padding-top:8px;
         .item {
-            margin-top: 10px;
+            margin-top:6px;
+            margin-bottom: 0px;
         }
     }
 
-    .tag {
-        img {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            left: 15px;
-            top: 65px;
-            z-index: 99;
-        }
-
-        // background-size: auto 100%;
-        // background-image: url("../../images/protectors/protector_tag.png");
-    }
-
-    .avator {
-
-        // position: absolute;
-        // width: 56px;
-        // height: 69px;
-        // left: 15px;
-        // top: 12px;
-        // background-size: auto 100%;
-        // background-image: url("../../images/protectors/protector_avator.png");
-        img {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            left: 20px;
-            top: 22px;
-        }
-    }
-
-    .avatorbg {
-        position: absolute;
-        width: 154px;
-        height: 79px;
-        left: 10px;
-        top: 6px;
-        z-index: 1;
-        background-size: auto 100%;
-        background-image: url("../../images/protectors/protector_border2.png");
-    }
-
-    .btn {
-        position: absolute;
-        width: 18px;
-        height: 71px;
-        left: 150px;
-        top: 5px;
-
-
-        // background-size: 18px 71px;
-        // background-image: url("../../images/protectors/Unlock.png");
+    .action {
+        width:18px;
+        height:71px;
+        margin-right:27px;
+        display:block;
+        float:right;
     }
 
     .btn:focus,

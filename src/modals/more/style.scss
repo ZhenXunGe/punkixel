@@ -1,0 +1,87 @@
+.more-area {
+    .info-left {
+        margin-left:65px;
+        position:absolute;
+        margin-top:25px;
+        .advisor {
+            position:absolute;
+            height:417px;
+            width:313px;
+            background-image: url("../../images/modal/more/alien.png");
+        }
+        img {
+            margin: 40px 20px 0 20px;
+            position:absolute;
+            height:300px;
+            width:260px;
+        }
+    }
+    .info {
+        position: absolute;
+        right: 145px;
+        top: 115px;
+        width: 370px;
+        height: 217px;
+        .title {
+            font-family: 'brush script MT';
+            height:50px;
+            margin-left:120px;
+            text-align:center;
+            font-size:38px;
+            font-weight:800;
+            color: #ffd200;
+        }
+        .skill {
+            list-style: none;
+            // background-color: rgb(215, 141, 141);
+            li {
+                // border: 1px solid #ffd200;
+                margin-top: 8px;
+                margin-left: 210px;
+                height: 55px;
+                font-size: 22px;
+                font-weight: 800;
+                line-height: 55px;
+                text-align: left;
+                color: #ffd200;
+            }
+        }
+
+        .proto {
+            margin-top: 75px;
+            list-style: none;
+            padding-left: 168px;
+            font-size: 24px;
+            font-family: 'brush script MT';
+            div {
+                // border: 1px solid #ffd200;
+                height: 45px;
+                width: 80px;
+                float: left;
+                cursor: pointer;
+                color: #ffd200;
+                &:last-child {
+                    margin-left: 30px;
+                }
+            }
+
+            // background-color: rgb(71, 157, 255);
+
+        }
+        .desc {
+            margin:150px 0px 0px 50px;
+            font-size:14px;
+            color: #333;
+        }
+    }
+
+    .info-right {
+        float:right;
+        margin-right: 60px;
+        margin-top:18px;
+        height:395px;
+        width:456px;
+        color: #cfbea3;
+        background-image: url('../../images/modal/more/monsterdetails.png');
+    }
+}

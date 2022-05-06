@@ -1,0 +1,31 @@
+.info-area{
+    .info-left {
+        margin-left:65px;
+        position:absolute;
+        margin-top:25px;
+        .advisor {
+            position:absolute;
+            height:417px;
+            width:313px;
+            background-image: url("../../images/modal/more/advisor.png");
+        }
+        img {
+            margin: 40px 20px 0 20px;
+            position:absolute;
+            height:300px;
+            width:260px;
+        }
+    }
+    .info-right{
+        float:right;
+        margin-right: 65px;
+        margin-top:25px;
+        height:420px;
+        width:400px;
+        color: #cfbea3;
+        .head {
+            font-size:30px;
+            text-align: center;
+        }
+    }
+}

@@ -61,7 +61,8 @@ export class StraightBullet implements BulletInfo {
         this.x = next_x;
         this.y = next_y;
         [front_x, front_y] = this.getFront();
-        let ratio = this.width / distance([this.x, this.y], [x, y]);
+        let dis = distance([this.x, this.y], [x, y]);
+        let ratio = 50 / dis;
         //throw("Exception ERRE");
         //console.log("ratio", ratio);
         if (ratio > 1) {

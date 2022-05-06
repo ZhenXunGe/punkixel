@@ -1,0 +1,68 @@
+.reward-area {
+    .info-left {
+        margin-left:65px;
+        position:absolute;
+        margin-top:25px;
+        .reward-punkxiels {
+            position:absolute;
+            height:417px;
+            width:313px;
+            background-image: url("../../images/modal/more/reward.png");
+        }
+        img {
+            margin: 40px 20px 0 20px;
+            position:absolute;
+            height:300px;
+            width:260px;
+        }
+    }
+    .info {
+        position: absolute;
+        right: 145px;
+        top: 125px;
+        width: 400px;
+        height: 217px;
+        .title {
+            height:50px;
+            position:relative;
+            top:-10px;
+            margin-left:70px;
+            text-align:center;
+            font-size:30px;
+            font-weight:800;
+            color: #ffd200;
+        }
+        .skill {
+            margin-top:10px;
+            list-style: none;
+            // background-color: rgb(215, 141, 141);
+            li {
+                img {
+                    width:35px;
+                    height:35px;
+                    margin-right:25px;
+                }
+                // border: 1px solid #ffd200;
+                margin-top: 6px;
+                margin-left: 40px;
+                height: 48px;
+                font-size: 16px;
+                font-weight: 800;
+                line-height: 55px;
+                text-align: left;
+                color: #333;
+            }
+        }
+
+    }
+
+    .info-right {
+        float:right;
+        margin-right: 85px;
+        margin-top:28px;
+        height:395px;
+        width:442px;
+        color: #cfbea3;
+        background-image: url('../../images/modal/more/rewarddetails.png');
+    }
+}

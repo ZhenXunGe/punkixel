@@ -1,10 +1,7 @@
 
 .event{
-
     .dropEvent{
-        z-index: 1;
-        line-height: 26px;
-        display: inline-block;
+        display: inline;
         width: 540px;
         span{
             display: inline-block;
@@ -14,6 +11,21 @@
         }
         div.button{
             color: crimson;
+        }
+        div.details {
+            position:relative;
+            color: white;
+            background-image: url("../images/buttons/detail_normal.png");
+            width: 60px;
+            height: 20px;
+            top: 5px;
+            cursor: pointer;
+        }
+        div.details:hover {
+            background-image: url("../images/buttons/detail_hover.png");
+        }
+        div.details:after {
+            background-image: url("../images/buttons/detail_click.png");
         }
     }
 }

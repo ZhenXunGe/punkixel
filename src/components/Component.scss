@@ -13,6 +13,8 @@ div.screen {
     left: 0px;
     right: 0px;
     background-color: #666;
+    background-image: url("../images/sky.jpg")
+    
 }
 
 div.application {
@@ -23,8 +25,10 @@ div.application {
     margin: auto;
     border: 1px solid gray;
     top: 50%;
+    border:none;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+    background-color: #ddd;
 }
 
 
@@ -46,6 +50,7 @@ div.application {
     float: left;
 
     background-color: transparent;
+    background-size:contain;
     // margin: auto;
     // margin-left: 100px;
 }
@@ -57,63 +62,6 @@ div.application {
     top: 0px;
     left: 0px;
 }
-
-.guest-info {
-    // z-index: 1;
-    position: absolute;
-    top: 668px;
-    width: 600px;
-    height: 150px;
-    left: 208px;
-    right: 300px;
-    // background-color:white;
-    background-color: rgba(255, 255, 255, 0);
-}
-
-.guest-info div.event {
-    display: flex;
-    // border-bottom: 2px solid #745435;
-    // border-radius: 4px;
-    padding: 5px;
-    color: $fontcolor;
-    // margin:5px;;
-    font-size: 12px;
-    font-weight: bold;
-    height: 42px;
-    &::after{
-
-        position: absolute;
-        margin-top: 36px;
-        content: '';
-        width: 590px;
-        height: 1px;
-        background-color: #745435;
-    }
-    div.minion-avator {
-        
-        margin-left: 20px;
-        margin-right: 10px;
-        display: inline-block;
-        // background-color:#eee;
-        border: 2px solid #d6af85;
-        // padding:2px;
-        border-radius: 12px;
-    }
-
-    div.minion-avator img {
-        background-color: #555;
-        width: 27px;
-        height: 28px;
-        border-radius: 10px;
-    }
-}
-
-
-
-
-
-
-
 
 .minion-selector img {
     float: left;

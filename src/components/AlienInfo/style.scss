@@ -1,0 +1,102 @@
+@import '../../styles/common.scss';
+.alien-info {
+    position: absolute;
+    padding: 10px;
+    left: 810px;
+    right: 0px;
+    top: 610px;
+    height: 250px;
+    width: 370px;
+    color: #deb98e; // $fontcolor;
+    font-size: 12px;
+    // background-color:rgba(173, 173, 173, 0.345);
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.alien-info .alien-basic {
+    height: 90px;
+
+    .alien-basic-info {
+        width: 360px;
+        height: 140px;
+        padding-top: 8px;
+        font-size: 18px;
+
+        .skill {
+            padding-left: 86px;
+            width: 300px;
+            height: 25px;
+
+            // float: left;
+            // display:inline;
+            .skills {
+                margin-top: 2px;
+                margin-left: 1px;
+
+                li {
+                    text-align: center;
+                    width: 26px;
+                    height: 26px;
+                    margin-left: 8px;
+                    //background-color: bisque;
+                    display: inline-block
+                }
+            }
+
+        }
+        .name {
+            font-size: 30px;
+            font-family: 'brush script MT';
+            margin-left: 150px;
+        }
+        .right {
+            display: inline-block;
+            margin-left: 8px;
+            width: 230px;
+            font-weight: bold;
+            // float: right;
+            // color: $alieninfo_blue;
+            -webkit-transform: scale(0.6);
+
+            // font-weight: bold;
+            .speed {
+                margin-left: 0px;
+                float: left;
+            }
+
+            .strack {
+                float: right;
+                margin-right: 1px;
+            }
+
+            // border:1px solid gray;
+        }
+    }
+}
+
+.alien-info .alien-basic-avator {
+    margin-top: 40px;
+    margin-left: 8px;
+    float: left;
+    height: 108px;
+    width: 108px;
+
+}
+
+.alien-info img {
+
+    height: 108px;
+    width: 108px;
+}
+
+// .alien-info div
+
+
+.summary {
+    // padding-top: 2px;
+    margin-top: 15px;
+    margin-left: 120px;
+    font-weight: bold;
+    width: 230px;
+    -webkit-transform: scale(0.8); //小于浏览器最小支持字体，使用css缩放
+}

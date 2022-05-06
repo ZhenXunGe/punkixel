@@ -1,0 +1,35 @@
+@import '../../styles/common.scss';
+
+.guest-info {
+    // z-index: 1;
+    position: absolute;
+    top: 668px;
+    width: 600px;
+    height: 150px;
+    left: 208px;
+    right: 300px;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.guest-info div.event {
+    height: 49px;
+    display: block;
+    padding: 10px;
+    color: $fontcolor;
+    // margin:5px;;
+    font-size: 12px;
+    font-weight: bold;
+    div.minion-avator {
+        margin: 0px 20px 10px 14px;
+        display: inline-block;
+        // background-color:#eee;
+        // padding:2px;
+    }
+
+    div.minion-avator img {
+        background-color: #555;
+        width: 27px;
+        height: 28px;
+        border-radius: 10px;
+    }
+}

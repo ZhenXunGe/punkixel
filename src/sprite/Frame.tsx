@@ -40,8 +40,8 @@ export default function Frame(prop: IProps) {
     let pos = (alien.pos % (individualWidth)) * ratio;
     canvas?.clearRect(0, 0, 1000, 400);
 
-    let alien_center_x = pos + 50;
-    let alien_center_y = 310 + 40;
+    let alien_center_x = pos + 60;
+    let alien_center_y = 330;
     dispatch(signalBulletsUpdate([alien_center_x, alien_center_y]));
     let idx = Math.floor(alien.pos / individualWidth);
     if (viewIndex != idx) {

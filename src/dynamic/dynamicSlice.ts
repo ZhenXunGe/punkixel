@@ -81,8 +81,8 @@ export const dynamicSlice = createSlice({
             state.alien.dizzle = 18;
             state.damage = 0;
             let instance = getWorld().getInstance(state.viewIndex*individualWidth);
-            instance.calculateRewards(100, state.alien.drop);
-            state.events.unshift(RewardEvent(state.alien.name, instance));
+            let rewardinfo = instance.calculateRewards(100, state.alien.drop);
+            state.events.unshift(RewardEvent(state.alien.name, instance, rewardinfo));
             state.events.unshift(DropEvent(state.alien.name, instance, state.alien.drop));
           }
           console.log(`alien has taken ${state.damage} damage`);

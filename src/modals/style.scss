@@ -1,17 +1,4 @@
-.protect_btn {
-    border: 0;
-
-    margin-right: -6px;
-    margin-top: -128px;
-    float: right;
-    z-index: 100;
-    background-color: rgba(255, 255, 255, 0);
-
-    img {
-        width: 160px;
-        background-color: rgba(255, 255, 255, 0);
-    }
-}
+@import '../styles/common.scss';
 
 .modal-90w {
     width: 920px;
@@ -26,6 +13,42 @@
         background-color: transparent;
         border: none;
 
+        .scrollOut{
+            height: 137px;
+            width: 60px;
+            position: absolute;
+            top: 216px;
+            background: transparent;
+            background-image: url('../images/buttons/arrow_key.png');
+            left: 830px;
+            .scrollUp{
+                position: relative;
+                background: black;
+                top:10px;
+                left:5px;
+                background-image: url('../images/buttons/up_normal.png');
+                width: 50px;
+                height: 47px;
+            }
+            .scrollDown{
+                position: relative;
+                background: black;
+                top:32px;
+                left:5px;
+                background-image: url('../images/buttons/down_normal.png');
+                width: 50px;
+                height: 47px;
+            }
+            .cover {
+                position: relative;
+                background: transparent;
+                height:137px;
+                top:-94px;
+                width:60px;
+                background-image: url('../images/buttons/arrow_key.png');
+            }
+        }
+        
         button.closeBtn {
             margin-left: 702px;
             margin-top: -12px;
@@ -230,50 +253,9 @@
                         }
                     }
                 }
-                .scrollOut{
-                    height: 408px;
-                    width: 35px;
-                    position: absolute;
-                    top: 90px;
-                    background: transparent;
-                    left: 793px;
-                    .scrollTop{
-                        height: 21px;
-                        width: 35px;
-                        background-image: url('../images/modal/roll_axis_top.png');
-                        cursor: pointer;
-                        // background-repeat: no-repeat;
-                        // background-position: 50% 0;
-                        // background-size: 35px 22px;
-                    }
-                    .scrollIn{
-                        // margin-top: 22px;
-                        height: 364px;
-                        width: 35px; 
-                        background-image: url('../images/modal/roll_axis.png');
-                        // left: 793px;
-                    }
-                    .scrollButton{
-                        width:35px;
-                        height:51px;
-                        // float: left;
-                        // backgroundImage: '../images/modal/roll_button.png',
-                        background-color:'#fff',
-                    }
-                    .scrollBottom{
-                        height: 21px;
-                        width: 35px;
-                        background-image: url('../images/modal/roll_axis_bottom.png');
-                        cursor: pointer;
-                        // background-repeat: no-repeat;
-                        // background-position: 50% 278px;
-                        // background-size: 35px 22px;
-                    }
-                }
             }
 
             .protect_area {
-
                 // text-align: center;
                 .headerTitle {
                     margin-top: 35px;
@@ -284,38 +266,11 @@
                         height: 44px;
                     }
                 }
-
                 .minions {
-
                     width: 755px;
                     height: 300px;
                     // background-color: aquamarine;
                     list-style: none;
-                    // overflow-y: scroll;
-
-                    // &::-webkit-scrollbar {
-
-                    //     width: 35px;
-                    //     z-index: 100;
-
-                    //     // background-color:#fff;
-                    //     // background-image: url('../images/modal/roll_axis.png');
-                    //     // background-image: url('../images/modal/roll_axis_top.png'),url('../images/modal/roll_axis.png'),url('../images/modal/roll_axis_bottom.png');
-                         
-                      
-                    // }
-                    // &::-webkit-scrollbar-button{
-                    //     background-color: transparent;
-                    //     height: 22px;
-                    // }
-                    
-                    // &::-webkit-scrollbar-thumb {
-                    //     // background-repeat: no-repeat;
-                    //     // width: 40px;
-                    //     background-color: transparent;
-                    //     background-image: url('../images/modal/roll_button.png');
-                    // }
-
                     li {
                         margin-top: -10px;
                         width: 687px;
@@ -343,47 +298,6 @@
                     }
                     
                 }
-                .scrollOut{
-                    height: 300px;
-                    width: 35px;
-                    position: absolute;
-                    top: 138px;
-                    background: transparent;
-                    left: 793px;
-                    .scrollTop{
-                        height: 21px;
-                        width: 35px;
-                        background-image: url('../images/modal/roll_axis_top.png');
-                        cursor: pointer;
-                        // background-repeat: no-repeat;
-                        // background-position: 50% 0;
-                        // background-size: 35px 22px;
-                    }
-                    .scrollIn{
-                        // margin-top: 22px;
-                        height: 256px;
-                        width: 35px; 
-                        background-image: url('../images/modal/roll_axis.png');
-                        // left: 793px;
-                    }
-                    .scrollButton{
-                        width:35px;
-                        height:51px;
-                        // float: left;
-                        // backgroundImage: '../images/modal/roll_button.png',
-                        background-color:'#fff',
-                    }
-                    .scrollBottom{
-                        height: 21px;
-                        width: 35px;
-                        background-image: url('../images/modal/roll_axis_bottom.png');
-                        cursor: pointer;
-                        // background-repeat: no-repeat;
-                        // background-position: 50% 278px;
-                        // background-size: 35px 22px;
-                    }
-                }
-                
             }
         }
 
@@ -579,117 +493,6 @@
             }
         }
 
-        .unlock_area {
-            margin-left: 39px;
-            margin-top: 25px;
-            width: 764px;
-            height: 434px;
-            background-image: url('../images/modal/unlock/minion_bg.png');
-
-            .minion_avator {
-                display: inline-block;
-                position: absolute;
-                left: 140px;
-                top: 151px;
-                border-radius: 50%;
-                width: 200px;
-                height: 200px;
-                // background-color: #ffd200;
-            }
-
-            .minion_pro {
-                position: absolute;
-                right: 145px;
-                top: 165px;
-                width: 370px;
-                height: 217px;
-
-                .minion_proto {
-                    list-style: none;
-
-                    // background-color: rgb(215, 141, 141);
-                    li {
-                        // border: 1px solid #ffd200;
-                        margin-top: 20px;
-                        height: 55px;
-                        font-size: 28px;
-                        line-height: 55px;
-                        text-align: center;
-                        color: #ffd200;
-                    }
-                }
-
-                .minion_position {
-
-                    height: 16px;
-                    margin-top: 29px;
-                    background-color: rgba(255, 255, 255, 0);
-                    list-style: none;
-                    padding-left: 49px;
-                    li {
-                        // border: 1px solid #ffd200;
-                        height: 16px;
-                        line-height: 55px;
-                        width: 16px;
-                        float: left;
-                        border-radius: 50%;
-                        cursor: pointer;
-                        // background-color: #ffd200;
-                        &:last-child {
-                            margin-left: 180px;
-                        }
-
-                        &#selected {
-                            background-color: white;
-                        }
-                    }
-
-                    // background-color: rgb(71, 157, 255);
-
-                }
-            }
-
-            .bottom {
-                position: absolute;
-                width: 700px;
-                height: 120px;
-                bottom: 30px;
-                
-                ul.modifier {
-                    margin-top: 28px;
-                    float: left;
-                    height: 90px;
-                    width: 250px;
-                    margin-left: 60px;
-                    // background-color: #00ff59;
-                    li {
-                        float: left;
-                        width: 64px;
-                        height: 64px;
-                        list-style: none;
-                        line-height: 64px;
-                        text-align: center;
-                        img{
-                            display: inline-block;
-                        }
-                        border-radius: 50%;
-                        &:last-child {
-                            margin-left: 40px;
-                        }
-                    }
-                }
-
-                .unlock {
-                    cursor: pointer;
-                    margin-top: 20px;
-                    margin-left: 370px;
-                    width: 298px;
-                    height: 119px;
-                    // border: 0px;
-                    background-image: url('../images/modal/unlock/unlock.png');
-                }
-            }
-        }
 
         .footer {
             width: 93%;
@@ -740,4 +543,23 @@
             }
         }
     }
+}
+
+.more {
+    left: 1010px;
+    top:780px;
+    font-size: 14px;
+    color: $alieninfo_blue;
+    position:absolute;
+    font-weight: bold;
+    width: 110px;
+    vertical-align: middle;
+    height: 26px;
+    border: none;
+    // border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    background-image: url('../images/MORE.png');
+    // p {
+    //     margin-top: -3px;
+    // }
 }

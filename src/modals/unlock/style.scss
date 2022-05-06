@@ -1,0 +1,129 @@
+.unlock-area {
+    .info-left {
+        margin-left:65px;
+        position:absolute;
+        margin-top:25px;
+        .advisor {
+            position:absolute;
+            height:417px;
+            width:313px;
+            background-image: url("../../images/modal/unlock/frame.png");
+        }
+        img {
+            margin: 40px 20px 0 20px;
+            position:absolute;
+            height:300px;
+            width:260px;
+        }
+    }
+    .minion_pro {
+        position: absolute;
+        right: 145px;
+        top: 135px;
+        width: 370px;
+        height: 217px;
+        .title {
+            margin-left: 50px;
+            height:50px;
+            font-size:18px;
+            font-weight:800;
+            color: #ffd200;
+        }
+        .minion_proto {
+            list-style: none;
+
+            // background-color: rgb(215, 141, 141);
+            li {
+                // border: 1px solid #ffd200;
+                margin-top: 8px;
+                margin-left: 210px;
+                height: 55px;
+                font-size: 22px;
+                font-weight: 800;
+                line-height: 55px;
+                text-align: left;
+                color: #ffd200;
+            }
+        }
+
+        .minion_position {
+
+            height: 15px;
+            margin-top: 25px;
+            list-style: none;
+            padding-left: 178px;
+            div {
+                // border: 1px solid #ffd200;
+                height: 11px;
+                line-height: 55px;
+                width: 11px;
+                float: left;
+                border-radius: 50%;
+                cursor: pointer;
+                // background-color: #ffd200;
+                &:last-child {
+                    margin-left: 240px;
+                }
+
+                &#selected {
+                    background-image: url("../../images/modal/unlock/dot.png");
+                }
+            }
+
+            // background-color: rgb(71, 157, 255);
+
+        }
+    }
+
+    .bottom {
+        position: absolute;
+        width: 700px;
+        height: 120px;
+        bottom: 40px;
+        
+        ul.modifier {
+            margin-top: 38px;
+            float: left;
+            height: 90px;
+            width: 250px;
+            margin-left: 70px;
+            // background-color: #00ff59;
+            li {
+                float: left;
+                width: 70px;
+                height: 70px;
+                list-style: none;
+                line-height: 64px;
+                text-align: center;
+                img{
+                    display: inline-block;
+                }
+                border-radius: 50%;
+                &:last-child {
+                    margin-left: 40px;
+                }
+            }
+        }
+
+
+    }
+
+    .info-right {
+        float:right;
+        margin-right: 60px;
+        margin-top:25px;
+        height:375px;
+        width:456px;
+        color: #cfbea3;
+        background-image: url('../../images/modal/unlock/minion_intorduction.png');
+        .unlock {
+            cursor: pointer;
+            margin-top: 325px;
+            margin-left: 85px;
+            width: 285px;
+            height: 106px;
+            // border: 0px;
+            background-image: url('../../images/modal/unlock/unlock.png');
+        }
+    }
+}

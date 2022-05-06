@@ -1,0 +1,78 @@
+.left-menu {
+  width: 208px;
+  position: absolute;
+  .padding-top {
+    height: 0px;
+    display: block;
+    clear: both;
+  }
+  padding-left:6px;
+  padding-top:7px;
+}
+
+.left-menu .panelSelect {
+  margin-top: 0px;
+
+  .bicon {
+    border: 0;
+    float:left;
+    &.left {
+      margin-top:0px;
+      margin-left:10px;
+    }
+    &.right {
+      margin-left: -4px;
+    }
+
+    &.bottom {
+      margin-top:-2px;
+    }
+
+    &.unact img{
+      display:none;
+    }
+
+    &.active {
+      background-image: url("../../images/buttons/button_select.png");
+    }
+
+    height: 44px;
+    width: 90px;
+    background-color: rgba(255, 255, 255, 0);
+
+    img {
+      margin-top:3px;
+      margin-left:24px;
+      width: 52px;
+      height: 39px;
+    }
+  }
+
+
+}
+
+.left-menu div.avatorTop {
+  position: relative;
+  width: 208px;
+  height: 252px;
+
+  .avatorContext {
+    position: absolute;
+    width: 125px;
+    height: 168px;
+    left: 28px;
+    top: 40px;
+    background-size: auto 100%;
+    background-image: url("./hero.jpeg");
+  }
+
+  .avatorBorder {
+    position: absolute;
+    width: 208px;
+    height: 252px;
+    left: 0;
+    top: 0;
+    background-size: auto 100%;
+    background-image: url("../../images/avatar-1.png");
+  }
+}

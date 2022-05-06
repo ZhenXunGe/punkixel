@@ -19,7 +19,7 @@ export function MinionAvator(props:IProps) {
   let minion = getWorld().getMinion(props.mId);
   let sprites = getSprite("ufo");
   let minion_url = sprites.getFrame(minion.type, minion.style).src;
-  return (<div className="minion-avator"><img src={minion_url} className="minion-avator"></img></div>)
+  return (<div className="minion-avator"><img src={minion_url} className="minion-avator"></img><div className="cover"></div></div>)
 }
 
 
@@ -37,7 +37,9 @@ export function ToolBarWeapon() {
           <ul className="inline-brick world">
             <div className='minionList'>
               {minions.map((m) => {
-                return <li className='minionItem' key={getWorld().getMinion(m).id}><MinionAvator  mId={m}></MinionAvator></li>;
+                return (
+                  <li className='minionItem' key={getWorld().getMinion(m).id}><MinionAvator  mId={m}></MinionAvator></li>
+                );
               })}
             </div>
             <div className='minionDamage'>
@@ -49,9 +51,7 @@ export function ToolBarWeapon() {
 
             </div>
           </ul>
-          
           <Contribute></Contribute>
-          
         </li>
         
       </ul>

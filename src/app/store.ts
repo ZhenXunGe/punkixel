@@ -9,13 +9,15 @@ export const store = configureStore({
       serializableCheck: {
         // Ignore these action types
         ignoredActions: [
-          'sprite/installSprite'
+          'sprite/installSprite',
+          'dynamic/addEvent'
         ],
         // Ignore these field paths in all actions
         ignoredActionPaths: ['status.world'],
         // Ignore these paths in the state
         ignoredPaths: [
-            'status.world'
+            'status.world',
+            'dynamic.events'
         ],
       },
     }),
