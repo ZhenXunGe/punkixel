@@ -131,17 +131,6 @@ export class World {
     this.minions.set(m.id, n);
   }
 
-  updateMinionPosition(mId: string) {
-    let m = this.minions.get(mId)!;
-    if (m.type !== "land") {
-      let pos_x = m.x + (1 - Math.floor(Math.random() * 3)) * 5;
-      if (pos_x < 0) { pos_x = 0; };
-      if (pos_x > 900) { pos_x = 900; };
-      let n = { ...m, contribution: 0, x: pos_x };
-      //this.minions.set(m.id, n);
-    }
-  }
-
   unlockMinion(owner: string, index: number) {
     let r = randomMinion(owner, this);
     let player = this.players.get(owner)!;

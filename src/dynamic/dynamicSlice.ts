@@ -3,29 +3,77 @@ import { rawListeners } from 'process';
 import { RootState } from '../app/store';
 import { Alien, randomAlien } from '../data/alien';
 import { individualWidth } from '../data/draw';
-import { availableMinions, getMinionById } from '../data/minion';
+import { availableMinions, getMinionById, Minion } from '../data/minion';
 import getWorld from '../data/world';
 import { Sprite } from '../sprite/sprite';
 import { getSprite } from '../sprite/spriteSlice';
 import { BulletInfo } from './bullet';
 import { DropEvent, Event, RewardEvent }  from './event';
+import { InstanceInfo } from '../data/instance';
 
 
-
-
-var bullets: Array<BulletInfo> = [];
-
-export function addBullet(d:BulletInfo) {
-  bullets.push(d);
-};
-
-export function resetBullets(){
-  bullets = [];
-};
-
-export function allBullets(){
-  return bullets;
+export class DynamicMinion {
+  minion: Minion;
+  offsetX: number;
+  offsetY: number;
+  constructor(minion: Minion) {
+    this.minion = minion;
+    this.offsetX = 0;
+    this.offsetY = 0;
+  }
 }
+
+
+class DynamicInfo {
+  bullets: Array<BulletInfo> = [];
+  minions: Array<DynamicMinion> = [];
+
+  addBullet(d:BulletInfo) {
+    this.bullets.push(d);
+  };
+
+  resetBullets() {
+    this.bullets = [];
+  };
+
+  allBullets() {
+    return this.bullets;
+  };
+
+  loadInstance(instance: InstanceInfo) {
+    this.minions = instance.minions.map((mid)=>{
+      let minfo = getWorld().getMinion(mid);
+      return new DynamicMinion(minfo);
+    });
+  }
+
+  getMinions() {
+    return this.minions;
+  }
+
+  updateMinionPosition(minion: DynamicMinion) {
+    if (minion.minion.type !== "land") {
+      let m = minion.minion;
+      let pos_x = minion.offsetX + m.x + (1 - Math.floor(Math.random() * 3)) * 5;
+      if (pos_x < 0) { pos_x = 0; };
+      if (pos_x > 900) { pos_x = 900; };
+      minion.offsetX = pos_x - m.x;
+    }
+  }
+
+
+}
+
+var dynamicInfo: DynamicInfo | null = null;
+
+export function getDynamicInfo(): DynamicInfo {
+  if (dynamicInfo === null) {
+    dynamicInfo = new DynamicInfo();
+    dynamicInfo.loadInstance(getWorld().getInstanceByIndex(0).info);
+  };
+  return dynamicInfo!;
+}
+
 
 export interface DynamicState {
     timeClock: number;
@@ -72,6 +120,8 @@ export const dynamicSlice = createSlice({
     signalBulletsUpdate: (state, d) => {
       let cs = [];
       let cor:[number, number] = d.payload;
+      let dynamicInfo =  getDynamicInfo();
+      let bullets = dynamicInfo.allBullets();
       for (var i=0;i<bullets.length;i++) {
         let b = bullets[i];
         let [done, hit] = b.approach(cor[0], cor[1]);
@@ -84,7 +134,7 @@ export const dynamicSlice = createSlice({
             alienSprite.currentTrigger = state.timeClock;
             state.alien.dizzle = 12;
             state.damage = 0;
-            let instance = getWorld().getInstance(state.viewIndex*individualWidth);
+            let instance = getWorld().getInstanceByIndex(state.viewIndex);
             let rewardinfo = instance.calculateRewards(100, state.alien.drop);
             state.events.unshift(RewardEvent(state.alien.name, instance, rewardinfo));
             state.events.unshift(DropEvent(state.alien.name, instance, state.alien.drop));
@@ -117,13 +167,14 @@ export const dynamicSlice = createSlice({
     },
     switchView: (state, d) => {
       state.viewIndex = d.payload;
+      let instance = getWorld().getInstanceByIndex(state.viewIndex);
+      getDynamicInfo().loadInstance(instance.info);
       getWorld().flipWeather();
     },
     signalPlaceMinion: (state, d) => {
       let viewIndex = d.payload.viewIndex;
-      let instance = getWorld().getInstance(viewIndex*individualWidth);
+      let instance = getWorld().getInstanceByIndex(viewIndex);
       getWorld().placeMinion(d.payload.mId, viewIndex);
-      //let m = randomMinion();
       instance.info.minions.push(d.payload.mId);
     }
   },
