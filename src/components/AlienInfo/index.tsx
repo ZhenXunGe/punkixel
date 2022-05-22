@@ -18,7 +18,7 @@ export function AlienInfo() {
       <div className="alien-basic-info">
         <div className='skill'>
           <ul className='skills'>
-            <li>1</li>
+            <li>0</li>
             <li>2</li>
             <li>3</li>
           </ul>

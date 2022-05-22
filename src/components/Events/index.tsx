@@ -1,14 +1,15 @@
 import { useAppSelector } from '../../app/hooks';
 import "./style.scss";
-import alien from "../../sprite/monster/run/1.png";
 import dyeavator from "../../images/buttons/dyebottle.png";
-import { selectEvents } from '../../dynamic/dynamicSlice';
+import { selectAlien, selectEvents } from '../../dynamic/dynamicSlice';
 import { EventInfo } from '../../dynamic/event';
 import { getSprite } from '../../sprite/spriteSlice';
 import { Minion } from '../../data/minion';
 
 export function AlienAvator() {
-    return (<div className="minion-avator"><img src={alien} className="minion-avator"></img></div>)
+  const alien = useAppSelector(selectAlien);
+  const sketch = getSprite(alien.sprite).getFrame("run", 0);
+    return (<div className="minion-avator"><img src={sketch.src} className="minion-avator"></img></div>)
 }
 
 interface MinionAvatorProp {

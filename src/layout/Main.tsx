@@ -2,8 +2,8 @@ import React, { createRef, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { LeftMenu } from './LeftMenu';
 import { RightPanel } from './RightPanel';
-import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded, spriteNumber, getSprite } from '../sprite/spriteSlice';
-import { updateTimeClockAsync } from '../dynamic/dynamicSlice';
+import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded, spriteNumber, getSprite, setLoaded } from '../sprite/spriteSlice';
+import { selectTimeClock, updateTimeClockAsync } from '../dynamic/dynamicSlice';
 import getWorld from '../data/world';
 
 
@@ -30,18 +30,41 @@ import More from '../modals/more';
 interface loadingStatus {
   totalSprites:number,
 }
+
+interface loaded {
+
+}
+function Loading(){
+  const loaded = useAppSelector(spriteLoaded);
+  const needload = useAppSelector(spriteNeedLoaded);
+  let timeClock = useAppSelector(selectTimeClock);
+  const dispatch = useAppDispatch();
+  let r = timeClock/50;
+  if (r > 1) {
+    r = 1;
+  }
+  let width = Math.floor(r*645);
+  let progress = r * loaded / needload;
+  if (r === 1) {
+    dispatch(setLoaded());
+  }
+  return(<div className="loading">
+    <div className="progress" style={{
+    width: width
+    }}></div>
+  </div>);
+}
+
 export function Main(prop: loadingStatus) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     setInterval(function () {dispatch(updateTimeClockAsync(0))}, 80);
   }, []);
   const isloaded = useAppSelector(spriteIsLoaded);
-  const loaded = useAppSelector(spriteLoaded);
-  const needload = useAppSelector(spriteNeedLoaded);
+
   const total = useAppSelector(spriteNumber);
   const handlerProxy = getHandlerProxy();
   const handlerProxyRef = createRef<HTMLDivElement>();
-
 /*
 
 */
@@ -65,7 +88,7 @@ export function Main(prop: loadingStatus) {
       </div>
     )
   } else {
-    return(<div>loading {loaded} {needload}</div>);
+    return (<Loading></Loading>);
   }
 }
 /*

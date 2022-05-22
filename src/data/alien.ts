@@ -70,7 +70,7 @@ return name;
 
 export function randomAlien():Alien {
   return {
-    sprite: "monster",
+    sprite: `monster-${Math.floor(Math.random()*3)}`,
     alienId: Math.ceil(Math.random()*10000),
     name: generateName(),
     status: "run",

@@ -46,9 +46,9 @@ export function ToolBarDye(props: DrawerConfig) {
                   {
                     palettes[pickedCategory].palettes[pickedPalette].dye.map((d, idx) => {
                       let palette = palettes[pickedCategory].palettes[pickedPalette];
-
                       return (
-                        <li id={`${d.color == ofDyeIndex(pickedDye).color && pickedBottle == idx ? 'selected' : ''}`}
+                        <li key={`${pickedPalette}-${idx}`}
+                            id={`${d.color == ofDyeIndex(pickedDye).color && pickedBottle == idx ? 'selected' : ''}`}
                             className={`${d.color == ofDyeIndex(pickedDye).color && pickedBottle == idx ? 'selected' : ''}`}
                         >
                           <div className='dye-item'

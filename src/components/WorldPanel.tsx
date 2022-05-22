@@ -10,6 +10,7 @@ import {
 import { toDyeColor } from "../data/palette"
 
 import {
+  selectAlien,
   selectTimeClock,
   selectViewIndex,
 } from '../dynamic/dynamicSlice';
@@ -87,11 +88,11 @@ function WorldBoard (props: IProps) {
 export function AlienAnimation() {
   const dispatch = useAppDispatch();
   const canvasRef = useRef<HTMLCanvasElement>();
-  const spriteMonster = getSprite("monster");
+
   const spriteUFO = getSprite("ufo");
   return (
   <>
-    <Frame monster={spriteMonster} minion={spriteUFO} canvasRef={canvasRef}></Frame>
+    <Frame minion={spriteUFO} canvasRef={canvasRef}></Frame>
     <div className="animation" >
         <div className="body">
         <canvas height="400" width="1000" ref={e => {

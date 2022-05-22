@@ -5,6 +5,8 @@ import { Alien, randomAlien } from '../data/alien';
 import { individualWidth } from '../data/draw';
 import { availableMinions, getMinionById } from '../data/minion';
 import getWorld from '../data/world';
+import { Sprite } from '../sprite/sprite';
+import { getSprite } from '../sprite/spriteSlice';
 import { BulletInfo } from './bullet';
 import { DropEvent, Event, RewardEvent }  from './event';
 
@@ -78,7 +80,9 @@ export const dynamicSlice = createSlice({
           state.damage += b.power;
           if (state.damage > 200) {
             state.alien.status = "dizzle";
-            state.alien.dizzle = 18;
+            let alienSprite:Sprite = getSprite(state.alien.sprite);
+            alienSprite.currentTrigger = state.timeClock;
+            state.alien.dizzle = 12;
             state.damage = 0;
             let instance = getWorld().getInstance(state.viewIndex*individualWidth);
             let rewardinfo = instance.calculateRewards(100, state.alien.drop);

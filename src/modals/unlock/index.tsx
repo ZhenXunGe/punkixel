@@ -47,8 +47,8 @@ export default function Unlock(prop: UnlockProps) {
               <div className="minion_pro">
                   <div className="title"> Unlock a minion to join your force</div>
                   <ul className="minion_proto">
-                    <li>200</li>
-                    <li>17</li>
+                    <li>5-20</li>
+                    <li>7-15</li>
                   </ul>
                   <div className="minion_position">
                     <div id={`${position == 0 ? 'selected' : ''}`} onClick={() => { console.log('set sky'); setPosition(0) }}></div>

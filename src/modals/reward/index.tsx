@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Container, ListGroup, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 // import { MinionSelector } from "../components/Inventory";
-import { selectUpcomingAlien } from "../../dynamic/dynamicSlice";
+import PUNKXIEL from "../../images/modal/advisor/punkixel.png";
 import './style.scss';
 import { getSprite } from "../../sprite/spriteSlice";
 import { RewardInfo } from "../../dynamic/event";
@@ -31,7 +31,7 @@ export default function RewardBox(props: RewardBoxProps) {
             <button className="closeBtn" onClick={handleClose}></button>
             <div className="reward-area">
               <div className="info-left">
-                <img src={"xxx"}></img>
+                <img src={PUNKXIEL}></img>
                 <div className="reward-punkxiels"></div>
               </div>
               <div className="info">

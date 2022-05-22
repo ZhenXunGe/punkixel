@@ -15,6 +15,7 @@ export interface SpriteState {
   total: number;
   totalFrame: 0;
   loadedFrame: number;
+  spriteIsLoaded: boolean;
 }
 
 export interface SpriteInfo {
@@ -27,6 +28,7 @@ const initialState: SpriteState = {
   total: 0,
   totalFrame: 0,
   loadedFrame: 0,
+  spriteIsLoaded: false,
 };
 
 export const spriteSlice = createSlice({
@@ -46,7 +48,10 @@ export const spriteSlice = createSlice({
     },
     loadSpriteFrame: (state) => {
       state.loadedFrame += 1;
-    } 
+    },
+    setLoaded: (state) => {
+      state.spriteIsLoaded = true;
+    }
   },
   extraReducers: (builder) => {
   },
@@ -54,9 +59,9 @@ export const spriteSlice = createSlice({
 
 });
 
-export const { installSprite, loadSpriteFrame } = spriteSlice.actions;
+export const { installSprite, loadSpriteFrame, setLoaded } = spriteSlice.actions;
 export const spriteIsLoaded = (state: RootState) => {
-  return(state.sprite.loadedFrame == state.sprite.totalFrame);
+  return (state.sprite.spriteIsLoaded);
 }
 export const spriteLoaded = (state: RootState) => {
   return(state.sprite.loadedFrame);

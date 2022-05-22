@@ -17,9 +17,9 @@ import { Sprite } from './sprite';
 import getWorld from '../data/world';
 import { AlienEvent } from '../dynamic/event';
 import { Minion, spawnBullet } from '../data/minion';
+import { getSprite } from './spriteSlice';
 
 interface IProps {
-  monster: Sprite;
   minion: Sprite;
   canvasRef: MutableRefObject<HTMLCanvasElement | undefined>;
 }
@@ -28,14 +28,14 @@ export default function Frame(prop: IProps) {
   let ratio = 4;
   const timeClock = useAppSelector(selectTimeClock);
   const dispatch = useAppDispatch();
-  const alien = useAppSelector(selectAlien);
   const [minions, setMinions] = useState<Minion[]>([]);
   const viewIndex = useAppSelector(selectViewIndex);
-
+  const alien = useAppSelector(selectAlien);
+  const monster = getSprite(alien.sprite);
   useEffect(() => {
     let minions = getWorld().getInstance(viewIndex * individualWidth).info.minions;
     let state = alien.status;
-    prop.monster.setState(state);
+    monster.setState(state);
     let canvas = prop.canvasRef?.current!.getContext("2d");
     let pos = (alien.pos % (individualWidth)) * ratio;
     canvas?.clearRect(0, 0, 1000, 400);
@@ -60,7 +60,7 @@ export default function Frame(prop: IProps) {
       getWorld().updateMinionPosition(m);
     });
 
-    prop.monster?.paint(prop.canvasRef?.current!, pos, 285, timeClock);
+    monster?.paint(prop.canvasRef?.current!, pos, 285, timeClock);
 
     for (var b of allBullets()) {
         /*if (Math.abs(b.x-pos-43) + Math.abs(b.y - 340) <20) {

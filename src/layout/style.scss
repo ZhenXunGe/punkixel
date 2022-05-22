@@ -5,3 +5,24 @@
   right:0px;
   bottom:0px;
 }
+
+div.loading {
+  // user-select: none;
+  position: relative;
+  height: 260px;
+  width: 645px;
+  margin: auto;
+  border: 1px solid gray;
+  top: 50%;
+  border:none;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  background-color: #ddd;
+  background-image: url("../images/loading.jpg");
+  background-size:contain;
+  padding-top:260px;
+  .progress {
+    text-align:center;
+    height: 20px;
+  }
+}
