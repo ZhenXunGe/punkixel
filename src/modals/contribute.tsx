@@ -12,7 +12,7 @@ import PROTECT from '../images/world/protect_btn.png';
 import CANCEL from '../images/modal/protect/CANCEL.png';
 import CHOOSE from '../images/modal/protect/CHOOSE.png';
 import './style.scss';
-import { getSprite } from "../sprite/spriteSlice";
+import { getMinionFrame} from "../sprite/spriteSlice";
 import {updateInventory} from '../data/statusSlice';
 import { PageScroller } from "./scroll";
 
@@ -24,8 +24,7 @@ interface SingleSelect {
 
 function SingleListItem(m: SingleSelect) {
   let minion = getWorld().getMinion(m.mId)!;
-  let sprites = getSprite("ufo");
-  let ufo = sprites.getFrame(minion.type, minion.style).src;
+  let ufo = getMinionFrame(minion).src;
   if (minion.location === null) {
     return (
       <li className={`${m.mId === m.current?'selected':'' }`} onClick={() => {m.setminion(m.mId);}}
@@ -34,8 +33,8 @@ function SingleListItem(m: SingleSelect) {
         <span>{minion.id} is now idling. [speed: {minion.power}]</span>
       </li>);
   } else {
-    return (<li > 
-      <img src={ufo}></img> 
+    return (<li>
+      <img src={ufo}></img>
       <span>{minion.id} is protecting block {minion.location}. [contribution:{minion.contribution} ] </span>
       </li>);
   }

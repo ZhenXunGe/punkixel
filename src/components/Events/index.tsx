@@ -3,7 +3,7 @@ import "./style.scss";
 import dyeavator from "../../images/buttons/dyebottle.png";
 import { selectAlien, selectEvents } from '../../dynamic/dynamicSlice';
 import { EventInfo } from '../../dynamic/event';
-import { getSprite } from '../../sprite/spriteSlice';
+import { getSprite, getMinionFrame } from '../../sprite/spriteSlice';
 import { Minion } from '../../data/minion';
 
 export function AlienAvator() {
@@ -16,9 +16,8 @@ interface MinionAvatorProp {
   minion: Minion;
 }
 export function MinionAvator(props: MinionAvatorProp) {
-  let sprites = getSprite("ufo");
   let minion = props.minion;
-  let ufo = sprites.getFrame(minion.type, minion.style).src;
+  let ufo = getMinionFrame(minion).src;
   return (<div className="minion-avator"><img src={ufo} className="minion-avator"></img></div>)
 }
 

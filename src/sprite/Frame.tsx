@@ -45,21 +45,22 @@ export default function Frame(prop: IProps) {
     let idx = Math.floor(alien.pos / individualWidth);
     if (viewIndex != idx) {
       dispatch(switchView(idx));
-      dynamic.resetBullets();
+      dynamic.resetBullets([]);
       dispatch(addEvent(AlienEvent(alien, getWorld().getInstance(idx))));
     }
     minions.map((m: DynamicMinion) => {
       let minion = m.minion;
+      let spriteName = `${minion.type}${minion.style}`;
       prop.minion?.paintAtClip(prop.canvasRef?.current!,
-        minion.type,
+        spriteName,
         minion.x + m.offsetX,
         minion.y + m.offsetY,
-        minion.style
+        Math.abs(m.offsetX % 2)
       );
       minion.countingdown--;
       if (minion.countingdown <= 0) {
         minion.countingdown = minion.frequency;
-        dynamic.addBullet(spawnBullet(minion, alien_center_x, alien_center_y));
+        dynamic.addBullet(spawnBullet(minion, alien_center_x, alien_center_y, m.offsetX, m.offsetY));
       }
       dynamic.updateMinionPosition(m);
     });

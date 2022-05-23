@@ -43,15 +43,22 @@ function Loading(){
   if (r > 1) {
     r = 1;
   }
-  let width = Math.floor(r*645);
+  let width = Math.floor(r*620 + 6);
   let progress = r * loaded / needload;
   if (r === 1) {
     dispatch(setLoaded());
   }
   return(<div className="loading">
-    <div className="progress" style={{
-    width: width
-    }}></div>
+    <div className="loading-bar">
+
+      <div className="progress" style={{
+      width: width
+      }}>
+
+      </div>
+
+    </div>
+    <div className="loading-bar-cover"></div>
   </div>);
 }
 
@@ -78,7 +85,9 @@ export function Main(prop: loadingStatus) {
       <LeftMenu handlerProxy={handlerProxy}></LeftMenu>
       <AlienInfo></AlienInfo>
       <Hover bgurl={hover3}></Hover>
-      <div onClick={(e)=>handlerProxy.clickHandler(e, handlerProxyRef.current!)} className="hover"></div>
+      <div onClick={(e)=>handlerProxy.clickHandler(e, handlerProxyRef.current!)}
+           onMouseMove={(e)=>handlerProxy.hoverHandler(e, handlerProxyRef.current!)}
+              className="hover"></div>
       <Inventory></Inventory>
       <Thumbnail></Thumbnail>
       <Status></Status>

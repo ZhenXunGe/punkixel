@@ -17,12 +17,34 @@ div.loading {
   border:none;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-  background-color: #ddd;
+
   background-image: url("../images/loading.jpg");
   background-size:contain;
-  padding-top:260px;
-  .progress {
-    text-align:center;
-    height: 20px;
+  padding-top:200px;
+  .loading-bar {
+    height: 60px;
+    background-image:url("../images/loading/lv0_brwon_bg.png");
+    background-size:contain;
+    .progress {
+      text-align:center;
+      position:relative;
+      top:33px;
+      margin-left: 16px;
+      height: 12px;
+      border-radius: 5px;
+      background-color: #95dcf6;
+    }
   }
+  .loading-bar-cover {
+    height: 60px;
+    position:relative;
+    top:-60px;
+    background-image:url("../images/loading/lv4_loadingbar.png");
+    background-size:contain;
+    .progress {
+      text-align:center;
+      height: 20px;
+    }
+  }
+
 }

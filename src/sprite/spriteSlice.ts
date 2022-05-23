@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { Sprite } from './sprite';
+import { Minion } from '../data/minion';
 
 interface SpriteMap {
   [id:string]: Sprite;
@@ -55,8 +56,6 @@ export const spriteSlice = createSlice({
   },
   extraReducers: (builder) => {
   },
-
-
 });
 
 export const { installSprite, loadSpriteFrame, setLoaded } = spriteSlice.actions;
@@ -73,4 +72,14 @@ export const spriteNumber = (state: RootState) => {
   return(state.sprite.total);
 }
 
+export function getMinionFrame(minion:Minion) {
+   let name = `${minion.type}${minion.style}`;
+   console.log("getSprite", name);
+   let sprite = getSprite("ufo");
+   console.log('sprite', sprite);
+   let frame = sprite.getFrame(name, 0);
+   return frame;
+}
+
 export default spriteSlice.reducer;
+

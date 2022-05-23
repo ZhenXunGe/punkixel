@@ -4,8 +4,8 @@ import { selectInventory, selectInventoryUpdater } from '../../data/statusSlice'
 import { Minion } from "../../data/minion";
 import { ListGroup } from 'react-bootstrap';
 import getWorld from '../../data/world';
-import Unlock from '../../modals/unlock';
-import { getSprite } from '../../sprite/spriteSlice';
+import { Unlock } from '../../modals/unlock';
+import { getMinionFrame } from '../../sprite/spriteSlice';
 
 import './style.scss';
 import Inuse from '../../images/protectors/Inuse.png';
@@ -37,8 +37,7 @@ export function SingleItem(m: single) {
     );
   } else {
     let minion = getWorld().getMinion(m.mId)!;
-    let sprites = getSprite("ufo");
-    let ufo = sprites.getFrame(minion.type, minion.style).src;
+    let ufo = getMinionFrame (minion).src;
     console.log(minion.location);
     if (minion.location === null) {
       return (
@@ -105,8 +104,7 @@ interface SingleSelect {
 
 export function SingleListItem(m: SingleSelect) {
   let minion = getWorld().getMinion(m.mId)!;
-  let sprites = getSprite("ufo");
-  let ufo = sprites.getFrame(minion.type, minion.style).src;
+  let ufo = getMinionFrame (minion).src;
   if (minion.location === null) {
     return (<ListGroup.Item onClick={() => m.setminion(m.mId)} href={"#" + minion.id}> <img src={ufo}></img> {minion.id} is now idling. [speed: {minion.power}] </ListGroup.Item>);
   } else {

@@ -22,17 +22,36 @@ import buildfront10 from "./resource/sketch-color-10.png";
 import buildfront11 from "./resource/sketch-color-11.png";
 import buildfront12 from "./resource/sketch-color-12.png";
 import buildfront13 from "./resource/sketch-color-13.png";
-
+import buildfront14 from "./resource/sketch-color-14.png";
+import buildfront15 from "./resource/sketch-color-15.png";
+import buildfront16 from "./resource/sketch-color-16.png";
+import buildfront17 from "./resource/sketch-color-17.png";
+import buildfront18 from "./resource/sketch-color-18.png";
+import buildfront19 from "./resource/sketch-color-19.png";
+import buildfront20 from "./resource/sketch-color-20.png";
+import buildfront21 from "./resource/sketch-color-21.png";
+import buildfront22 from "./resource/sketch-color-22.png";
+import buildfront23 from "./resource/sketch-color-11.png";
+import buildfront24 from "./resource/sketch-color-24.png";
+import buildfront25 from "./resource/sketch-color-25.png";
+import buildfront26 from "./resource/sketch-color-26.png";
+import buildfront27 from "./resource/sketch-color-27.png";
+import buildfront28 from "./resource/sketch-color-28.png";
 
 import road01 from "./resource/sketch-road-01.png";
 import road02 from "./resource/sketch-road-02.png";
 import road03 from "./resource/sketch-road-03.png";
 import road04 from "./resource/sketch-road-04.png";
 export const clips = [
-  { name: "building", src: [build01, build02, build03, build04, build05, build06] },
+  { name: "building", src: [build01, build02, build03, build04, build05, build06,
+    buildfront22, buildfront23, buildfront24, buildfront25, buildfront26, buildfront27,
+    buildfront28
+  ] },
   { name: "buildingfront", src: [
     buildfront01, buildfront02, buildfront03, buildfront04, buildfront05, buildfront06,
-    buildfront07, buildfront08, buildfront09, buildfront10, buildfront11, buildfront12, buildfront13
+    buildfront07, buildfront08, buildfront09, buildfront10, buildfront11, buildfront12, buildfront13,
+    buildfront14, buildfront15, buildfront16, buildfront17, buildfront18, buildfront19, buildfront20,
+    buildfront21, 
   ] },
   { name: "road", src: [road01, road02, road03, road04] }
 ]

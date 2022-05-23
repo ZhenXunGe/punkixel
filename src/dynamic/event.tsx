@@ -41,7 +41,7 @@ export function AdviceEvent(advisor: string, brief: string, advice: string) {
                 <InfoBox avator={ARTIST_ADVISOR_AVATOR} hint={"details"} title={advisor}>{(<div>{advice}</div>)}</InfoBox></div>
                 </>
             );
-        }        
+        }
     }
 }
 

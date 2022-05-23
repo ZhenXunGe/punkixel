@@ -1,11 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useState } from "react";
-import { Button, Container, Modal } from "react-bootstrap";
+import { Container, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { Minion, randomMinion } from "../../data/minion";
+import { getMinionFrame } from '../../sprite/spriteSlice';
 import getWorld from "../../data/world";
 import Unlock_ from "../../images/protectors/Unlock.png";
 import mod_ice from "../../images/modal/unlock/ice.png";
 import "./style.scss";
+
 interface UnlockProps {
   uid: string;
   index: number;
@@ -13,69 +16,66 @@ interface UnlockProps {
 }
 
 
-export default function Unlock(prop: UnlockProps) {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const [position, setPosition] = useState(0);
-  let ratio = 4;
-  const dispatch = useAppDispatch();
-  const handleConfirm = () => {
-    getWorld().spentPunkxiel("solo", 1000);
-    getWorld().unlockMinion(prop.uid, prop.index);
-    setShow(false);
-  }
-  return (
+interface MinionInfoProps {
+  show: boolean;
+  handleClose: ()=> void;
+  handleConfirm: ()=> void;
+  position: number;
+  minion: Minion | null;
+  topic: string;
+}
 
-    <>
-      {/* <div className="button" onClick={() => handleShow()}>
-            UNLOCK
-      </div> */}
-      <div className='action' onClick={() => handleShow()}>
-        <img src={Unlock_}></img>
-      </div>
-      <Modal show={show} aria-labelledby="contained-modal-title-vcenter" centered dialogClassName="modal-90w">
 
+export function MinionInfoBox(props: MinionInfoProps) {
+  if (props.minion === null) { return(<></>);}
+  let ufo = getMinionFrame(props.minion).src;
+  return(
+      <Modal show={props.show} aria-labelledby="contained-modal-title-vcenter" centered dialogClassName="modal-90w">
         <Modal.Body className="show-grid">
           <Container>
-            <button className="closeBtn" onClick={handleClose}></button>
+            <button className="closeBtn" onClick={props.handleClose}></button>
             <div className="unlock-area">
               <div className="info-left">
-                <img src={prop.avator}></img>
+                <img src={ufo}></img>
                 <div className="advisor"></div>
               </div>
               <div className="minion_pro">
-                  <div className="title"> Unlock a minion to join your force</div>
+                  <div className="title"> {props.topic} </div>
                   <ul className="minion_proto">
-                    <li>5-20</li>
-                    <li>7-15</li>
+                    <li>{props.minion.power}</li>
+                    <li>{props.minion.frequency}</li>
                   </ul>
                   <div className="minion_position">
-                    <div id={`${position == 0 ? 'selected' : ''}`} onClick={() => { console.log('set sky'); setPosition(0) }}></div>
-                    <div id={`${position == 1 ? 'selected' : ''}`} onClick={() => { console.log('set land'); setPosition(1) }}></div>
+                    <div id={`${props.position == 0 ? 'selected' : ''}`}></div>
+                    <div id={`${props.position == 1 ? 'selected' : ''}`}></div>
                   </div>
                 </div>
               <div className="info-right">
-                <div onClick={handleConfirm} className="unlock"></div>
+                <div onClick={props.handleConfirm} className="unlock"></div>
               </div>
             </div>
           </Container>
         </Modal.Body>
       </Modal>
-    </>
   );
 }
 
-/*
-                <div className="bottom">
-                  <ul className="modifier">
-                    <li>
-                      <img style={{ width: '50px', height: '50px', }} src={mod_ice} />
-                    </li>
-                    <li>
-                      <img />
-                    </li>
-                  </ul>
-
-                </div>
-                */
+export function Unlock(prop: UnlockProps) {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  let m = randomMinion("solo", getWorld());
+  const handleConfirm = () => {
+    getWorld().spentPunkxiel("solo", 1000);
+    getWorld().unlockMinion(m, prop.index);
+    setShow(false);
+  }
+  return (
+    <>
+      <div className='action' onClick={() => handleShow()}>
+        <img src={Unlock_}></img>
+      </div>
+      <MinionInfoBox show={show} handleClose={handleClose} handleConfirm={handleConfirm} position={0} minion={m} topic="Unlock a minion to join your force"></MinionInfoBox>
+    </>
+  );
+}

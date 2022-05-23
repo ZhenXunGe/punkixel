@@ -32,8 +32,8 @@ class DynamicInfo {
     this.bullets.push(d);
   };
 
-  resetBullets() {
-    this.bullets = [];
+  resetBullets(bullets: Array<BulletInfo>) {
+    this.bullets = bullets;
   };
 
   allBullets() {
@@ -61,7 +61,18 @@ class DynamicInfo {
     }
   }
 
-
+  getFocus(x:number, y: number): DynamicMinion | null {
+    let close = 100000;
+    for(var m of this.minions) {
+      let centerX = m.minion.x + m.offsetX+20;
+      let centerY = m.minion.y + m.offsetY+20;
+      let dis = Math.sqrt((x-centerX)*(x-centerX) + (y-centerY)*(y-centerY));
+      if (dis<20) {
+        return m;
+      }
+    }
+    return null;
+  }
 }
 
 var dynamicInfo: DynamicInfo | null = null;
@@ -139,13 +150,12 @@ export const dynamicSlice = createSlice({
             state.events.unshift(RewardEvent(state.alien.name, instance, rewardinfo));
             state.events.unshift(DropEvent(state.alien.name, instance, state.alien.drop));
           }
-          console.log(`alien has taken ${state.damage} damage`);
         }
         if (!done) {
           cs.push(b);
         }
       }
-      bullets = cs;
+      dynamicInfo.resetBullets(cs);
     },
     signalAlien: (state) => {
       let status = state.alien.status;

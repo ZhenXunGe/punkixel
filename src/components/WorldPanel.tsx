@@ -13,13 +13,17 @@ import {
   selectAlien,
   selectTimeClock,
   selectViewIndex,
+  getDynamicInfo,
 } from '../dynamic/dynamicSlice';
 import getWorld, { getBackground } from '../data/world';
+import { Minion } from "../data/minion";
 
 
 import { getSprite } from '../sprite/spriteSlice';
 import Frame from '../sprite/Frame';
 import { drawWeather } from '../data/weather';
+import { HandlerProxy } from '../layout/handlerProxy';
+import { MinionInfoBox } from '../modals/unlock';
 
 interface IProps {
 }
@@ -71,8 +75,9 @@ function WorldBoard (props: IProps) {
   }, [timeClock])
 
 
+
+
   return (
-    <div className="main-board">
     <div className="drawer" onClick={(e) => {clickEvent(e);}} ref={backRef}>
     <canvas key="drawer-world-board" height="400" width={`${individualWidth*ratio}`} ref={canvasRef}>
         Drawer Drawer
@@ -80,7 +85,6 @@ function WorldBoard (props: IProps) {
     <canvas key="weather-drawer" height="400" width={`${individualWidth * ratio}`} ref={weatherRef}>
       Weather Drawer
     </canvas>
-    </div>
     </div>
   );
 }
@@ -107,12 +111,62 @@ export function AlienAnimation() {
   );
 }
 
-export function WorldPanel() {
+interface WorldPanelProp {
+  handlerProxy: HandlerProxy;
+}
+
+export function WorldPanel(props: WorldPanelProp) {
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [pickFrameX, setPickFrameX] = useState(-100000);
+  const [pickFrameY, setPickFrameY] = useState(-100000);
+
+  const [minion, setMinion] = useState<Minion|null>(null);
+  function pickEvent(offsetX:number, offsetY:number) {
+    let dynamic = getDynamicInfo();
+    let m = dynamic.getFocus(offsetX, offsetY);
+    if (m) {
+       setMinion(m.minion);
+       setShow(true);
+       console.log("minion picked", m.minion.id);
+    }
+  }
+  function hoverEvent(offsetX:number, offsetY:number) {
+    let dynamic = getDynamicInfo();
+    let m = dynamic.getFocus(offsetX, offsetY);
+    if (m) {
+       setPickFrameX(m.offsetX + m.minion.x);
+       setPickFrameY(m.offsetY + m.minion.y);
+       console.log("minion hover", m.minion.id);
+    } else {
+       setPickFrameX(-10000);
+       setPickFrameY(-10000);
+    }
+  }
+
+  const boardRef = React.createRef<HTMLDivElement>();
+  React.useEffect(()=>{
+    if (boardRef.current) {
+      props.handlerProxy.registerClick("frame", boardRef.current!, (left, top)=>{pickEvent(left, top);});
+      props.handlerProxy.registerHover("frame", boardRef.current!, (left, top)=>{hoverEvent(left, top);});
+    }
+  },[boardRef])
+
   return (
     <>
-      <div ref={x => { console.log("load main board") }}></div>
+    <div className="main-board" key="main-board" ref={boardRef} >
       <WorldBoard></WorldBoard>
-      <AlienAnimation key="alien"></AlienAnimation>
+    </div>
+    <AlienAnimation key="alien"></AlienAnimation>
+    <div className="pick-frame" >
+      <div style={{left:pickFrameX, top:pickFrameY}}></div>
+    </div>
+      <MinionInfoBox show={show} handleClose={handleClose}
+            handleConfirm={handleClose} position={0}
+              minion={minion} topic={`Owned by: ${minion?.owner} [contribution: ${minion?.contribution}]`}></MinionInfoBox>
     </>
   );
 }

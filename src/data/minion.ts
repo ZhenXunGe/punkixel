@@ -88,7 +88,7 @@ export function randomMinion(owner:string, world:World): Minion {
       owner:owner,
       modifier:[generateModifier(minionType)],
       contribution:0,
-      style: Math.floor(Math.random()*5),
+      style: Math.floor(Math.random()*2),
       bulletPos: generateBulletPos(minionType),
       type: minionType//minionTypeList[Math.floor(Math.random()*3)]
     };
@@ -105,9 +105,9 @@ export function availableMinions(instances:Array<Minion|null>) :Array<Minion> {
   return instances.filter((m)=>{return (m !== null)}).map((x) => {return x!});
 }
 
-export function spawnBullet(m:Minion, alien_x:number, alien_y:number):BulletInfo {
-  let start_x = m.x + m.bulletPos[0];
-  let start_y = m.y + m.bulletPos[1];
+export function spawnBullet(m:Minion, alien_x:number, alien_y:number, offsetX:number, offsetY:number):BulletInfo {
+  let start_x = m.x + m.bulletPos[0] + offsetX;
+  let start_y = m.y + m.bulletPos[1] + offsetY;
   if (m.modifier[0] == "track") {
     let rotate = 0;
     if (m.x > alien_x) {

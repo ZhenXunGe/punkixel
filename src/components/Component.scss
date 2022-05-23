@@ -112,7 +112,7 @@ div.application {
 
 .animation {
     position: absolute;
-    top: 230px;
+    top: 240px;
     height: 400px;
     right: 0px;
     left: 199px;
@@ -161,4 +161,22 @@ div.drop img {
 
 div.minion.img {
     position: relative;
+}
+
+div.pick-frame {
+    position: absolute;
+    top: 240px;
+    height: 400px;
+    background-color: transparent;
+    right: 0px;
+    left: 198px;
+
+    div {
+    position: absolute;
+    width:50px;
+    height:50px;
+    border-radius: 5px 5px;
+    background-color:transparent;
+    border: 5px dashed #ccc;
+    }
 }

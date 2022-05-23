@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 // import { MinionSelector } from "../components/Inventory";
 import PUNKXIEL from "../../images/modal/advisor/punkixel.png";
 import './style.scss';
-import { getSprite } from "../../sprite/spriteSlice";
+import { getMinionFrame } from "../../sprite/spriteSlice";
 import { RewardInfo } from "../../dynamic/event";
 import getWorld from "../../data/world";
 interface RewardBoxProps {
@@ -35,12 +35,11 @@ export default function RewardBox(props: RewardBoxProps) {
                 <div className="reward-punkxiels"></div>
               </div>
               <div className="info">
-                <div className="title">200 Punkxiels</div>
+                <div className="title">200 Punkxiels Dropped</div>
                 <ul className="skill">
                   {props.info.rewards.map((m)=>{
                     let minion = getWorld().getMinion(m.minion.id)!;
-                    let sprites = getSprite("ufo");
-                    let ufo = sprites.getFrame(minion.type, minion.style).src;
+                    let ufo = getMinionFrame(minion).src;
                     return (<li key={`contributor-${m.minion.id}`}>
                       <img className="reward-avator" src={ufo}></img>
                       {m.amount} for [{m.minion.id}]

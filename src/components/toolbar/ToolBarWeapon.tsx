@@ -4,12 +4,13 @@ import '../Component.scss';
 import Contribute from "../../modals/contribute";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { individualWidth } from '../../data/draw';
+import { selectInventory, selectInventoryUpdater, } from "../../data/statusSlice";
 import getWorld from '../../data/world';
 import { selectViewIndex } from '../../dynamic/dynamicSlice';
 import minion from "../../sprite/ufo/ufo0.png";
 import './style.scss';
 import { Minion } from '../../data/minion';
-import { getSprite } from '../../sprite/spriteSlice';
+import { getMinionFrame } from '../../sprite/spriteSlice';
 
 interface IProps {
   mId:string;
@@ -17,14 +18,14 @@ interface IProps {
 
 export function MinionAvator(props:IProps) {
   let minion = getWorld().getMinion(props.mId);
-  let sprites = getSprite("ufo");
-  let minion_url = sprites.getFrame(minion.type, minion.style).src;
+  let minion_url = getMinionFrame(minion).src;
   return (<div className="minion-avator"><img src={minion_url} className="minion-avator"></img><div className="cover"></div></div>)
 }
 
 
 export function ToolBarWeapon() {
   const viewIndex = useAppSelector(selectViewIndex);
+  const inventory = useAppSelector(selectInventory);
   const minions = getWorld().getInstance(viewIndex * individualWidth).info.minions;
   var damage = 0;
   for (var m of minions) {
@@ -53,9 +54,7 @@ export function ToolBarWeapon() {
           </ul>
           <Contribute></Contribute>
         </li>
-        
       </ul>
-      
     </div>
   );
 }

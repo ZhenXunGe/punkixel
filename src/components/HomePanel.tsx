@@ -121,7 +121,7 @@ export function HomePanel(props:HomePanelProp) {
   const boardRef = React.createRef<HTMLDivElement>();
   React.useEffect(()=>{
     if (boardRef.current) {
-      props.handlerProxy.registerClick("draw", boardRef.current!, (left, top)=>{drawEvent(left, top);});
+      props.handlerProxy.registerClick("frame", boardRef.current!, (left, top)=>{drawEvent(left, top);});
     }
   },[boardRef])
   return (

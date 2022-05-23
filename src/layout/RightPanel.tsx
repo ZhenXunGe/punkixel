@@ -20,7 +20,7 @@ export function RightPanel(props: RightPanelProp) {
   return (
     <>
       {panel == "home" && <HomePanel key="home-panel" handlerProxy={props.handlerProxy} ></HomePanel>}
-      {panel == "world" && <WorldPanel key="world-panel"></WorldPanel>}
+      {panel == "world" && <WorldPanel key="world-panel" handlerProxy={props.handlerProxy}></WorldPanel>}
 
     </>
   );

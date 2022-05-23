@@ -131,11 +131,11 @@ export class World {
     this.minions.set(m.id, n);
   }
 
-  unlockMinion(owner: string, index: number) {
-    let r = randomMinion(owner, this);
+  unlockMinion(minion: Minion, index: number) {
+    let owner = minion.owner;
     let player = this.players.get(owner)!;
     let inventory = [...player.inventory];
-    inventory[index] = r.id;
+    inventory[index] = minion.id;
     let update = { ...player, inventory: inventory };
     this.players.set(player.id, update);
   }
@@ -217,8 +217,8 @@ world.loadInstance();
 let player = {
   id: "solo",
   energy: 50,
-  punkxiel: 1000,
-  ranking: 9999,
+  punkxiel: 10000,
+  ranking: 99,
   pph: 0,
   voucher: 1,
   palettes: [{
