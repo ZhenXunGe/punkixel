@@ -39,7 +39,7 @@ export function Thumbnail() {
     let start = Math.floor(alien.pos/individualWidth) - 2
     let end = start + 3;
 
-    getWorld().rend(painter, start, end, alien.pos-individualWidth*2);
+    getWorld().rend({paint: painter, delta: painter}, start, end, alien.pos-individualWidth*2);
     context.putImageData(image,0,0);
   }, [viewIndex, timeClock, sketchSignal])
 

@@ -8,6 +8,7 @@ export interface Palette {
     dye: Array<Dye>;
     idx: number;
     rotation: number;
+    dilation: number;
 }
 
 export interface ColorCategory {
@@ -24,13 +25,14 @@ function buildPaletteDye(colorHex: string, weight: number) {
   };
 }
 
-function buildPallete(dye: Dye, name: string, pph: number, index:number, rotation:number) {
+function buildPallete(dye: Dye, name: string, pph: number, index:number, rotation:number, dilation:number) {
   return {
     name: name,
     dye: dye,
     pph: pph,
     idx: index,
-    rotation: rotation
+    rotation: rotation,
+    dilation: dilation,
   }
 }
 
@@ -235,23 +237,23 @@ export function fromDrop(dropstring: string): number {
   return parseInt(result[1], 16)
 }
 
-export const transparent =  {name: "nil", dye: color_trans, pph:0, idx:0, rotation:0};
+export const transparent =  {name: "nil", dye: color_trans, pph:0, idx:0, rotation:0, dilation:0};
 
-export const gray_palette =  {name: "Gray Pallette", dye: color_gray, pph:1, idx:1, rotation:0};
-export const red_palette =  {name: "Red Pallette", dye: color_red, pph:1, idx:2, rotation:0};
-export const pink_palette =  {name: "Pink Pallette", dye: color_pink, pph:1, idx:3, rotation:0};
-export const purple_palette =  {name: "Purple Pallette", dye: color_purple, pph:1, idx:4, rotation:0};
-export const indigo_palette =  {name: "Indigo Pallette", dye: color_indigo, pph:1, idx:5, rotation:0};
-export const blue_palette =  {name: "Blue Pallette", dye: color_blue, pph:1, idx:6, rotation:0};
-export const lightblue_palette =  {name: "LightBule Pallette", dye: color_lightblue, pph:1, idx:7, rotation:0};
-export const cyan_palette =  {name: "Cyan Pallette", dye: color_cyan, pph:1, idx:8, rotation:0};
-export const teal_palette =  {name: "Teal Pallette", dye: color_teal, pph:1, idx:9, rotation:0};
-export const green_palette =  {name: "Green Pallette", dye: color_green, pph:1, idx:10, rotation:0};
-export const lightgreen_palette =  {name: "LightGreen Pallette", dye: color_lightgreen, pph:11, idx:3, rotation:0};
-export const lime_palette =  {name: "Lime Pallette", dye: color_lime, pph:1, idx:12, rotation:0};
-export const yellow_palette =  {name: "Yellow Pallette", dye: color_yellow, pph:1, idx:13, rotation:0};
-export const amber_palette =  {name: "Amber Pallette", dye: color_amber, pph:1, idx:14, rotation:0};
-export const orange_palette =  {name: "Orange Pallette", dye: color_orange, pph:1, idx:15, rotation:0};
+export const gray_palette =  {name: "Gray Pallette", dye: color_gray, pph:1, idx:1, rotation:0, dilation:0};
+export const red_palette =  {name: "Red Pallette", dye: color_red, pph:1, idx:2, rotation:0, dilation:0};
+export const pink_palette =  {name: "Pink Pallette", dye: color_pink, pph:1, idx:3, rotation:0, dilation:0};
+export const purple_palette =  {name: "Purple Pallette", dye: color_purple, pph:1, idx:4, rotation:0, dilation:0};
+export const indigo_palette =  {name: "Indigo Pallette", dye: color_indigo, pph:1, idx:5, rotation:0, dilation:0};
+export const blue_palette =  {name: "Blue Pallette", dye: color_blue, pph:1, idx:6, rotation:0, dilation:0};
+export const lightblue_palette =  {name: "LightBule Pallette", dye: color_lightblue, pph:1, idx:7, rotation:0, dilation:0};
+export const cyan_palette =  {name: "Cyan Pallette", dye: color_cyan, pph:1, idx:8, rotation:0, dilation:0};
+export const teal_palette =  {name: "Teal Pallette", dye: color_teal, pph:1, idx:9, rotation:0, dilation:0};
+export const green_palette =  {name: "Green Pallette", dye: color_green, pph:1, idx:10, rotation:0, dilation:0};
+export const lightgreen_palette =  {name: "LightGreen Pallette", dye: color_lightgreen, pph:11, idx:3, rotation:0, dilation:0};
+export const lime_palette =  {name: "Lime Pallette", dye: color_lime, pph:1, idx:12, rotation:0, dilation:0};
+export const yellow_palette =  {name: "Yellow Pallette", dye: color_yellow, pph:1, idx:13, rotation:0, dilation:0};
+export const amber_palette =  {name: "Amber Pallette", dye: color_amber, pph:1, idx:14, rotation:0, dilation:0};
+export const orange_palette =  {name: "Orange Pallette", dye: color_orange, pph:1, idx:15, rotation:0, dilation:0};
 
 export const basic_palettes = [
   gray_palette,
@@ -271,12 +273,17 @@ export const basic_palettes = [
   orange_palette,
 ];
 
-export const liquid_green_palette =  {name: "Shining Green", dye: color_liquid_green, pph:2, idx:16, rotation:20};
-export const liquid_blue_palette =  {name: "Shining Green", dye: color_liquid_blue, pph:2, idx:17, rotation:20};
+export const liquid_green_palette =  {name: "Shining Green", dye: color_liquid_green, pph:2, idx:16, rotation:20, dilation:0};
+export const liquid_blue_palette =  {name: "Shining Green", dye: color_liquid_blue, pph:2, idx:17, rotation:20, dilation:0};
+
+
+export const amber_dilation_palette=  {name: "Amber Pallette", dye: color_amber, pph:1, idx:14, rotation:0, dilation:10};
+
 export const dye_table :Array<Palette> = [
   [transparent],
   basic_palettes,
   [liquid_green_palette,liquid_blue_palette],
+  [amber_dilation_palette],
 ].flat();
 
 export type DyeIndex = number;

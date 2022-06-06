@@ -1,3 +1,4 @@
+import { BulletModifier } from "../data/minion";
 import { Sprite } from "../sprite/sprite";
 import { getSprite } from "../sprite/spriteSlice";
 
@@ -13,6 +14,7 @@ export interface BulletInfo {
   source: string;
   power: number;
   speed: number;
+  modifier: BulletModifier;
   rotate: number;
   approach: (x: number, y: number) => boolean[];
   paint: (canvas: CanvasRenderingContext2D, ins: Sprite) => void;
@@ -28,12 +30,15 @@ export class StraightBullet implements BulletInfo {
   rotate: number;
   bomb: 0;
   hit: boolean;
-  constructor(x: number, y: number, width: number, power: number, speed: number, rotate: number, source: string) {
+  modifier: BulletModifier;
+  constructor(x: number, y: number, width: number, power: number, modifier: BulletModifier,
+      speed: number, rotate: number, source: string) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.speed = speed;
     this.power = power;
+    this.modifier = modifier;
     this.rotate = rotate;
     this.source = source;
     this.bomb = 0;
@@ -108,7 +113,8 @@ export class TrackBullet implements BulletInfo {
   rotate: number;
   bomb: number;
   hit: boolean;
-  constructor(x: number, y: number, width: number, power: number, speed: number, rotate: number, source: string) {
+  modifier: BulletModifier;
+  constructor(x: number, y: number, width: number, power: number, modifier: BulletModifier, speed: number, rotate: number, source: string) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -118,6 +124,7 @@ export class TrackBullet implements BulletInfo {
     this.source = source;
     this.bomb = 0;
     this.hit = false;
+    this.modifier = modifier;
   }
   getFront(): number[] {
     return [
@@ -172,8 +179,8 @@ export class TrackBullet implements BulletInfo {
       canvas.save();
       canvas.translate(this.x, this.y);
       canvas.rotate(this.rotate * (Math.PI) / 180);
-      let img = ins.getFrame("missle", 0);
-      canvas.drawImage(img, 0, 0, 16, 7)
+      let img = ins.getFrame("missle-"+this.modifier, 0);
+      canvas.drawImage(img, 0, 0, 24, 10.5)
       canvas.restore();
     } else {
       canvas.save();
@@ -186,4 +193,87 @@ export class TrackBullet implements BulletInfo {
     }
   }
 
+}
+
+
+export class BombBullet implements BulletInfo {
+  x: number;
+  y: number;
+  width: number;
+  source: string;
+  power: number;
+  speed: number;
+  rotate: number;
+  bomb: 0;
+  hit: boolean;
+  modifier: BulletModifier;
+  constructor(x: number, y: number, width: number, power: number, modifier: BulletModifier,
+      speed: number, rotate: number, source: string) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.speed = speed;
+    this.power = power;
+    this.modifier = modifier;
+    this.rotate = rotate;
+    this.source = source;
+    this.bomb = 0;
+    this.hit = false;
+  }
+  getFront(): number[] {
+    return [
+      this.x + this.width * Math.cos(this.rotate * Math.PI / 180),
+      this.y + this.width * Math.sin(this.rotate * Math.PI / 180)
+    ];
+  };
+  getBack(): number[] {
+    return [this.x, this.y];
+  }
+  approach(x: number, y: number): boolean[] {
+    var [front_x, front_y] = this.getFront();
+    let r = this.rotate * Math.PI / 180;
+    if (this.bomb < 4) {
+      if (this.bomb > 0) {
+        this.bomb++;
+      } else if (this.y < 370) {
+        let next_x = this.x + (Math.cos(r)) * this.speed;
+        let next_y = this.y + (Math.sin(r)) * this.speed;
+        // adjust omega
+        this.x = next_x;
+        this.y = next_y;
+        [front_x, front_y] = this.getFront();
+        let dis = distance([this.x, this.y], [x, y]);
+        let ratio = 50 / dis;
+        //throw("Exception ERRE");
+        //console.log("ratio", ratio);
+        if (ratio > 1) {
+          this.hit = true;
+          this.bomb++;
+        }
+      } else {
+        this.bomb++;
+      }
+      return [false,false];
+    } else {
+      return [true, this.hit];
+    }
+  }
+  paint(canvas: CanvasRenderingContext2D, ins: Sprite) {
+    if (this.bomb == 0) {
+      canvas.save();
+      canvas.translate(this.x, this.y);
+      canvas.rotate(this.rotate * (Math.PI) / 180);
+      let img = ins.getFrame("bomb-"+this.modifier, 0);
+      canvas.drawImage(img, 0, 0, 32, 14)
+      canvas.restore();
+    } else {
+      canvas.save();
+      canvas.translate(this.x, this.y);
+      let splash = getSprite("splash");
+      canvas.rotate(this.rotate * (Math.PI) / 180);
+      let img = splash.getFrame("default", this.bomb);
+      canvas.drawImage(img, 0, 0, 40, 40)
+      canvas?.restore();
+    }
+  }
 }

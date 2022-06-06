@@ -9,12 +9,26 @@ class cHandler {
   }
 }
 
+class sHandler {
+  constructor(public key:string, public top:number, public left:number, public width:number, public height:number, public handler:(direction:boolean)=>void) {
+  }
+  withinRange(x:number, y:number) {
+    return (x>this.left && x<this.left+this.width && y>this.top && y<this.height+this.top);
+  }
+  getPoint(x:number, y:number) {
+    return {left: x-this.left, top: y-this.top};
+  }
+}
+
 export class HandlerProxy {
   clickHandlerMap: Map<string, cHandler>;
   hoverHandlerMap: Map<string, cHandler>;
+  scrollHandlerMap: Map<string, sHandler>;
+
   constructor() {
     this.clickHandlerMap = new Map<string, cHandler>();
     this.hoverHandlerMap = new Map<string, cHandler>();
+    this.scrollHandlerMap = new Map<string, sHandler>();
   }
   registerClick(key: string, element: HTMLElement, handler: (left:number, top:number) => void) {
     const h = new cHandler(key, element.offsetTop, element.offsetLeft, element.offsetWidth, element.offsetHeight, handler);
@@ -27,6 +41,14 @@ export class HandlerProxy {
     console.log(`event handler ${key} registered for element ${element.offsetTop}, ${element.offsetLeft}, ${element.offsetWidth}, ${element.offsetHeight}`);
     this.hoverHandlerMap.set(key, h);
   }
+
+  registerScroll(key: string, element: HTMLElement, handler: (direction:boolean) => void) {
+    const h = new sHandler(key, element.offsetTop, element.offsetLeft, element.offsetWidth, element.offsetHeight, handler);
+    console.log(`event handler ${key} registered for element ${element.offsetTop}, ${element.offsetLeft}, ${element.offsetWidth}, ${element.offsetHeight}`);
+    this.scrollHandlerMap.set(key, h);
+  }
+
+
 
 
   clickHandler(e: React.MouseEvent<HTMLElement>, hover:HTMLElement) {
@@ -51,5 +73,12 @@ export class HandlerProxy {
       }
     });
   }
+
+  scrollHandler(e: React.WheelEvent<HTMLElement>, hover:HTMLElement) {
+    this.scrollHandlerMap.forEach((v, k) => {
+      v.handler(e.deltaY>0);
+    });
+  }
+
 
 }

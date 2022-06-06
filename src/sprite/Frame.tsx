@@ -26,7 +26,7 @@ export default function Frame(prop: IProps) {
   let ratio = 4;
   const timeClock = useAppSelector(selectTimeClock);
   const dispatch = useAppDispatch();
-  const [minions, setMinions] = useState<Minion[]>([]);
+  const [, setMinions] = useState<Minion[]>([]);
   const viewIndex = useAppSelector(selectViewIndex);
   const alien = useAppSelector(selectAlien);
   const monster = getSprite(alien.sprite);
@@ -42,12 +42,16 @@ export default function Frame(prop: IProps) {
     let alien_center_x = pos + 60;
     let alien_center_y = 330;
     dispatch(signalBulletsUpdate([alien_center_x, alien_center_y]));
+    
     let idx = Math.floor(alien.pos / individualWidth);
     if (viewIndex != idx) {
       dispatch(switchView(idx));
       dynamic.resetBullets([]);
-      dispatch(addEvent(AlienEvent(alien, getWorld().getInstance(idx))));
+      dispatch(addEvent(AlienEvent(alien, getWorld().getInstanceByIndex(idx))));
     }
+
+
+    // Render minions
     minions.map((m: DynamicMinion) => {
       let minion = m.minion;
       let spriteName = `${minion.type}${minion.style}`;
@@ -55,18 +59,20 @@ export default function Frame(prop: IProps) {
         spriteName,
         minion.x + m.offsetX,
         minion.y + m.offsetY,
-        Math.abs(m.offsetX % 2)
+        m.currentFrame,
       );
       minion.countingdown--;
       if (minion.countingdown <= 0) {
         minion.countingdown = minion.frequency;
         dynamic.addBullet(spawnBullet(minion, alien_center_x, alien_center_y, m.offsetX, m.offsetY));
       }
-      dynamic.updateMinionPosition(m);
+      dynamic.updateMinionPosition(m, alien_center_x);
     });
 
+    // render Monsters
     monster?.paint(prop.canvasRef?.current!, pos, 285, timeClock);
 
+    // render Bullets
     for (var b of dynamic.allBullets()) {
       b.paint(canvas!, prop.minion);
     }

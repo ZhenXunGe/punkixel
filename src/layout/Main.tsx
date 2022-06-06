@@ -25,41 +25,11 @@ import hover3 from "../images/layout/level_3.png";
 import { getHandlerProxy, Hover } from './Hover';
 import './style.scss';
 import More from '../modals/more';
+import { Loading } from './Loading';
 
 
 interface loadingStatus {
   totalSprites:number,
-}
-
-interface loaded {
-
-}
-function Loading(){
-  const loaded = useAppSelector(spriteLoaded);
-  const needload = useAppSelector(spriteNeedLoaded);
-  let timeClock = useAppSelector(selectTimeClock);
-  const dispatch = useAppDispatch();
-  let r = timeClock/50;
-  if (r > 1) {
-    r = 1;
-  }
-  let width = Math.floor(r*620 + 6);
-  let progress = r * loaded / needload;
-  if (r === 1) {
-    dispatch(setLoaded());
-  }
-  return(<div className="loading">
-    <div className="loading-bar">
-
-      <div className="progress" style={{
-      width: width
-      }}>
-
-      </div>
-
-    </div>
-    <div className="loading-bar-cover"></div>
-  </div>);
 }
 
 export function Main(prop: loadingStatus) {
@@ -72,9 +42,6 @@ export function Main(prop: loadingStatus) {
   const total = useAppSelector(spriteNumber);
   const handlerProxy = getHandlerProxy();
   const handlerProxyRef = createRef<HTMLDivElement>();
-/*
-
-*/
   if(isloaded === true && getWorld()!=undefined && total === prop.totalSprites) {
     return (
       <div className="application" ref={handlerProxyRef} >
@@ -87,6 +54,7 @@ export function Main(prop: loadingStatus) {
       <Hover bgurl={hover3}></Hover>
       <div onClick={(e)=>handlerProxy.clickHandler(e, handlerProxyRef.current!)}
            onMouseMove={(e)=>handlerProxy.hoverHandler(e, handlerProxyRef.current!)}
+           onWheel={(e)=>handlerProxy.scrollHandler(e, handlerProxyRef.current!)}
               className="hover"></div>
       <Inventory></Inventory>
       <Thumbnail></Thumbnail>
@@ -100,10 +68,3 @@ export function Main(prop: loadingStatus) {
     return (<Loading></Loading>);
   }
 }
-/*
-      <AlienInfo></AlienInfo>
-
-
-
-
-      */

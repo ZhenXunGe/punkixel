@@ -136,6 +136,30 @@ interface Drop {
       rain.move();
     }
   };
+
+
+  export function drawMesh(canvas: HTMLCanvasElement, size: number) {
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d')!;
+      var w = canvas.width;
+      var h = canvas.height;
+      ctx.strokeStyle = 'rgba(174,194,224,0.5)';
+      ctx.lineWidth = 1;
+      for (var c = 0; c < w; c = c + size) {
+        ctx.beginPath();
+        ctx.moveTo(c, 0);
+        ctx.lineTo(c, 400);
+        ctx.stroke();
+      }
+      for (var y = 400; y > 0; y = y - size) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(1000, y);
+        ctx.stroke();
+      }
+      rain.move();
+    }
+  };
   
   
       

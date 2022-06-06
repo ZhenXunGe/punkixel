@@ -16,10 +16,12 @@ export class DynamicMinion {
   minion: Minion;
   offsetX: number;
   offsetY: number;
+  currentFrame: number;
   constructor(minion: Minion) {
     this.minion = minion;
     this.offsetX = 0;
     this.offsetY = 0;
+    this.currentFrame = 0;
   }
 }
 
@@ -51,13 +53,24 @@ class DynamicInfo {
     return this.minions;
   }
 
-  updateMinionPosition(minion: DynamicMinion) {
+  updateMinionPosition(minion: DynamicMinion, targetX: number) {
     if (minion.minion.type !== "land") {
       let m = minion.minion;
       let pos_x = minion.offsetX + m.x + (1 - Math.floor(Math.random() * 3)) * 5;
       if (pos_x < 0) { pos_x = 0; };
       if (pos_x > 900) { pos_x = 900; };
       minion.offsetX = pos_x - m.x;
+      minion.currentFrame = Math.abs(minion.offsetX % 2);
+    } else {
+      let m = minion.minion;
+      let pos_x = minion.offsetX + m.x + (1 - Math.floor(Math.random() * 3)) * 5;
+      if (pos_x < 0) { pos_x = 0; };
+      if (pos_x > 900) { pos_x = 900; };
+      minion.offsetX = pos_x - m.x;
+      let indexBase = pos_x > targetX ? 0 : 3
+
+      minion.currentFrame = Math.abs(minion.offsetX%3) + indexBase;
+      console.log(minion.currentFrame);
     }
   }
 
@@ -93,6 +106,7 @@ export interface DynamicState {
     upcomingAlien: Alien;
     viewIndex: number;
     sketchSignal: number;
+    sketchDynamic: number;
     damage: number;
 }
 
@@ -103,6 +117,7 @@ const initialState: DynamicState = {
   upcomingAlien: randomAlien(),
   viewIndex: 0,
   sketchSignal: 0,
+  sketchDynamic: 0,
   damage:0,
 };
 
@@ -128,6 +143,10 @@ export const dynamicSlice = createSlice({
     signalSketch: (state) => {
       state.sketchSignal ++;
     },
+    signalDynamic: (state) => {
+      state.sketchDynamic ++;
+    },
+
     signalBulletsUpdate: (state, d) => {
       let cs = [];
       let cor:[number, number] = d.payload;
@@ -181,11 +200,13 @@ export const dynamicSlice = createSlice({
       getDynamicInfo().loadInstance(instance.info);
       getWorld().flipWeather();
     },
+    
     signalPlaceMinion: (state, d) => {
       let viewIndex = d.payload.viewIndex;
       let instance = getWorld().getInstanceByIndex(viewIndex);
       getWorld().placeMinion(d.payload.mId, viewIndex);
       instance.info.minions.push(d.payload.mId);
+      getDynamicInfo().loadInstance(instance.info);
     }
   },
   extraReducers: (builder) => {
@@ -195,11 +216,12 @@ export const dynamicSlice = createSlice({
       })
   },
 });
-export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch, signalPlaceMinion,} = dynamicSlice.actions;
+export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch, signalDynamic, signalPlaceMinion,} = dynamicSlice.actions;
 export const selectTimeClock = (state: RootState) => state.dynamic.timeClock;
 export const selectEvents = (state: RootState) => state.dynamic.events;
 export const selectAlien = (state: RootState) => state.dynamic.alien;
 export const selectUpcomingAlien = (state: RootState) => state.dynamic.upcomingAlien;
 export const selectViewIndex = (state: RootState) => state.dynamic.viewIndex;
 export const selectSketchSignal = (state: RootState) => state.dynamic.sketchSignal;
+export const selectDynamicSignal = (state: RootState) => state.dynamic.sketchDynamic;
 export default dynamicSlice.reducer;

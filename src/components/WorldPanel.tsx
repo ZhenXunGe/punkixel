@@ -63,7 +63,7 @@ function WorldBoard (props: IProps) {
       }
     };
     let drawer = getWorld().getInstance(viewIndex*individualWidth).drawer;
-    drawer.draw(painter, viewIndex*individualWidth);
+    drawer.draw({paint: painter, delta: painter}, viewIndex*individualWidth);
     context.putImageData(image,0,0);
     const instance = getWorld().getInstance(viewIndex);
     backref.style.backgroundImage = `url(${getBackground(instance.info.background)})`;

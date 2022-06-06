@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import '../Component.scss';
 import Contribute from "../../modals/contribute";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { individualWidth } from '../../data/draw';
-import { selectInventory, selectInventoryUpdater, } from "../../data/statusSlice";
 import getWorld from '../../data/world';
-import { selectViewIndex } from '../../dynamic/dynamicSlice';
-import minion from "../../sprite/ufo/ufo0.png";
+import {
+   selectTimeClock,
+   selectViewIndex, selectDynamicSignal} from '../../dynamic/dynamicSlice';
 import './style.scss';
-import { Minion } from '../../data/minion';
 import { getMinionFrame } from '../../sprite/spriteSlice';
 
 interface IProps {
@@ -25,14 +24,17 @@ export function MinionAvator(props:IProps) {
 
 export function ToolBarWeapon() {
   const viewIndex = useAppSelector(selectViewIndex);
-  const inventory = useAppSelector(selectInventory);
+  const dynamic = useAppSelector(selectDynamicSignal);
   const minions = getWorld().getInstance(viewIndex * individualWidth).info.minions;
-  var damage = 0;
-  for (var m of minions) {
-    damage += getWorld().getMinion(m).power;
-  }
+  const timeClock = useAppSelector(selectTimeClock);
+  const [damage, setDamage] = useState(0);
+  useEffect(() => {
+    for (var m of minions) {
+      setDamage(damage + getWorld().getMinion(m).power);
+    }
+  }, [dynamic])
   return (
-    <div className="tool-bar">
+    <div className="tool-bar" key={dynamic}>
       <ul>
         <li>
           <ul className="inline-brick world">

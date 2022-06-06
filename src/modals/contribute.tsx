@@ -4,7 +4,7 @@ import { Button, Container, ListGroup, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectInventory, selectInventoryUpdater, } from "../data/statusSlice";
 // import { MinionSelector } from "../components/Inventory";
-import { addEvent, selectTimeClock, selectViewIndex, signalPlaceMinion } from "../dynamic/dynamicSlice";
+import { addEvent, selectTimeClock, selectViewIndex, signalPlaceMinion, signalDynamic } from "../dynamic/dynamicSlice";
 import { ProtectingEvent } from "../dynamic/event";
 import getWorld from "../data/world";
 import header from "../images/modal/protect/header.png";
@@ -93,6 +93,7 @@ export default function Contribute() {
     dispatch(addEvent(ProtectingEvent("GruPlayer 1", getWorld().getInstance(viewIndex), getWorld().getMinion(minionId!))));
     setShow(false);
     dispatch(updateInventory({bol:false}));
+    dispatch(signalDynamic);
   }
   return (
 

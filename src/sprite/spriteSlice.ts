@@ -74,11 +74,15 @@ export const spriteNumber = (state: RootState) => {
 
 export function getMinionFrame(minion:Minion) {
    let name = `${minion.type}${minion.style}`;
-   console.log("getSprite", name);
    let sprite = getSprite("ufo");
-   console.log('sprite', sprite);
    let frame = sprite.getFrame(name, 0);
    return frame;
+}
+
+export function getBulletFrame(modifierStr: string) {
+  let sprite = getSprite("ufo");
+  let frame = sprite.getFrame(modifierStr,0);
+  return frame;
 }
 
 export default spriteSlice.reducer;

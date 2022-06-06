@@ -9,7 +9,7 @@
 div.loading {
   // user-select: none;
   position: relative;
-  height: 260px;
+  height: 270px;
   width: 645px;
   margin: auto;
   border: 1px solid gray;
@@ -18,9 +18,16 @@ div.loading {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 
-  background-image: url("../images/loading.jpg");
+  background-image: url("../images/loading.png");
   background-size:contain;
   padding-top:200px;
+  img {
+    height:270px;
+    width: 645px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  };
   .loading-bar {
     height: 60px;
     background-image:url("../images/loading/lv0_brwon_bg.png");

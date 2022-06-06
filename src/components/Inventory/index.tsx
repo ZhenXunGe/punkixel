@@ -4,8 +4,8 @@ import { selectInventory, selectInventoryUpdater } from '../../data/statusSlice'
 import { Minion } from "../../data/minion";
 import { ListGroup } from 'react-bootstrap';
 import getWorld from '../../data/world';
-import { Unlock } from '../../modals/unlock';
-import { getMinionFrame } from '../../sprite/spriteSlice';
+import { Reroll, Unlock } from '../../modals/unlock';
+import { getBulletFrame, getMinionFrame } from '../../sprite/spriteSlice';
 
 import './style.scss';
 import Inuse from '../../images/protectors/Inuse.png';
@@ -44,7 +44,8 @@ export function SingleItem(m: single) {
         <div className='protector'>
           <div className='left'>
             <img className="avator" src={ufo}></img>
-            <img className="modifier" src={protector_modifier} ></img>
+
+            <img className="modifier" src={getBulletFrame(minion.modifier[1]).src}></img>
           </div>
           <div className="right">
             <div className='item'>{minion.power}</div>
@@ -57,7 +58,8 @@ export function SingleItem(m: single) {
         <div className='protector'>
           <div className='left'>
             <img className="avator" src={ufo}></img>
-            <img className="modifier" src={protector_modifier} ></img>
+
+            <img className="modifier" src={getBulletFrame(minion.modifier[1]).src}></img>
           </div>
           <div className="right">
             <div className='item'>{minion.power}</div>
@@ -80,12 +82,14 @@ export function SingleItemBtn(m: single) {
     if (minion.location === null) {
       return (
         <div className='action'>
+          <Reroll minion={minion} index={m.index}></Reroll>
           <img src={Idle}></img>
         </div>
       );
     } else {
       return (
         <div className='action'>
+            <Reroll minion={minion} index={m.index}></Reroll>
             <img src={Inuse}></img>
         </div>
       );

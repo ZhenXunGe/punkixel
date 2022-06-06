@@ -31,7 +31,10 @@ export function ofCorIndex(idx: number) {
   return [x,y]
 }
 
-export type Painter = (x:number, y:number, c:number, alpha:number) => void
+export type Painter = {
+    paint: (x:number, y:number, c:number, alpha:number) => void;
+    delta: (x:number, y:number, c:number, alpha:number) => void;
+}
 
 export class Drawer {
     pixels: Array<Array<DyeIndex>>;
@@ -68,12 +71,11 @@ export class Drawer {
         }
       }
       if (!IsNillDye(dye)) {
-        paint(x + this.offset - cursor, y, dye, 255);
+        paint.paint(x + this.offset - cursor, y, dye, 255);
       } else {
-        paint(x + this.offset - cursor, y, (x + y) %2, 10);
+        paint.paint(x + this.offset - cursor, y, (x + y) %2, 10);
       }
     }
-
 
     setDry(dry: boolean) {
       this.dry = dry;

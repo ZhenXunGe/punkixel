@@ -86,7 +86,10 @@ export const statusSlice = createSlice({
     },
 
     updatePPH: (state, d) => {
-      state.pph += d.payload.delta;
+      let delta = d.payload.delta;
+      let player = getWorld().getPlayer("solo");
+      getWorld().updateInstancePPH(player.homeIndex, delta);
+      //instance.info.pph = instance.info.pph + instance.info.basePPH;
       getWorld().spentPunkxiel("solo", d.payload.cost);
     },
   },

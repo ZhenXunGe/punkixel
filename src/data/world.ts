@@ -1,7 +1,7 @@
 import { content_size, Drawer, individualHeight, individualWidth, Painter } from "./draw";
 import { EmptyInstance, Instance } from "./instance";
 import { Minion, randomMinion } from "./minion";
-import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette } from "./palette";
+import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette, amber_dilation_palette } from "./palette";
 import background from "../images/sky.jpg";
 import { textChangeRangeIsUnchanged } from "typescript";
 
@@ -62,6 +62,9 @@ export class World {
       }
     }
     return undefined;
+  }
+  updateInstancePPH(idx:number, delta:number) {
+    this.instances[idx].info.pph += delta;
   }
   loadInstance() {
     this.instances = BuildTestInstances(() => { return this.cursor });
@@ -136,6 +139,16 @@ export class World {
     let player = this.players.get(owner)!;
     let inventory = [...player.inventory];
     inventory[index] = minion.id;
+    let update = { ...player, inventory: inventory };
+    this.players.set(player.id, update);
+  }
+
+  rerollMinion(minion: Minion, index: number) {
+    let minionNew = randomMinion(minion.owner, getWorld());
+    let owner = minion.owner;
+    let player = this.players.get(owner)!;
+    let inventory = [...player.inventory];
+    inventory[index] = minionNew.id;
     let update = { ...player, inventory: inventory };
     this.players.set(player.id, update);
   }
@@ -230,7 +243,13 @@ let player = {
     palettes: [
       liquid_green_palette,
       liquid_blue_palette,]
-  }],
+  },
+  {
+    name: "dilation",
+    palettes: [
+      amber_dilation_palette,]
+  }
+  ],
   reward: 0,
   inventory: [randomMinion("solo", world).id, randomMinion("solo", world).id, null, null, null],
   homeIndex: 1,
