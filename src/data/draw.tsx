@@ -1,6 +1,7 @@
-import { costOfDyeIndex, Dye, DyeIndex, IsNillDye, pphOfDyeIndex } from "./palette";
+import { costOfDyeIndex, Dye, DyeIndex, IsNillDye, pphOfDyeIndex, dilationDistance } from "./palette";
 import { drawBuildings, sketchBuildings, drawRoad } from "../sketch/sketch";
 import { Sprite } from "../sprite/sprite";
+import { toDyeColor } from "../data/palette";
 
 /* Size of the individual home */
 export const individualWidth:number = 250;
@@ -36,6 +37,57 @@ export type Painter = {
     delta: (x:number, y:number, c:number, alpha:number) => void;
 }
 
+export interface DrawerBoardProp {
+  ratio: number;
+  offsetX: number;
+  offsetY: number;
+  canvasWidth: number;
+  canvasHeight: number;
+}
+
+export function buildPainter(image: ImageData, props:DrawerBoardProp, timeClock: number) {
+  let painter = (x:number, y:number, c:number, alpha:number) => {
+    let xx = x - props.offsetX;
+    let yy = y - props.offsetY;
+    let sx = xx * props.ratio;
+    let sy = yy * props.ratio;
+    let color = toDyeColor(c, timeClock);
+    for (var px=sx; px<sx+props.ratio; px++) {
+      for (var py=sy; py<sy+props.ratio; py++) {
+        if (py < props.canvasHeight && px < props.canvasWidth) {
+          let index = ((props.canvasHeight - py) * props.canvasWidth + px) * 4;
+            image.data[index] = color[0];
+            image.data[index+1] = color[1];
+            image.data[index+2] = color[2];
+            image.data[index+3] = alpha;
+        }
+      }
+    }
+  };
+
+  let delta = (x:number, y:number, c:number, alpha:number) => {
+    let xx = x - props.offsetX;
+    let yy = y - props.offsetY;
+    let sx = xx * props.ratio;
+    let sy = yy * props.ratio;
+    let color = toDyeColor(c, timeClock);
+    for (var px=sx; px<sx+props.ratio; px++) {
+      for (var py=sy; py<sy+props.ratio; py++) {
+        if (py < props.canvasHeight && px < props.canvasWidth) {
+          let index = ((props.canvasHeight - py) * props.canvasWidth + px) * 4;
+            image.data[index] += Math.ceil(color[0] * alpha);
+            image.data[index+1] += Math.ceil(color[1] * alpha);
+            image.data[index+2] += Math.ceil(color[2] * alpha);
+            //image.data[index+3] = 255;
+        }
+      }
+    }
+  };
+  return {paint: painter, delta: delta};
+
+}
+
+
 export class Drawer {
     pixels: Array<Array<DyeIndex>>;
     delta: Array<Delta>;
@@ -70,10 +122,36 @@ export class Drawer {
           dye = this.pixels[i][index];
         }
       }
-      if (!IsNillDye(dye)) {
+      if (dye && !IsNillDye(dye)) {
         paint.paint(x + this.offset - cursor, y, dye, 255);
       } else {
         paint.paint(x + this.offset - cursor, y, (x + y) %2, 10);
+      }
+    }
+
+    deltaPixel (paint:Painter, index: number, pos: number = 0) {
+      let cursor = this.cursor();
+      if (pos !== 0) {
+        cursor = pos;
+      }
+      if(this.dry) {
+        return;
+      }
+      const [x, y] = ofCorIndex(index);
+      var dye = this.pixels[frontLayer][index];
+      if (dye && !IsNillDye(dye) && dilationDistance(dye)>0) {
+        let d = dilationDistance(dye);
+        for(var xx = x-d; xx <= x+d; xx++) {
+          let xd = Math.abs(x-xx);
+          for(var yy = Math.ceil(y-Math.sqrt(d*d-xd*xd)); yy <= Math.floor(y+Math.sqrt(d*d-xd*xd)); yy++) {
+            let yd = Math.abs(y-yy);
+            let dis = Math.sqrt(xd*xd + yd*yd);
+            if (xx>0 && xx<individualWidth && yy>0 && yy<individualHeight) {
+                paint.delta(xx + this.offset - cursor, yy, dye, 1/dis);
+            }
+          }
+        }
+        /* Dilation effect */
       }
     }
 
@@ -98,6 +176,8 @@ export class Drawer {
       });
       this.setPixel(idx, dye);
       let cost = costOfDyeIndex(dye);
+      let d = dilationDistance(dye);
+      console.log("dilation", d, dye);
       return [pphOfDyeIndex(dye) - old_pph, cost];
     }
 
@@ -109,10 +189,11 @@ export class Drawer {
     }
 
     draw(paint: Painter, pos:number=0) {
-      for (var i=0; i<2; i++) {
-        for (var idx=0; idx<content_size; idx++) {
-          this.paintPixel(paint, idx, pos);
-        }
+      for (var idx=0; idx<content_size; idx++) {
+        this.paintPixel(paint, idx, pos);
+      }
+      for (var idx=0; idx<content_size; idx++) {
+        this.deltaPixel(paint, idx, pos);
       }
     }
 

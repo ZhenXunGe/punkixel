@@ -10,6 +10,7 @@ import { getSprite } from '../sprite/spriteSlice';
 import { BulletInfo } from './bullet';
 import { DropEvent, Event, RewardEvent }  from './event';
 import { InstanceInfo } from '../data/instance';
+import { Reaction } from '../data/weather';
 
 
 export class DynamicMinion {
@@ -108,6 +109,8 @@ export interface DynamicState {
     sketchSignal: number;
     sketchDynamic: number;
     damage: number;
+    reaction: Reaction | null;
+    cursor: string;
 }
 
 const initialState: DynamicState = {
@@ -119,6 +122,8 @@ const initialState: DynamicState = {
   sketchSignal: 0,
   sketchDynamic: 0,
   damage:0,
+  reaction: null,
+  cursor: "cursorDefault",
 };
 
 function timeout(ms:number) {
@@ -139,6 +144,9 @@ export const dynamicSlice = createSlice({
   reducers: {
     addEvent: (state, d) => {
       state.events.unshift(d.payload);
+    },
+    setCursor: (state, d) => {
+      state.cursor = d.payload;
     },
     signalSketch: (state) => {
       state.sketchSignal ++;
@@ -200,7 +208,10 @@ export const dynamicSlice = createSlice({
       getDynamicInfo().loadInstance(instance.info);
       getWorld().flipWeather();
     },
-    
+
+    setReaction: (state, d) => {
+      state.reaction = d.payload;
+    },
     signalPlaceMinion: (state, d) => {
       let viewIndex = d.payload.viewIndex;
       let instance = getWorld().getInstanceByIndex(viewIndex);
@@ -213,10 +224,17 @@ export const dynamicSlice = createSlice({
     builder
       .addCase(updateTimeClockAsync.fulfilled, (meta: DynamicState, c) => {
         meta.timeClock += 1;
+        if(meta.reaction) {
+          if (meta.reaction.current < meta.reaction.duration) {
+            meta.reaction = {...meta.reaction, current: meta.reaction.current+1};
+          } else {
+            meta.reaction = null;
+          }
+        }
       })
   },
 });
-export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch, signalDynamic, signalPlaceMinion,} = dynamicSlice.actions;
+export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch, signalDynamic, signalPlaceMinion, setReaction, setCursor} = dynamicSlice.actions;
 export const selectTimeClock = (state: RootState) => state.dynamic.timeClock;
 export const selectEvents = (state: RootState) => state.dynamic.events;
 export const selectAlien = (state: RootState) => state.dynamic.alien;
@@ -224,4 +242,6 @@ export const selectUpcomingAlien = (state: RootState) => state.dynamic.upcomingA
 export const selectViewIndex = (state: RootState) => state.dynamic.viewIndex;
 export const selectSketchSignal = (state: RootState) => state.dynamic.sketchSignal;
 export const selectDynamicSignal = (state: RootState) => state.dynamic.sketchDynamic;
+export const selectReaction = (state: RootState) => state.dynamic.reaction;
+export const selectCursor = (state: RootState) => state.dynamic.cursor;
 export default dynamicSlice.reducer;

@@ -48,7 +48,6 @@ export function ToolBarDye(props: DrawerConfig) {
                       let palette = palettes[pickedCategory].palettes[pickedPalette];
                       return (
                         <li key={`${pickedPalette}-${idx}`}
-                            id={`${d.color == ofDyeIndex(pickedDye).color && pickedBottle == idx ? 'selected' : ''}`}
                             className={`${d.color == ofDyeIndex(pickedDye).color && pickedBottle == idx ? 'selected' : ''}`}
                         >
                           <div className='dye-item'
@@ -60,7 +59,8 @@ export function ToolBarDye(props: DrawerConfig) {
                           </div>
                           <div className="cover"
                             onClick={() => {
-                              dispatch(pickColor(toDyeIndex(palette.idx, + idx)))
+                              console.log("pickColor", pickedCategory, palette.idx, idx);
+                              dispatch(pickColor(toDyeIndex(pickedCategory+1, palette.idx, idx)))
                               setPickedBottle(idx)
                             }
                             }></div>

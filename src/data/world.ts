@@ -1,7 +1,7 @@
 import { content_size, Drawer, individualHeight, individualWidth, Painter } from "./draw";
 import { EmptyInstance, Instance } from "./instance";
 import { Minion, randomMinion } from "./minion";
-import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette, amber_dilation_palette } from "./palette";
+import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette, amber_dilation_palette, lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette } from "./palette";
 import background from "../images/sky.jpg";
 import { textChangeRangeIsUnchanged } from "typescript";
 
@@ -246,8 +246,8 @@ let player = {
   },
   {
     name: "dilation",
-    palettes: [
-      amber_dilation_palette,]
+    palettes:
+      [lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette, amber_dilation_palette],
   }
   ],
   reward: 0,

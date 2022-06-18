@@ -1,6 +1,11 @@
 import { Market } from './Market';
 import React, { useState } from 'react';
-export function MarketPanel() {
+import { HandlerProxy } from '../layout/handlerProxy';
+interface MarketPanelProp {
+  handlerProxy: HandlerProxy;
+}
+export function MarketPanel(props: MarketPanelProp) {
+  
   return (
     <>
     <Market></Market>

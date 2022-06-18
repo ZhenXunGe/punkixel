@@ -1,13 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { Palette, Dye,
-    gray_palette,
+import {
     basic_palettes,
     liquid_green_palette,
     liquid_blue_palette,
-    ColorCategory,} from  './palette';
-import { individualWidth } from "./draw"
-import { randomMinion } from "./minion";
+    ColorCategory,
+} from  './palette';
 import getWorld from './world';
 
 export interface StatusState {

@@ -6,6 +6,7 @@ import './Component.scss';
 import {
     individualWidth,
     individualHeight,
+    buildPainter,
 } from "../data/draw"
 import { toDyeColor } from "../data/palette"
 
@@ -48,22 +49,12 @@ function WorldBoard (props: IProps) {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     const image = context.getImageData(0, 0, individualWidth*ratio, individualHeight*ratio)
-    let painter = (x:number, y:number, c:number, alpha:number) => {
-      let sx = x * ratio;
-      let sy = y * ratio;
-      let color = toDyeColor(c, timeClock);
-      for (var px=sx; px<sx+ratio; px++) {
-        for (var py=sy; py<sy+ratio; py++) {
-          let index = ((100 * ratio - py) * individualWidth * ratio + px) * 4;
-            image.data[index] = color[0];
-            image.data[index+1] = color[1];
-            image.data[index+2] = color[2];
-            image.data[index+3] = alpha;
-        }
-      }
-    };
+    let painter = buildPainter(image, {
+            ratio:4, offsetX:0, offsetY:0,
+            canvasHeight:400, canvasWidth: 1000,
+    }, timeClock);
     let drawer = getWorld().getInstance(viewIndex*individualWidth).drawer;
-    drawer.draw({paint: painter, delta: painter}, viewIndex*individualWidth);
+    drawer.draw(painter, viewIndex*individualWidth);
     context.putImageData(image,0,0);
     const instance = getWorld().getInstance(viewIndex);
     backref.style.backgroundImage = `url(${getBackground(instance.info.background)})`;
@@ -151,7 +142,7 @@ export function WorldPanel(props: WorldPanelProp) {
   React.useEffect(()=>{
     if (boardRef.current) {
       props.handlerProxy.registerClick("frame", boardRef.current!, (left, top)=>{pickEvent(left, top);});
-      props.handlerProxy.registerHover("frame", boardRef.current!, (left, top)=>{hoverEvent(left, top);});
+      props.handlerProxy.registerHover("frame", boardRef.current!, (left, top)=>{hoverEvent(left, top);}, "cursor-pick");
     }
   },[boardRef])
 

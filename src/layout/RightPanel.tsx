@@ -21,7 +21,7 @@ export function RightPanel(props: RightPanelProp) {
     <>
       {panel == "home" && <HomePanel key="home-panel" handlerProxy={props.handlerProxy} ></HomePanel>}
       {panel == "world" && <WorldPanel key="world-panel" handlerProxy={props.handlerProxy}></WorldPanel>}
-
+      {panel == "market" && <MarketPanel key="world-panel" handlerProxy={props.handlerProxy}></MarketPanel>}
     </>
   );
 }

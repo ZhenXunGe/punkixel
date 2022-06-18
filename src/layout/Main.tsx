@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { LeftMenu } from './LeftMenu';
 import { RightPanel } from './RightPanel';
 import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded, spriteNumber, getSprite, setLoaded } from '../sprite/spriteSlice';
-import { selectTimeClock, updateTimeClockAsync } from '../dynamic/dynamicSlice';
+import { selectCursor, selectTimeClock, setCursor, updateTimeClockAsync } from '../dynamic/dynamicSlice';
 import getWorld from '../data/world';
 
 
@@ -17,8 +17,6 @@ import Inventory from '../components/Inventory';
 
 import hover1 from "../images/layout/level_1.png";
 import hover2 from "../images/layout/level_2.png";
-
-
 import hover3 from "../images/layout/level_3.png";
 
 
@@ -26,10 +24,51 @@ import { getHandlerProxy, Hover } from './Hover';
 import './style.scss';
 import More from '../modals/more';
 import { Loading } from './Loading';
+import { HandlerProxy } from './handlerProxy';
 
 
 interface loadingStatus {
   totalSprites:number,
+}
+
+interface HoverProxyProps {
+  proxy: HandlerProxy,
+  ele: () => HTMLElement | null,
+
+}
+function HoverProxy(props: HoverProxyProps) {
+  const cursorClass = useAppSelector(selectCursor);
+  const dispatch = useAppDispatch();
+  //const ratio = useAppSelector(selectRatio);
+
+  return <div
+  onClick={(e)=> {
+    const ele = props.ele();
+    if (ele) {
+      props.proxy.clickHandler(e, ele);
+    } else {
+      console.log(ele);
+    }
+  }}
+  onMouseMove={(e)=>{
+    const ele = props.ele();
+    if (ele) {
+      let style = props.proxy.hoverHandler(e, ele);
+      dispatch(setCursor(style));
+      console.log(style);
+    } else {
+      return (ele);
+    }
+  }}
+  onWheel={(e)=> {
+    const ele = props.ele();
+    if (ele) {
+      props.proxy.scrollHandler(e, ele)
+    } else {
+      console.log("wheel");
+    }
+  }} className={`hover ${cursorClass}`}>
+  </div>
 }
 
 export function Main(prop: loadingStatus) {
@@ -41,7 +80,14 @@ export function Main(prop: loadingStatus) {
 
   const total = useAppSelector(spriteNumber);
   const handlerProxy = getHandlerProxy();
-  const handlerProxyRef = createRef<HTMLDivElement>();
+  const handlerProxyRef = useRef(null);
+  function getRef(): HTMLDivElement | null {
+    if (handlerProxyRef.current) {
+      return handlerProxyRef.current!;
+    } else {
+      return null;
+    }
+  }
   if(isloaded === true && getWorld()!=undefined && total === prop.totalSprites) {
     return (
       <div className="application" ref={handlerProxyRef} >
@@ -52,10 +98,7 @@ export function Main(prop: loadingStatus) {
       <LeftMenu handlerProxy={handlerProxy}></LeftMenu>
       <AlienInfo></AlienInfo>
       <Hover bgurl={hover3}></Hover>
-      <div onClick={(e)=>handlerProxy.clickHandler(e, handlerProxyRef.current!)}
-           onMouseMove={(e)=>handlerProxy.hoverHandler(e, handlerProxyRef.current!)}
-           onWheel={(e)=>handlerProxy.scrollHandler(e, handlerProxyRef.current!)}
-              className="hover"></div>
+      <HoverProxy proxy={handlerProxy} ele={getRef}></HoverProxy>
       <Inventory></Inventory>
       <Thumbnail></Thumbnail>
       <Status></Status>

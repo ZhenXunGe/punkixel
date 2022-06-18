@@ -45,7 +45,7 @@ export function LeftMenu(prop: LeftMenuProp) {
       prop.handlerProxy.registerClick("rank", rankButtonRef.current!, ()=>{setCurrentPanel('rank'); dispatch(vote())});
     }
     if (marketButtonRef.current) {
-      prop.handlerProxy.registerClick("market", rankButtonRef.current!, ()=>{setCurrentPanel('market'); dispatch(world())});
+      prop.handlerProxy.registerClick("market", marketButtonRef.current!, ()=>{setCurrentPanel('market'); dispatch(market())});
     }
   },[homeButtonRef, worldButtonRef, rankButtonRef, marketButtonRef])
   return (
@@ -68,7 +68,7 @@ export function LeftMenu(prop: LeftMenuProp) {
           <img src={RANK_ACT}></img>
         </div>
         <div className={`bicon right bottom ${'market' === currentpanel ? "active" : "unact"
-          }`}>
+          }`} ref={marketButtonRef}>
           <img src={MARKET_ACT}></img>
         </div>
       </div>

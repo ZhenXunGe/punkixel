@@ -1,4 +1,13 @@
+import { getSprite } from "../sprite/spriteSlice";
 import getWorld from "./world";
+
+export interface Reaction {
+  duration: number;
+  current: number;
+  offsetLeft: number;
+  offsetTop: number;
+  clip: string;
+}
 
 interface Drop {
     x: number;
@@ -116,7 +125,7 @@ interface Drop {
   }
   const rain = new Rain(1000, 400);
   const snow = new Snow(1000, 400);
-  
+
   export function drawWeatherRain(canvas: HTMLCanvasElement) {
     if (canvas.getContext) {
       var ctx = canvas.getContext('2d')!;
@@ -160,10 +169,10 @@ interface Drop {
       rain.move();
     }
   };
-  
-  
-      
-      //Lets draw the flakes
+
+
+
+  //Lets draw the flakes
   export function drawWeatherSnow(canvas: HTMLCanvasElement) {
     if (canvas.getContext) {
       var ctx = canvas.getContext('2d')!;
@@ -196,4 +205,21 @@ interface Drop {
       ctx.clearRect(0, 0, w, h);
     }
   }
-    
+
+
+  export function drawReaction(canvas: HTMLCanvasElement, r: Reaction) {
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d')!;
+      var w = canvas.width;
+      var h = canvas.height;
+      const reactSprite = getSprite("click");
+      reactSprite.paintAt(canvas, r.offsetLeft - 104, r.offsetTop-94, r.current);
+      //ctx.strokeStyle = 'rgba(174,194,224,0.5)';
+      //ctx.lineWidth = 2;
+      //let rad = 20 * (r.duration-r.current);
+      //ctx.strokeRect(r.offsetLeft-rad, r.offsetTop-rad, 2*rad+1, 2*rad+1);
+    }
+  };
+
+
+

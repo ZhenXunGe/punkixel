@@ -137,7 +137,7 @@ export function drawBuildings(
         } else {
           dyeidx = findColor(r, g, b);
         }
-        drawer.setBackgroundPixelByCor(sx + x, sy + height - y - 1, dyeidx + gray);
+        drawer.setBackgroundPixelByCor(sx + x, sy + height - y - 1, dyeidx);
       }
       //drawer.setPixelByCor(sx+x, sy+height-y, 18);\
     }

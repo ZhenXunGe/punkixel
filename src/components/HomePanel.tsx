@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { toDyeColor } from "../data/palette";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
     individualWidth,
     individualHeight,
     getCorIndex,
+    DrawerBoardProp,
+    buildPainter,
 } from "../data/draw"
 
 import {
@@ -17,10 +18,13 @@ import {
 import {
   addEvent,
   selectSketchSignal,
-  selectTimeClock, signalSketch,
+  selectTimeClock,
+  signalSketch,
+  selectReaction,
+  setReaction,
 } from '../dynamic/dynamicSlice';
 import getWorld, { getBackground } from '../data/world';
-import { drawWeather, drawMesh } from '../data/weather';
+import { drawWeather, drawMesh, drawReaction } from '../data/weather';
 import { AdviceEvent } from '../dynamic/event';
 import { HandlerProxy } from '../layout/handlerProxy';
 
@@ -28,12 +32,6 @@ import { HandlerProxy } from '../layout/handlerProxy';
 
 interface HomePanelProp {
   handlerProxy: HandlerProxy;
-}
-
-interface DrawerBoardProp {
-  ratio: number;
-  offsetX: number;
-  offsetY: number;
 }
 
 
@@ -48,51 +46,17 @@ export function DrawerBoard(props: DrawerBoardProp) {
   const homeIndex = useAppSelector(selectHomeIndex);
   const timeClock = useAppSelector(selectTimeClock);
   const sketchSignal = useAppSelector(selectSketchSignal);
+
+
+  const reaction = useAppSelector(selectReaction);
   useEffect(() => {
     let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     const image = context.getImageData(0, 0, individualWidth*restrictRatio, individualHeight*restrictRatio);
 
-    let painter = (x:number, y:number, c:number, alpha:number) => {
-      let xx = x - props.offsetX;
-      let yy = y - props.offsetY;
-      let sx = xx * props.ratio;
-      let sy = yy * props.ratio;
-      let color = toDyeColor(c, timeClock);
-      for (var px=sx; px<sx+props.ratio; px++) {
-        for (var py=sy; py<sy+props.ratio; py++) {
-          if (py < 100*restrictRatio && px < individualWidth * restrictRatio) {
-            let index = ((100 * restrictRatio - py) * individualWidth * restrictRatio + px) * 4;
-              image.data[index] = color[0];
-              image.data[index+1] = color[1];
-              image.data[index+2] = color[2];
-              image.data[index+3] = alpha;
-          }
-        }
-      }
-    };
-
-    let delta = (x:number, y:number, c:number, alpha:number) => {
-      let xx = x - props.offsetX;
-      let yy = y - props.offsetY;
-      let sx = xx * props.ratio;
-      let sy = yy * props.ratio;
-      let color = toDyeColor(c, timeClock);
-      for (var px=sx; px<sx+props.ratio; px++) {
-        for (var py=sy; py<sy+props.ratio; py++) {
-          if (py < 100*restrictRatio && px < individualWidth * restrictRatio) {
-            let index = ((100 * restrictRatio - py) * individualWidth * restrictRatio + px) * 4;
-              image.data[index] += color[0] * alpha;
-              image.data[index+1] += color[1] * alpha;
-              image.data[index+2] += color[2] * alpha;
-          }
-        }
-      }
-    };
-
-
-    drawer.draw({paint:painter, delta:delta}, homeIndex*individualWidth);
+    let painter = buildPainter(image, props, timeClock);
+    drawer.draw(painter,homeIndex*individualWidth);
     context.putImageData(image,0,0);
     const instance = getWorld().getInstance(homeIndex);
     const backref = backRef.current!;
@@ -102,8 +66,11 @@ export function DrawerBoard(props: DrawerBoardProp) {
   useEffect(() => {
     const weather = weatherRef.current!;
     drawWeather(weather);
-    if (props.ratio > 6) {
+    if (props.ratio > 4) {
       drawMesh(weather, props.ratio);
+    }
+    if (reaction) {
+      drawReaction(weather, reaction);
     }
   }, [timeClock])
 
@@ -147,25 +114,54 @@ export function HomePanel(props:HomePanelProp) {
   const [mouseLeft, setMouseLeft] = useState(0);
   const [mouseTop, setMouseTop] = useState(0);
 
+  const [action, setAction] = useState("paint");
 
-  function drawEvent(left:number, top:number) {
-    var x = Math.floor(left/ratio) + offsetX;
-    var y = Math.floor((400 - top)/ratio) + offsetY;
-    console.log(left, top, x, y, offsetX, offsetY);
-    let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
-    let [delta, cost] = drawer.pushPixelDelta(getCorIndex(x,y), pickedDye);
-    dispatch(signalSketch());
-    dispatch(updatePPH({delta:delta, cost:cost}));
+  const safeSetOffsetX = (x:number) => {
+    let xx = x + Math.floor(1000/ratio);
+    if (xx <= 250 && x>=0) {
+      setOffsetX(x);
+    }
   }
+
+  const safeSetOffsetY = (y:number) => {
+    let yy = y + Math.floor(400/ratio);
+    if (yy <= 100 && y>=0) {
+      setOffsetY(y);
+    }
+  }
+
+
+  const getRatio = () => {return ratio;};
+  function handlePaint(left:number, top:number) {
+    if (action === "paint") {
+      var x = Math.floor(left/ratio) + offsetX;
+      var y = Math.floor((400 - top)/ratio) + offsetY;
+      console.log(left, top, x, y, offsetX, offsetY);
+      let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
+      let [delta, cost] = drawer.pushPixelDelta(getCorIndex(x,y), pickedDye);
+      dispatch(signalSketch());
+      dispatch(setReaction({offsetLeft:left, offsetTop:top, duration:5, current:0, clip:"paint"}));
+      dispatch(updatePPH({delta:delta, cost:cost}));
+    } else if (action === "left") {
+      safeSetOffsetX(offsetX-1);
+    } else if (action === "right") {
+      safeSetOffsetX(offsetX+1);
+    } else if (action === "top") {
+      safeSetOffsetY(offsetY-1);
+    } else if (action === "bottom") {
+      safeSetOffsetY(offsetY+1);
+    }
+  }
+
   function scrollEvent(shrink: boolean) {
+    let ratio = getRatio();
     let yy = offsetY + Math.floor((400 - mouseTop)/ratio);
     let xx = offsetX + Math.floor(mouseLeft/ratio);
-    let ratioOld = ratio;
     if (shrink) {
       if (ratio > 4) {
         setRatio(ratio-1);
-        let newOffsetX = xx-Math.floor(mouseLeft/(ratioOld-1));
-        let newOffsetY = yy+Math.floor(mouseTop/(ratioOld-1)) - Math.floor(400/(ratioOld-1));
+        let newOffsetX = xx-Math.floor(mouseLeft/(ratio-1));
+        let newOffsetY = yy+Math.floor(mouseTop/(ratio-1)) - Math.floor(400/(ratio-1));
         setOffsetX(newOffsetX<0? 0: newOffsetX);
         setOffsetY(newOffsetY<0? 0: newOffsetY);
 
@@ -173,25 +169,59 @@ export function HomePanel(props:HomePanelProp) {
     } else {
       if (ratio < 24) {
         setRatio(ratio+1);
-        let newOffsetX = xx-Math.floor(mouseLeft/(ratioOld+1));
-        let newOffsetY = yy+Math.floor(mouseTop/(ratioOld+1)) - Math.floor(400/(ratioOld+1));
+        let newOffsetX = xx-Math.floor(mouseLeft/(ratio+1));
+        let newOffsetY = yy+Math.floor(mouseTop/(ratio+1)) - Math.floor(400/(ratio+1));
         setOffsetX(newOffsetX<0? 0: newOffsetX);
         setOffsetY(newOffsetY<0? 0: newOffsetY);
       }
+    }
+    console.log("ratio is:", ratio);
+  }
+
+  function moveEvent(left: number, top:number) {
+    setMouseLeft(left);
+    setMouseTop(top);
+    let yy = offsetY + Math.floor(400/ratio);
+    let xx = offsetX + Math.floor(1000/ratio);
+    console.log(offsetX, offsetY, xx, yy);
+    if (left < 50 && offsetX > 0) {
+      setAction("left");
+    } else if (left > 950 && xx < 250) {
+      setAction("right");
+    } else if (top<50 && yy < 100) {
+      setAction("top");
+    } else if (top>350 && offsetY > 0) {
+      setAction("bottom");
+    } else {
+      setAction("paint");
     }
   }
   const boardRef = React.createRef<HTMLDivElement>();
   React.useEffect(()=>{
     console.log("boardRef changed");
     if (boardRef.current) {
-      props.handlerProxy.registerClick("frame", boardRef.current!, (left, top)=>{drawEvent(left, top);});
-      props.handlerProxy.registerHover("frame", boardRef.current!, (left, top)=>{setMouseLeft(left); setMouseTop(top);});
+      props.handlerProxy.registerClick("frame", boardRef.current!, (left, top)=>{handlePaint(left, top);});
+      props.handlerProxy.registerHover("frame", boardRef.current!, (left, top)=>{moveEvent(left, top)}, `cursor-${action}`);
       props.handlerProxy.registerScroll("frame", boardRef.current!, (direction)=>{scrollEvent(direction);});
     }
-  },[boardRef])
+  },[boardRef.current, ratio, pickedDye, action, offsetX, offsetY]);
+  React.useEffect(()=>{
+    console.log("ratio changed", ratio);
+    return ()=>{
+      console.log("ratio end1", ratio);
+      }
+  },[ratio]);
+  React.useEffect(()=>{
+    return ()=>{
+    console.log("ratio end", ratio);
+    }
+  },[]);
   return (
     <div className="main-board" key="main-board" ref={boardRef} >
-        <DrawerBoard ratio={ratio} offsetX={offsetX} offsetY={offsetY}></DrawerBoard>
+        <DrawerBoard ratio={ratio}
+            offsetX={offsetX} offsetY={offsetY}
+            canvasHeight={400} canvasWidth={1000}
+        ></DrawerBoard>
     </div>
   )
 }

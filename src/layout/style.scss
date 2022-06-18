@@ -6,6 +6,38 @@
   bottom:0px;
 }
 
+.cursor-paint {
+  cursor: url("../images/cursors/cursor-paint.png") 16 13, pointer;
+}
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-top {
+  cursor: url("../images/cursors/cursor-top.png") 16 16, pointer;
+}
+.cursor-left {
+  cursor: url("../images/cursors/cursor-left.png") 16 16, pointer;
+}
+.cursor-bottom {
+  cursor: url("../images/cursors/cursor-bottom.png") 16 16, pointer;
+}
+.cursor-right {
+  cursor: url("../images/cursors/cursor-right.png") 16 16, pointer;
+}
+.cursor-left-top {
+  cursor: url("../images/cursors/cursor-left-top.png") 16 16, pointer;
+}
+.cursor-left-bottom {
+  cursor: url("../images/cursors/cursor-left-bottom.png") 16 16, pointer;
+}
+.cursor-right-top {
+  cursor: url("../images/cursors/cursor-right-top.png") 16 16, pointer;
+}
+.cursor-right-bottom {
+  cursor: url("../images/cursors/cursor-right-bottom.png") 16 16, pointer;
+}
+
 div.loading {
   // user-select: none;
   position: relative;

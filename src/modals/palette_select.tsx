@@ -32,7 +32,7 @@ export function PaletteSelect(props: IProps) {
                   {palettes.map((p, idx) =>
                     <li className={`category ${idx == pickedCategory ? 'selected' : ''}`}
                       onClick={() => {
-                        setPickedPalette(0); 
+                        setPickedPalette(0);
                         setPickedCategory(idx);
                         setPageNumber(0);
                         paletteLenth = palettes[pickedCategory].palettes.length;

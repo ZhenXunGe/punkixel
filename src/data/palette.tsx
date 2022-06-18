@@ -239,21 +239,21 @@ export function fromDrop(dropstring: string): number {
 
 export const transparent =  {name: "nil", dye: color_trans, pph:0, idx:0, rotation:0, dilation:0};
 
-export const gray_palette =  {name: "Gray Pallette", dye: color_gray, pph:1, idx:1, rotation:0, dilation:0};
-export const red_palette =  {name: "Red Pallette", dye: color_red, pph:1, idx:2, rotation:0, dilation:0};
-export const pink_palette =  {name: "Pink Pallette", dye: color_pink, pph:1, idx:3, rotation:0, dilation:0};
-export const purple_palette =  {name: "Purple Pallette", dye: color_purple, pph:1, idx:4, rotation:0, dilation:0};
-export const indigo_palette =  {name: "Indigo Pallette", dye: color_indigo, pph:1, idx:5, rotation:0, dilation:0};
-export const blue_palette =  {name: "Blue Pallette", dye: color_blue, pph:1, idx:6, rotation:0, dilation:0};
-export const lightblue_palette =  {name: "LightBule Pallette", dye: color_lightblue, pph:1, idx:7, rotation:0, dilation:0};
-export const cyan_palette =  {name: "Cyan Pallette", dye: color_cyan, pph:1, idx:8, rotation:0, dilation:0};
-export const teal_palette =  {name: "Teal Pallette", dye: color_teal, pph:1, idx:9, rotation:0, dilation:0};
-export const green_palette =  {name: "Green Pallette", dye: color_green, pph:1, idx:10, rotation:0, dilation:0};
-export const lightgreen_palette =  {name: "LightGreen Pallette", dye: color_lightgreen, pph:11, idx:3, rotation:0, dilation:0};
-export const lime_palette =  {name: "Lime Pallette", dye: color_lime, pph:1, idx:12, rotation:0, dilation:0};
-export const yellow_palette =  {name: "Yellow Pallette", dye: color_yellow, pph:1, idx:13, rotation:0, dilation:0};
-export const amber_palette =  {name: "Amber Pallette", dye: color_amber, pph:1, idx:14, rotation:0, dilation:0};
-export const orange_palette =  {name: "Orange Pallette", dye: color_orange, pph:1, idx:15, rotation:0, dilation:0};
+export const gray_palette =  {name: "Gray Pallette", dye: color_gray, pph:1, idx:0, rotation:0, dilation:0};
+export const red_palette =  {name: "Red Pallette", dye: color_red, pph:1, idx:1, rotation:0, dilation:0};
+export const pink_palette =  {name: "Pink Pallette", dye: color_pink, pph:1, idx:2, rotation:0, dilation:0};
+export const purple_palette =  {name: "Purple Pallette", dye: color_purple, pph:1, idx:3, rotation:0, dilation:0};
+export const indigo_palette =  {name: "Indigo Pallette", dye: color_indigo, pph:1, idx:4, rotation:0, dilation:0};
+export const blue_palette =  {name: "Blue Pallette", dye: color_blue, pph:1, idx:5, rotation:0, dilation:0};
+export const lightblue_palette =  {name: "LightBule Pallette", dye: color_lightblue, pph:1, idx:6, rotation:0, dilation:0};
+export const cyan_palette =  {name: "Cyan Pallette", dye: color_cyan, pph:1, idx:7, rotation:0, dilation:0};
+export const teal_palette =  {name: "Teal Pallette", dye: color_teal, pph:1, idx:8, rotation:0, dilation:0};
+export const green_palette =  {name: "Green Pallette", dye: color_green, pph:1, idx:9, rotation:0, dilation:0};
+export const lightgreen_palette =  {name: "LightGreen Pallette", dye: color_lightgreen, pph:10, idx:3, rotation:0, dilation:0};
+export const lime_palette =  {name: "Lime Pallette", dye: color_lime, pph:1, idx:11, rotation:0, dilation:0};
+export const yellow_palette =  {name: "Yellow Pallette", dye: color_yellow, pph:1, idx:12, rotation:0, dilation:0};
+export const amber_palette =  {name: "Amber Pallette", dye: color_amber, pph:1, idx:13, rotation:0, dilation:0};
+export const orange_palette =  {name: "Orange Pallette", dye: color_orange, pph:1, idx:14, rotation:0, dilation:0};
 
 export const basic_palettes = [
   gray_palette,
@@ -273,49 +273,62 @@ export const basic_palettes = [
   orange_palette,
 ];
 
-export const liquid_green_palette =  {name: "Shining Green", dye: color_liquid_green, pph:2, idx:16, rotation:20, dilation:0};
-export const liquid_blue_palette =  {name: "Shining Green", dye: color_liquid_blue, pph:2, idx:17, rotation:20, dilation:0};
+export const liquid_green_palette =  {name: "Shining Green", dye: color_liquid_green, pph:2, idx:0, rotation:20, dilation:0};
+export const liquid_blue_palette =  {name: "Shining Green", dye: color_liquid_blue, pph:2, idx:1, rotation:20, dilation:0};
 
+export const lightblue_dilation_palette =  {name: "LightBule Pallette", dye: color_lightblue, pph:1, idx:0, rotation:0, dilation:14};
+export const red_dilation_palette =  {name: "Red Pallette", dye: color_red, pph:1, idx:1, rotation:0, dilation:14};
+export const pink_dilation_palette =  {name: "Pink Pallette", dye: color_pink, pph:1, idx:2, rotation:0, dilation:14};
+export const amber_dilation_palette=  {name: "Amber Pallette", dye: color_amber, pph:1, idx:3, rotation:0, dilation:14};
 
-export const amber_dilation_palette=  {name: "Amber Pallette", dye: color_amber, pph:1, idx:14, rotation:0, dilation:10};
-
-export const dye_table :Array<Palette> = [
+export const dye_table :Array<Array<Palette>> = [
   [transparent],
   basic_palettes,
   [liquid_green_palette,liquid_blue_palette],
-  [amber_dilation_palette],
-].flat();
+  [lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette, amber_dilation_palette],
+];
 
 export type DyeIndex = number;
-
-export function getPalette(index: number) {
-  return dye_table[index];
-}
 
 export function IsNillDye(idx:DyeIndex) {
   return (idx === 0);
 }
 
-export function ofDyeIndex(index: number) {
+export function ofPaletteIndex(index: number):Palette {
+  let cindex = (index - index%256)/256;
+  let pindex = index%256;
+  pindex = (pindex - pindex%16)/16;
+  return dye_table[cindex][pindex];
+}
+
+export function getPalette(index: number):Palette {
+  return ofPaletteIndex(index * 16);
+}
+
+export function ofDyeIndex(index: number):Dye {
   // each palette only contains at most 16 colors
-  return dye_table[(index-index%16)/16].dye[index % 16];
+  let palette = ofPaletteIndex(index);
+  return palette.dye[index % 16];
 }
 
-export function pphOfDyeIndex(index: number) {
-  return dye_table[(index-index%16)/16].pph;
-}
-
-export function costOfDyeIndex(index: number) {
-  return dye_table[(index-index%16)/16].dye[index % 16].weight;
+export function pphOfDyeIndex(index: number):number {
+  let palette = ofPaletteIndex(index);
+  return palette.pph;
 }
 
 
-export function toDyeIndex(palette:number, dye:number) {
-  return (palette* 16 + dye);
+export function costOfDyeIndex(index: number):number {
+  let dye = ofDyeIndex(index);
+  return dye.weight;
+}
+
+
+export function toDyeIndex(c: number, palette:number, dye:number) {
+  return (c*256 + palette* 16 + dye);
 }
 
 export function toDyeColor(index: number, shine: number) {
-  let palette = dye_table[(index-index%16)/16];
+  let palette = ofPaletteIndex(index);
   if (palette.rotation === 0) {
     let dye = palette.dye[(index%16) % (palette.dye.length)];
     return dye.color;
@@ -326,34 +339,42 @@ export function toDyeColor(index: number, shine: number) {
   }
 }
 
+export function dilationDistance(index: number) {
+  let palette = ofPaletteIndex(index);
+  return palette.dilation;
+}
+
 export function findColor(r:number, g:number, b:number) {
   let idx = 0;
   let min = 100000;
   for (var i=1; i<dye_table.length; i++) {
-    let palette = dye_table[i];
-    for (var d=0; d<palette.dye.length; d++) {
-      let dye = palette.dye[d];
-      let distance = Math.sqrt(
-          Math.pow(dye.color[0] - r,2)
-          + Math.pow(dye.color[1] - g,2)
-          + Math.pow(dye.color[2] - b,2)
-          );
-      if (distance < min) {
-        idx = toDyeIndex(i, d);
-        min = distance;
+    let palettes = dye_table[i];
+    for (var p=0; p<palettes.length; p++) {
+      let palette = palettes[p];
+      for (var d=0; d<palette.dye.length; d++) {
+        let dye = palette.dye[d];
+        let distance = Math.sqrt(
+            Math.pow(dye.color[0] - r,2)
+            + Math.pow(dye.color[1] - g,2)
+            + Math.pow(dye.color[2] - b,2)
+            );
+        if (distance < min) {
+          idx = toDyeIndex(i, p, d);
+          min = distance;
+        }
       }
     }
   }
   if(min > 30) {
     //console.log("can not find color",r,g,b,min);
-    findGrayColor(r, g, b);
+    return findGrayColor(r, g, b);
   } else {
     //console.log("find color", r, g, b, min);
   }
   return idx;
 }
 export function findGrayColor(r: number, g: number, b: number) {
-  let palette = dye_table[1];
+  let palette = dye_table[1][0];
   let idx = 0;
   let min = 100000;
   for (var d = 0; d < palette.dye.length; d++) {
@@ -364,12 +385,16 @@ export function findGrayColor(r: number, g: number, b: number) {
       + Math.pow(dye.color[2] - b,2)
       );
     if (distance < min) {
-      idx = toDyeIndex(1, d);
+      idx = toDyeIndex(1, 0, d);
       min = distance;
     }
   }
   if (min > 50) {
     return 0;
+  }
+  if (idx < 256 ) {
+    console.log("dyeindex:", idx);
+    throw Error("invalid idx");
   }
   return idx;
 }
