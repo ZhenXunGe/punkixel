@@ -3,6 +3,7 @@ import panelReducer from '../layout/layoutSlice';
 import statusReducer from '../data/statusSlice';
 import dynamicReducer from '../dynamic/dynamicSlice';
 import spriteReducer from '../sprite/spriteSlice';
+import accountReducer from '../data/accountSlice';
 export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -16,6 +17,7 @@ export const store = configureStore({
         ignoredActionPaths: ['status.world'],
         // Ignore these paths in the state
         ignoredPaths: [
+            'account.l1Account.web3',
             'status.world',
             'dynamic.events'
         ],
@@ -26,6 +28,7 @@ export const store = configureStore({
     status: statusReducer,
     dynamic: dynamicReducer,
     sprite: spriteReducer,
+    account: accountReducer,
   },
 });
 

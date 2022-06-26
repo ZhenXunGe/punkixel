@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef } from 'react';
+import React, {createRef, useState, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { spriteNeedLoaded, spriteLoaded, setLoaded } from '../sprite/spriteSlice';
 import { selectTimeClock } from '../dynamic/dynamicSlice';
@@ -45,27 +45,91 @@ import P38 from "../images/loading/38_back_blue_hotel.png";
 
 import COVER from "../images/loading/cover.png";
 
+
+import {
+  selectL1Account,
+  loginL1AccountAsync,
+} from "../data/accountSlice";
+
 const import_progress_images = [
         P1, P2, P3, P4, P5, P6, P7, P8, P9, P10,
         P11, P12, P13, P14, P15, P16, P17, P18, P19, P20,
         P21, P22, P23, P24, P25, P26, P27, P28, P29, P30,
         P31, P32, P33, P34, P35, P36, P37, P38 ];
 
+interface BC {
+  r: number;
+
+}
+
+function ProgressBar(props: BC) {
+  let account = useAppSelector(selectL1Account);
+  if (account) {
+    console.log("connected", account);
+    return (
+    <>
+    <img key={`loading-cover`} src={COVER}></img>
+    <div className="loading-bar">
+      <div className="progress" style={{
+        width: Math.floor(props.r * 620 + 2)
+      }}>
+      </div>
+    </div>
+    <div className="loading-bar-cover"></div>
+    </>
+    );
+  } else {
+    return (<></>);
+  }
+}
+
+function Connect() {
+  let account = useAppSelector(selectL1Account);
+  const dispatch = useAppDispatch();
+  const connect = () => {
+    dispatch(loginL1AccountAsync());
+  };
+
+  if (!account) {
+    return(
+    <>
+    <img key={`loading-cover`} src={COVER}></img>
+    <div className="connect-account">
+        <div onClick={() => connect()}>connect account</div>
+    </div>
+    </>
+    );
+  } else {
+    console.log("connected", account);
+    return (<></>);
+  }
+
+}
+
 
 export function Loading() {
   const loaded = useAppSelector(spriteLoaded);
   const needload = useAppSelector(spriteNeedLoaded);
+  let account = useAppSelector(selectL1Account);
   let timeClock = useAppSelector(selectTimeClock);
   const dispatch = useAppDispatch();
-  let r = timeClock / 50;
-  if (r > 1) {
-    r = 1;
-  }
-  let width = Math.floor(r * 620 + 6);
-  let progress = r * loaded / needload;
-  if (r === 1) {
-    dispatch(setLoaded());
-  }
+  const [delta, setDelta] = useState(0);
+  const [r, setR] = useState(0);
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    if (account) {
+      let r = delta / 50;
+      if (r > 1) {
+        r = 1;
+      }
+      setProgress(r * loaded / needload);
+      if (r === 1) {
+        dispatch(setLoaded());
+      }
+      setR(r);
+      setDelta(delta + 1);
+    };
+  }, [timeClock]);
   return (<div className="loading">
     {
       import_progress_images.map((url, i) => {
@@ -76,14 +140,7 @@ export function Loading() {
         }
       })
     }
-    <img key={`loading-cover`} src={COVER}></img>
-    <div className="loading-bar">
-
-      <div className="progress" style={{
-        width: width
-      }}>
-      </div>
-    </div>
-    <div className="loading-bar-cover"></div>
+    <ProgressBar r = {r}></ProgressBar>
+    <Connect></Connect>
   </div>);
 }

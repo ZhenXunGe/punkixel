@@ -22,7 +22,8 @@
     "react-redux": "^7.2.0",
     "react-scripts": "4.0.3",
     "typescript": "~4.1.5",
-    "wait-on": "^6.0.1"
+    "wait-on": "^6.0.1",
+    "web3subscriber": "git+https://github.com/DelphinusLab/delphinus-web3subscriber.git"
   },
   "scripts": {
     "start": "react-scripts start",
