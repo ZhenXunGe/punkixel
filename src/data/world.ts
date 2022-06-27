@@ -1,9 +1,9 @@
-import { content_size, Drawer, individualHeight, individualWidth, Painter } from "./draw";
+import { Drawer, individualWidth, Painter } from "./draw";
 import { EmptyInstance, Instance } from "./instance";
 import { Minion, randomMinion } from "./minion";
+import { Player } from "./player";
 import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette, amber_dilation_palette, lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette } from "./palette";
 import background from "../images/sky.jpg";
-import { textChangeRangeIsUnchanged } from "typescript";
 
 export function getBackground(index: number) {
   let backs = [background];
@@ -11,44 +11,22 @@ export function getBackground(index: number) {
 }
 
 
-export interface Player {
-  id: string;
-  energy: number;
-  punkxiel: number;
-  ranking: number;
-  voucher: number;
-  reward: number;
-  palettes: Array<ColorCategory>;
-  homeIndex: number;
-  inventory: Array<string | null>;
-}
-
 export class World {
   cursor: number;
   weather: string;
   instances: Array<Instance>;
   minions: Map<string, Minion>;
   players: Map<string, Player>;
-  sketched: boolean;
   timestamp: number;
   constructor(cor: number) {
-    var that = this;
     this.cursor = cor;
     this.minions = new Map<string, Minion>();
     this.players = new Map<string, Player>();
     this.instances = [];
     this.weather = "normal";
-    this.sketched = false;
     this.timestamp = new Date().getMilliseconds();
   }
-  initSketch() {
-    if (this.sketched === false) {
-      this.sketched = true;
-      return true;
-    } else {
-      return false;
-    }
-  }
+
   getInstance(center_position: number) {
     return this.instances[Math.floor(center_position / individualWidth)];
   }
@@ -66,7 +44,7 @@ export class World {
   updateInstancePPH(idx:number, delta:number) {
     this.instances[idx].info.pph += delta;
   }
-  loadInstance() {
+  loadInstance () {
     this.instances = BuildTestInstances(() => { return this.cursor });
   }
   rend(painter: Painter, p_start: number, p_end: number, cursor: number) {
@@ -250,7 +228,6 @@ let player = {
       [lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette, amber_dilation_palette],
   }
   ],
-  reward: 0,
   inventory: [randomMinion("solo", world).id, randomMinion("solo", world).id, null, null, null],
   homeIndex: 1,
 };

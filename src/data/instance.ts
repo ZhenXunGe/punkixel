@@ -15,7 +15,8 @@ export interface InstanceInfo {
     ratio: number;
     pph: number;
     basePPH: number;
-  }
+    sketched: boolean;
+}
 
 export class Instance {
     drawer: Drawer;
@@ -118,7 +119,8 @@ export class Instance {
       owner:"other",
       background: 0,
       pph: 0,
-      basePPH: 0
+      basePPH: 0,
+      sketched: false,
     };
     return instance;
   }

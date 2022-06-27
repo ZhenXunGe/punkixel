@@ -12,9 +12,8 @@ import {
 } from '../dynamic/dynamicSlice';
 import { Sprite } from './sprite';
 import getWorld from '../data/world';
-import { getDynamicInfo, DynamicMinion } from '../dynamic/dynamicSlice';
+import { getDynamicInfo, DynamicMinion, spawnBullet } from '../dynamic/dynamicSlice';
 import { AlienEvent } from '../dynamic/event';
-import { Minion, spawnBullet } from '../data/minion';
 import { getSprite } from './spriteSlice';
 
 interface IProps {
@@ -26,7 +25,6 @@ export default function Frame(prop: IProps) {
   let ratio = 4;
   const timeClock = useAppSelector(selectTimeClock);
   const dispatch = useAppDispatch();
-  const [, setMinions] = useState<Minion[]>([]);
   const viewIndex = useAppSelector(selectViewIndex);
   const alien = useAppSelector(selectAlien);
   const monster = getSprite(alien.sprite);
@@ -42,7 +40,7 @@ export default function Frame(prop: IProps) {
     let alien_center_x = pos + 60;
     let alien_center_y = 330;
     dispatch(signalBulletsUpdate([alien_center_x, alien_center_y]));
-    
+
     let idx = Math.floor(alien.pos / individualWidth);
     if (viewIndex != idx) {
       dispatch(switchView(idx));
@@ -61,10 +59,10 @@ export default function Frame(prop: IProps) {
         minion.y + m.offsetY,
         m.currentFrame,
       );
-      minion.countingdown--;
-      if (minion.countingdown <= 0) {
-        minion.countingdown = minion.frequency;
-        dynamic.addBullet(spawnBullet(minion, alien_center_x, alien_center_y, m.offsetX, m.offsetY));
+      m.countingdown--;
+      if (m.countingdown <= 0) {
+        m.countingdown = minion.frequency;
+        dynamic.addBullet(spawnBullet(m, alien_center_x, alien_center_y, m.offsetX, m.offsetY));
       }
       dynamic.updateMinionPosition(m, alien_center_x);
     });

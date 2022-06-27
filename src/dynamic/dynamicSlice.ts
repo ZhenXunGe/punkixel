@@ -1,29 +1,59 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import { rawListeners } from 'process';
 import { RootState } from '../app/store';
 import { Alien, randomAlien } from '../data/alien';
 import { individualWidth } from '../data/draw';
-import { availableMinions, getMinionById, Minion } from '../data/minion';
+import { Minion, MinionType } from '../data/minion';
 import getWorld from '../data/world';
 import { Sprite } from '../sprite/sprite';
 import { getSprite } from '../sprite/spriteSlice';
-import { BulletInfo } from './bullet';
 import { DropEvent, Event, RewardEvent }  from './event';
 import { InstanceInfo } from '../data/instance';
 import { Reaction } from '../data/weather';
+import { BombBullet, BulletInfo, StraightBullet, TrackBullet } from "./bullet";
 
+function generateBulletPos(t:MinionType) {
+  if(t==="ufo") {
+    return [25,40];
+  } else if (t==="land") {
+    return [25,15];
+  } else if (t==="airballoon") {
+    return [25,35];
+  } else {
+    return [0,0];
+  }
+}
 
 export class DynamicMinion {
   minion: Minion;
   offsetX: number;
   offsetY: number;
+  bulletPos: number[];
+  countingdown: number;
   currentFrame: number;
   constructor(minion: Minion) {
     this.minion = minion;
     this.offsetX = 0;
     this.offsetY = 0;
     this.currentFrame = 0;
+    this.bulletPos = generateBulletPos(minion.type);
+    this.countingdown = 2;
   }
+}
+
+export function spawnBullet(m:DynamicMinion, alien_x:number, alien_y:number, offsetX:number, offsetY:number):BulletInfo {
+  let start_x = m.minion.x + m.bulletPos[0] + offsetX;
+  let start_y = m.minion.y + m.bulletPos[1] + offsetY;
+  if (m.minion.modifier[0] == "missle") {
+    let rotate = 0;
+    if (m.minion.x > alien_x) {
+      rotate = 180;
+    }
+    return new TrackBullet(start_x, start_y, 20, m.minion.power, m.minion.modifier[1], 0, rotate, m.minion.id);
+  } else if (m.minion.modifier[0] == "bomb") {
+    let rotate = Math.atan2(alien_y - m.minion.y, alien_x - m.minion.x)*180/Math.PI;
+    return new BombBullet(start_x, start_y, 10, m.minion.power, m.minion.modifier[1], 20, rotate, m.minion.id);
+  }
+  return new StraightBullet(start_x, start_y, 20, m.minion.power, m.minion.modifier[1], 20, 0, m.minion.id);
 }
 
 
@@ -69,9 +99,7 @@ class DynamicInfo {
       if (pos_x > 900) { pos_x = 900; };
       minion.offsetX = pos_x - m.x;
       let indexBase = pos_x > targetX ? 0 : 3
-
       minion.currentFrame = Math.abs(minion.offsetX%3) + indexBase;
-      console.log(minion.currentFrame);
     }
   }
 
