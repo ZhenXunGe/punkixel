@@ -3,7 +3,7 @@ import { RootState } from '../app/store';
 import { Alien, randomAlien } from '../data/alien';
 import { individualWidth } from '../data/draw';
 import { Minion, MinionType } from '../data/minion';
-import getWorld from '../data/world';
+import { getWorld } from '../data/world';
 import { Sprite } from '../sprite/sprite';
 import { getSprite } from '../sprite/spriteSlice';
 import { DropEvent, Event, RewardEvent }  from './event';
@@ -222,8 +222,6 @@ export const dynamicSlice = createSlice({
         }
       }
       if (status == "dizzle") {
-        //let instance = getWorld().getInstanceById(state.viewIndex);
-        //instance.info.drops.push(state.alien.pos % individualWidth);
         state.alien.dizzle -= 1;
         if (state.alien.dizzle == 0) {
           state.alien.status = "run";

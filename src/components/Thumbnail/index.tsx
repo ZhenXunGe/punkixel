@@ -6,10 +6,12 @@ import {
   buildPainter,
 } from "../../data/draw"
 import { selectAlien, selectSketchSignal, selectTimeClock, selectViewIndex } from '../../dynamic/dynamicSlice';
-import getWorld from '../../data/world';
+import { getWorld } from '../../data/world';
 import FRAME from '../../images/layout/frame.png';
 import './style.scss';
-export function Thumbnail() {
+import { selectPanel } from '../../layout/layoutSlice';
+function ThumbnailInternal() {
+
   let ratio = 1;
 
   const dispatch = useAppDispatch();
@@ -18,6 +20,7 @@ export function Thumbnail() {
   const viewIndex = useAppSelector(selectViewIndex);
   const alien = useAppSelector(selectAlien);
   const timeClock = useAppSelector(selectTimeClock);
+
   let offset = 0;
   useEffect(() => {
     const canvas = canvasRef.current
@@ -49,4 +52,14 @@ export function Thumbnail() {
       </div>
     </div>
   );
+
+}
+
+export function Thumbnail() {
+  const panel = useAppSelector(selectPanel);
+  if (panel === "world" ||  panel === "home") {
+    return (<ThumbnailInternal></ThumbnailInternal>);
+  } else {
+    return (<></>);
+  }
 }

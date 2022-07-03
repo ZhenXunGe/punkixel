@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { individualWidth } from "../../data/draw";
-import getWorld from "../../data/world";
+import { getWorld } from "../../data/world";
 import { selectTimeClock, selectViewIndex } from "../../dynamic/dynamicSlice";
 import coin from "./punkxiel.gif";
 

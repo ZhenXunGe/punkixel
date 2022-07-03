@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { WritableDraft } from 'immer/dist/types/types-external';
 import { RootState } from '../app/store';
 import {
     basic_palettes,
@@ -6,21 +7,19 @@ import {
     liquid_blue_palette,
     ColorCategory,
 } from  './palette';
-import getWorld from './world';
+import { Player } from './player';
+import { getWorld, initializeWorld } from './world';
 
 export interface StatusState {
     energy: number;
     punkxiel: number;
     contribution: number;
     ranking: number;
-    pph: number;
-    voucher: number;
     reward: number;
-    palettes: Array<ColorCategory>;
+    pph: number,
+    player: Player | null;
     dye_focus: number;
-    homeIndex: number;
-    inventory: Array<string | null>;
-    inventory_updater: boolean;
+    synchronize: number;
 }
 
 const initialState: StatusState = {
@@ -28,56 +27,47 @@ const initialState: StatusState = {
     punkxiel: 1000,
     contribution: 0,
     ranking: 9999,
-    pph: 0,
-    voucher: 1,
-    palettes: [
-      {
-        name:"basic",
-        palettes: basic_palettes,
-      },
-      {
-        name:"spin",
-        palettes: [
-          liquid_green_palette,
-          liquid_blue_palette,]
-      },
-    ],
-    dye_focus: 0,
     reward: 0,
-    inventory: [],
-    inventory_updater: false,
-    homeIndex: 1,
+    pph:0,
+    player: null,
+    dye_focus: 0,
+    synchronize:0,
 };
 
 function timeout(ms:number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export const loadWorld = createAsyncThunk(
+  'world/fetchWorld',
+  async (thunkApi) => {
+    return await initializeWorld(true);
+  }
+);
 
+function updateState(state: WritableDraft<StatusState>) {
+  let player = getWorld().getPlayer("solo");
+  state.player = player;
+  let instance = getWorld().getInstanceByIndex(player.homeIndex);
+  state.pph = instance.info.pph + instance.info.basePPH;
+  let total = 0;
+  for (var m of state.player.inventory) {
+    if (m!==null) {
+      let world = getWorld();
+      let minion = world.getMinion(m);
+      //console.log("inventory", m, minion.contribution, getWorld().timestamp);
+      total += minion.contribution;
+    }
+  };
+  state.contribution = total;
+}
 export const statusSlice = createSlice({
   name: 'status',
   initialState,
   reducers: {
-    updateStatus: (state) => {
-      let player = getWorld().getPlayer("solo");
-      state.punkxiel = player.punkxiel;
-      state.inventory = player.inventory;
-      state.palettes = player.palettes;
-      let instance = getWorld().getInstanceByIndex(player.homeIndex);
-      state.pph = instance.info.pph + instance.info.basePPH;
-      let total = 0;
-      for (var m of state.inventory) {
-        if (m!==null) {
-          let world = getWorld();
-          let minion = world.getMinion(m);
-          //console.log("inventory", m, minion.contribution, getWorld().timestamp);
-          total += getWorld().getMinion(m).contribution;
-        }
-      };
-      state.contribution = total;
-    },
+    updateStatus: (state) => { updateState(state);},
     updateInventory: (state, d) => {
-      state.inventory_updater = d.payload.bol;
+      //state.inventory_updater = d.payload.bol;
     },
     pickColor: (state, d) => {
       state.dye_focus = d.payload;
@@ -92,9 +82,12 @@ export const statusSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder
+      .addCase(loadWorld.fulfilled, (state, c) => {
+        updateState(state);
+        state.synchronize = c.payload;
+      });
   },
-
-
 });
 
 export const { updatePPH, pickColor,
@@ -105,12 +98,9 @@ export const selectEnergy = (state: RootState) => state.status.energy;
 export const selectPunkixel= (state: RootState) => state.status.punkxiel;
 export const selectRanking = (state: RootState) => state.status.ranking;
 export const selectPPH = (state: RootState) => state.status.pph;
-export const selectVoucher = (state: RootState) => state.status.voucher;
 export const selectReward = (state: RootState) => state.status.reward;
 export const selectDye = (state: RootState) => state.status.dye_focus;
-export const selectPalettes = (state: RootState) => state.status.palettes;
-export const selectHomeIndex = (state: RootState) => state.status.homeIndex;
-export const selectInventory = (state: RootState) => state.status.inventory;
-export const selectInventoryUpdater = (state: RootState) => state.status.inventory_updater;
+export const selectPlayer = (state: RootState) => state.status.player;
 export const selectContribution = (state: RootState) => state.status.contribution;
+export const worldLoaded = (state: RootState) => (state.status.synchronize > 0);
 export default statusSlice.reducer;

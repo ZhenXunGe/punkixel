@@ -2,7 +2,7 @@
 import { MutableRefObject, useState } from "react";
 import { Button, Container, Dropdown, DropdownButton, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import getWorld from "../data/world";
+import { getWorld } from "../data/world";
 import { signalSketch } from "../dynamic/dynamicSlice";
 import { mainCategory, roadCategory } from "../sketch/sketch";
 import { getSprite } from "../sprite/spriteSlice";

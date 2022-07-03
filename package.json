@@ -25,6 +25,7 @@
     "wait-on": "^6.0.1",
     "express": "^4.17.1",
     "node-fetch": "^2.6.6",
+    "axios": "^0.26.1",
     "web3subscriber": "git+https://github.com/DelphinusLab/delphinus-web3subscriber.git"
   },
   "scripts": {

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import getWorld from "../data/world";
+import { getWorld } from "../data/world";
 
 interface UnlockProps {
   uid: string;

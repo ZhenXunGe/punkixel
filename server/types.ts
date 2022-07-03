@@ -2,6 +2,10 @@ export type BulletModifier = "missle" | "bomb" | "bullet" | "freeze" | "explode"
 export type MinionType = "ufo" | "airballoon" | "land";
 export type DyeIndex = number;
 
+export const individualWidth:number = 250;
+export const individualHeight:number = 100;
+
+
 export interface Dye {
     color: Array<number>;
     weight: number;

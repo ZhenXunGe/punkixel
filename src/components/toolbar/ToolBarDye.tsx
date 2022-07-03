@@ -7,23 +7,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.scss';
 import { individualWidth } from "../../data/draw";
 import {
-  selectPalettes,
+  selectPlayer,
   selectDye,
   pickColor,
-  selectHomeIndex,
 } from '../../data/statusSlice';
 import { ofDyeIndex, toDyeColor, toDyeIndex } from '../../data/palette';
 import Sketch from "../../modals/sketch";
 import { DrawerConfig } from '../Tool';
 
 export function ToolBarDye(props: DrawerConfig) {
-  const palettes = useAppSelector(selectPalettes);
+  const player = useAppSelector(selectPlayer);
+  const palettes = player!.palettes;
+  const homeIndex = player!.homeIndex;
   const dispatch = useAppDispatch();
   const [pickedCategory, setPickedCategory] = useState(0);
   const [pickedPalette, setPickedPalette] = useState(0);
   const [pickedBottle, setPickedBottle] = useState(0);
   const pickedDye = useAppSelector(selectDye);
-  const homeIndex = useAppSelector(selectHomeIndex);
   const [show, setShow] = useState(false);
   const [alertContext, setAlertContext] = useState("");
   return (

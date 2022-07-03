@@ -4,9 +4,10 @@ import { ToolBarWeapon } from './toolbar/ToolBarWeapon';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectPanel } from '../layout/layoutSlice';
 import { getSprite } from '../sprite/spriteSlice';
-import getWorld from '../data/world';
+import { getWorld } from '../data/world';
 import { individualWidth } from '../data/draw';
 import { signalSketch } from '../dynamic/dynamicSlice';
+import { RankTop } from './toolbar/RankTop';
 
 
 
@@ -21,7 +22,7 @@ export function Tool() {
 
   useEffect(() => {
     const spriteSketch = getSprite("sketch");
-    if (canvasRef.current && getWorld().initSketch()) {
+    if (canvasRef.current /*&& getWorld().initSketch()*/) {
       for (var i = 0; i < getWorld().instances.length; i++) {
         let d = getWorld().getInstance(i * individualWidth).drawer;
         d.resetSketch();
@@ -40,6 +41,7 @@ export function Tool() {
       </div>
       {panel === "world" && <ToolBarWeapon></ToolBarWeapon>}
       {panel === "home" && <ToolBarDye canvasRef={canvasRef}></ToolBarDye>}
+      {panel === "rank" && <RankTop></RankTop>}
     </>
   );
 }

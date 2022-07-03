@@ -11,7 +11,7 @@ import {
 
 import {
     selectDye,
-    selectHomeIndex,
+    selectPlayer,
     updatePPH,
 } from '../data/statusSlice';
 
@@ -23,7 +23,7 @@ import {
   selectReaction,
   setReaction,
 } from '../dynamic/dynamicSlice';
-import getWorld, { getBackground } from '../data/world';
+import { getWorld, getBackground } from '../data/world';
 import { drawWeather, drawMesh, drawReaction } from '../data/weather';
 import { AdviceEvent } from '../dynamic/event';
 import { HandlerProxy } from '../layout/handlerProxy';
@@ -42,8 +42,8 @@ export function DrawerBoard(props: DrawerBoardProp) {
   const canvasRef = useRef<any>();
   const backRef = useRef<any>();
   const weatherRef = useRef<any>();
-
-  const homeIndex = useAppSelector(selectHomeIndex);
+  const player = useAppSelector(selectPlayer)!;
+  const homeIndex = player.homeIndex;
   const timeClock = useAppSelector(selectTimeClock);
   const sketchSignal = useAppSelector(selectSketchSignal);
 
@@ -104,7 +104,8 @@ export function DrawerBoard(props: DrawerBoardProp) {
 
 export function HomePanel(props:HomePanelProp) {
   const dispatch = useAppDispatch();
-  const homeIndex = useAppSelector(selectHomeIndex);
+  const player = useAppSelector(selectPlayer)!;
+  const homeIndex = player.homeIndex;
   const pickedDye = useAppSelector(selectDye);
 
   const [ratio,setRatio]  = useState(4);

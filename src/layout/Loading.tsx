@@ -51,6 +51,10 @@ import {
   loginL1AccountAsync,
 } from "../data/accountSlice";
 
+import {
+  loadWorld,
+  worldLoaded,
+} from "../data/statusSlice";
 const import_progress_images = [
         P1, P2, P3, P4, P5, P6, P7, P8, P9, P10,
         P11, P12, P13, P14, P15, P16, P17, P18, P19, P20,
@@ -110,6 +114,7 @@ function Connect() {
 export function Loading() {
   const loaded = useAppSelector(spriteLoaded);
   const needload = useAppSelector(spriteNeedLoaded);
+  const wloaded = useAppSelector(worldLoaded);
   let account = useAppSelector(selectL1Account);
   let timeClock = useAppSelector(selectTimeClock);
   const dispatch = useAppDispatch();
@@ -130,6 +135,7 @@ export function Loading() {
       setDelta(delta + 1);
     };
   }, [timeClock]);
+  useEffect(()=>{dispatch(loadWorld())},[])
   return (<div className="loading">
     {
       import_progress_images.map((url, i) => {

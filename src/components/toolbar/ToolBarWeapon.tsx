@@ -4,7 +4,7 @@ import '../Component.scss';
 import Contribute from "../../modals/contribute";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { individualWidth } from '../../data/draw';
-import getWorld from '../../data/world';
+import { getWorld } from '../../data/world';
 import {
    selectTimeClock,
    selectViewIndex, selectDynamicSignal} from '../../dynamic/dynamicSlice';

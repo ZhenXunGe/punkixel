@@ -1,7 +1,7 @@
 import { Drawer } from "./draw";
 import { Minion, randomMinion } from "./minion";
 import { DyeIndex } from "./palette";
-import getWorld, { World } from "./world";
+import { getWorld, World } from "./world";
 const individualWidth:number = 250;
 const individualHeight:number = 100;
 const content_size = individualWidth * individualHeight;
@@ -98,7 +98,7 @@ export class Instance {
       }
     }
   }
-  
+
   export function EmptyInstance(id: string, world:World): InstanceInfo {
     let content = [
       new Array(individualHeight * individualWidth),
@@ -124,4 +124,4 @@ export class Instance {
     };
     return instance;
   }
-  
+

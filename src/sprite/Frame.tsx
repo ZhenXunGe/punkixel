@@ -11,7 +11,7 @@ import {
   selectViewIndex,
 } from '../dynamic/dynamicSlice';
 import { Sprite } from './sprite';
-import getWorld from '../data/world';
+import { getWorld } from '../data/world';
 import { getDynamicInfo, DynamicMinion, spawnBullet } from '../dynamic/dynamicSlice';
 import { AlienEvent } from '../dynamic/event';
 import { getSprite } from './spriteSlice';

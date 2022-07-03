@@ -1,5 +1,5 @@
 import { getSprite } from "../sprite/spriteSlice";
-import getWorld from "./world";
+import { getWorld } from "./world";
 
 export interface Reaction {
   duration: number;

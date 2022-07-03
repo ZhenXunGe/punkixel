@@ -1,9 +1,9 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectInventory, selectInventoryUpdater } from '../../data/statusSlice';
+import { selectPlayer } from '../../data/statusSlice';
 import { Minion } from "../../data/minion";
 import { ListGroup } from 'react-bootstrap';
-import getWorld from '../../data/world';
+import { getWorld } from '../../data/world';
 import { Reroll, Unlock } from '../../modals/unlock';
 import { getBulletFrame, getMinionFrame } from '../../sprite/spriteSlice';
 
@@ -118,7 +118,8 @@ export function SingleListItem(m: SingleSelect) {
 
 
 export function MinionSelector(s: MinionSelector) {
-  const inventory = useAppSelector(selectInventory);
+  const player = useAppSelector(selectPlayer)!;
+  const inventory = player.inventory;
   const [current, setCurrent] = useState("none");
   console.log('selector',inventory)
   const setMinion = (mid: string) => {
@@ -134,29 +135,21 @@ export function MinionSelector(s: MinionSelector) {
 
 export default function Inventory() {
   const dispatch = useAppDispatch();
-  const inventory = useAppSelector(selectInventory);
-  const inventory_updater = useAppSelector(selectInventoryUpdater);
-  const [forceUpdate,setfForceUpdate] = useState(true);
-  useEffect(()=>{
-    if(inventory_updater) {
-      setfForceUpdate(false);
-      setTimeout(() => {
-        setfForceUpdate(true); 
-      }, 0);
-    }
-  },[inventory_updater]);
+  const player = useAppSelector(selectPlayer)!;
+  const inventory = player.inventory;
   return (
     <div className="inventory">
     <div className="inventory-content">
-      {forceUpdate?inventory.map((m, i) => {
+      {inventory.map((m, i) => {
         return <SingleItem mId={m} index={i} key={m == null ? `inventory-minion-${i}` : m}></SingleItem>
-      }):null}
+      })}
     </div>
     <img className="inventory-cover" src={hover4} ></img>
     <div className="inventory-btn">
-    {forceUpdate?inventory.map((m, i) => {
+    {inventory.map((m, i) => {
         return <SingleItemBtn mId={m} index={i} key={`btn-inventory-minion-${i}`}></SingleItemBtn>
-      }):null}
+      })
+    }
     </div>
     </div>
   );

@@ -7,7 +7,7 @@ import PUNKXIEL from "../../images/modal/advisor/punkixel.png";
 import './style.scss';
 import { getMinionFrame } from "../../sprite/spriteSlice";
 import { RewardInfo } from "../../dynamic/event";
-import getWorld from "../../data/world";
+import { getWorld } from "../../data/world";
 interface RewardBoxProps {
   info: RewardInfo;
 }

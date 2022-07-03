@@ -2,7 +2,7 @@ import { createSlice} from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 
 export interface PanelState {
-  status: 'home' | 'world' | 'vote' | 'market';
+  status: 'home' | 'world' | 'rank' | 'market';
 }
 
 const initialState: PanelState = {
@@ -20,7 +20,7 @@ export const panelSlice = createSlice({
       state.status = "world";
     },
     vote: (state) => {
-      state.status = "vote";
+      state.status = "rank";
     },
     market: (state) => {
       state.status = "market";

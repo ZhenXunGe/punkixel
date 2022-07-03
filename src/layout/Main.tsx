@@ -4,7 +4,7 @@ import { LeftMenu } from './LeftMenu';
 import { RightPanel } from './RightPanel';
 import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded, spriteNumber, getSprite, setLoaded } from '../sprite/spriteSlice';
 import { selectCursor, selectTimeClock, setCursor, updateTimeClockAsync } from '../dynamic/dynamicSlice';
-import getWorld from '../data/world';
+import { getWorld } from '../data/world';
 
 
 import { Status } from '../components/Status';
@@ -100,7 +100,7 @@ export function Main(prop: loadingStatus) {
       <Hover bgurl={hover3}></Hover>
       <HoverProxy proxy={handlerProxy} ele={getRef}></HoverProxy>
       <Inventory></Inventory>
-      <Thumbnail></Thumbnail>
+      <Thumbnail></Thumbnail>;
       <Status></Status>
       <Events></Events>
       <More></More>

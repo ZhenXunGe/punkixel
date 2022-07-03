@@ -16,7 +16,7 @@ import {
   selectViewIndex,
   getDynamicInfo,
 } from '../dynamic/dynamicSlice';
-import getWorld, { getBackground } from '../data/world';
+import { getWorld, getBackground } from '../data/world';
 import { Minion } from "../data/minion";
 
 

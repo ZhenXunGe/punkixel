@@ -4,7 +4,7 @@ import { Container, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { Minion, randomMinion } from "../../data/minion";
 import { getBulletFrame, getMinionFrame } from '../../sprite/spriteSlice';
-import getWorld from "../../data/world";
+import { getWorld } from "../../data/world";
 import Unlock_ from "../../images/protectors/Unlock.png";
 import "./style.scss";
 

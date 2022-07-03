@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Modal } from "react-bootstrap";
 import { useAppSelector } from "../app/hooks";
-import { selectPalettes } from "../data/statusSlice";
+import { selectPlayer } from "../data/statusSlice";
 import { PageScroller } from "./scroll";
 interface IProps {
   show: boolean;
@@ -13,7 +13,8 @@ interface IProps {
 }
 
 export function PaletteSelect(props: IProps) {
-  const palettes = useAppSelector(selectPalettes);
+  const player = useAppSelector(selectPlayer)!;
+  const palettes = player.palettes;
   // const [pickedCategory, setPickedCategory] = useState(0);
   // const [pickedPalette, setPickedPalette] = useState(0);
   const pageSize = 8;

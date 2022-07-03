@@ -27,12 +27,8 @@ div.application {
     border:none;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
-    background-color: #ddd;
+    //background-color: #ddd;
 }
-
-
-
-
 
 .main-board {
     position: absolute;
@@ -71,31 +67,6 @@ div.application {
 }
 
 
-.ranking-list {
-
-    width: 999px;
-    height: 417px;
-    position: absolute;
-    top: 240px;
-    // bottom: 10px;
-    // background-color: #aaa;
-    background-image: url('../images/rank/rank_tmp.png');
-    right: 0px;
-    left: 199px;
-}
-
-
-.ranking-list ul {
-    list-style-type: none;
-    padding: 0px;
-    margin: 0px;
-}
-
-.ranking-list li {
-    height: 100px;
-    border: 1px solid black;
-    margin: 10px;
-}
 
 .world-board {
     position: absolute;

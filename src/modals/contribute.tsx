@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { Button, Container, ListGroup, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { selectInventory, selectInventoryUpdater, } from "../data/statusSlice";
+import { selectPlayer } from "../data/statusSlice";
 // import { MinionSelector } from "../components/Inventory";
 import { addEvent, selectTimeClock, selectViewIndex, signalPlaceMinion, signalDynamic } from "../dynamic/dynamicSlice";
 import { ProtectingEvent } from "../dynamic/event";
-import getWorld from "../data/world";
+import { getWorld } from "../data/world";
 import header from "../images/modal/protect/header.png";
 import PROTECT from '../images/world/protect_btn.png';
 import CANCEL from '../images/modal/protect/CANCEL.png';
@@ -78,7 +78,8 @@ export default function Contribute() {
   const handleShow = () => setShow(true);
   const dispatch = useAppDispatch();
   const viewIndex = useAppSelector(selectViewIndex);
-  const inventory = useAppSelector(selectInventory);
+  const player = useAppSelector(selectPlayer)!;
+  const inventory = player.inventory;
   const [startPos, setStartPos] = useState<number>(0);
   const timeClock = useAppSelector(selectTimeClock);
 

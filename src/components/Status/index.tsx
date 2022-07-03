@@ -4,11 +4,11 @@ import {
   selectEnergy,
   selectPunkixel,
   selectRanking,
-  selectVoucher,
   selectContribution,
   selectReward,
   selectPPH,
   updateStatus,
+  selectPlayer,
 } from '../../data/statusSlice';
 import './style.scss';
 import {
@@ -22,7 +22,8 @@ export function Status () {
     const punkixel = useAppSelector(selectPunkixel);
     const ranking = useAppSelector(selectRanking);
     const pph = useAppSelector(selectPPH);
-    const voucher = useAppSelector(selectVoucher);
+    const player = useAppSelector(selectPlayer)!;
+    const voucher = player.voucher;
     const contribution = useAppSelector(selectContribution);
     const reward = useAppSelector(selectReward);
     const viewIndex = useAppSelector(selectViewIndex);

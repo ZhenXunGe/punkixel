@@ -10,6 +10,47 @@ export function getBackground(index: number) {
   return backs[index];
 }
 
+const axios = require('axios').default;
+
+export class RestEndpoint {
+  constructor(public endpoint: string, public username: string, public useraddress: string) { };
+  async prepareRequest(method: "GET" | "POST", url: string, body: JSON | null) {
+    if (method === 'GET') {
+      console.log(this.endpoint + url);
+      try {
+        let response = await axios.get(this.endpoint + url, body ? { params: body! } : {});
+        return response.data;
+      } catch (e: any) {
+        console.log(e);
+        throw Error("rest post failure");
+      }
+    } else {
+      try {
+        let response = await axios.post(this.endpoint + url, body ? body! : {});
+        return response.data;
+      } catch (e: any) {
+        console.log(e);
+        throw Error("rest post failure");
+      }
+    }
+  }
+
+  async getJSONResponse(json: any) {
+    if (json["success"] !== true) {
+      console.log(json);
+      throw new Error("Request response error:" + json["error"]);
+    }
+    return json["result"];
+  }
+
+  async invokeRequest(method: "GET"|"POST", url: string, body: JSON | null) {
+    let response = await this.prepareRequest(method, url, body);
+    return await this.getJSONResponse(response);
+  }
+}
+
+const punkixelEndpoint = new RestEndpoint("http://47.242.199.74:4000", "punkixel", "punkixel");
+
 
 export class World {
   cursor: number;
@@ -32,14 +73,6 @@ export class World {
   }
   getInstanceByIndex(idx: number) {
     return this.instances[idx];
-  }
-  getInstanceById(id: string) {
-    for (var ins of this.instances) {
-      if (ins.info.id === id) {
-        return ins;
-      }
-    }
-    return undefined;
   }
   updateInstancePPH(idx:number, delta:number) {
     this.instances[idx].info.pph += delta;
@@ -199,40 +232,51 @@ export class World {
   // }
 }
 
-export default function getWorld() {
+const world = new World(0);
+
+export function getWorld() {
   return world;
 }
 
-const world = new World(0);
-world.loadInstance();
-let player = {
-  id: "solo",
-  energy: 50,
-  punkxiel: 10000,
-  ranking: 99,
-  pph: 0,
-  voucher: 1,
-  palettes: [{
-    name: "basic",
-    palettes: basic_palettes,
-  },
-  {
-    name: "spin",
-    palettes: [
-      liquid_green_palette,
-      liquid_blue_palette,]
-  },
-  {
-    name: "dilation",
-    palettes:
-      [lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette, amber_dilation_palette],
+export async function initializeWorld(local:boolean) {
+  try {
+    let test = await punkixelEndpoint.invokeRequest("GET", "world", null);
+  } catch (e) {
+    console.log(e);
+    console.log("can not connect to the server, we are in offlane testing mode");
+    world.loadInstance();
+    let player = {
+      id: "solo",
+      energy: 50,
+      punkxiel: 10000,
+      ranking: 99,
+      pph: 0,
+      voucher: 1,
+      palettes: [{
+        name: "basic",
+        palettes: basic_palettes,
+      },
+      {
+        name: "spin",
+        palettes: [
+          liquid_green_palette,
+          liquid_blue_palette,]
+      },
+      {
+        name: "dilation",
+        palettes:
+          [lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette, amber_dilation_palette],
+      }
+      ],
+      inventory: [randomMinion("solo", world).id, randomMinion("solo", world).id, null, null, null],
+      homeIndex: 1,
+    };
+    world.registerPlayer(player);
+    return 1;
   }
-  ],
-  inventory: [randomMinion("solo", world).id, randomMinion("solo", world).id, null, null, null],
-  homeIndex: 1,
-};
+  return 0;
+}
 
-world.registerPlayer(player);
 
 /* Testging purpose for standalone version */
 
