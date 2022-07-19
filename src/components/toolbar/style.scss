@@ -35,7 +35,6 @@
             height: 50px;
             margin-top: 5px;
             color: white;
-            
             .dye-item {
                 display: inline-block;
                 // border: 1px solid gray;
@@ -45,8 +44,6 @@
                     margin-top: 3px;
                     margin-left: 2px;
                 }
-                
-              
             }
 
             button.right {
@@ -328,9 +325,39 @@
 }
 .thumbnail-frame {
     position:absolute;
-    top:125px;
-    left:361px;
-    image {
-        margin:auto;
+    height:105px;
+    color: #dddddd;
+    .thumbnail-single {
+        position: absolute;
+        margin-left:375px;
+    }
+    img {
+        position: absolute;
+        top:-5px;
+        margin-left:360px;
+    }
+    div.address {
+        font-size: 30px;
+        margin-left: 100px;
+        width:285px;
+        position: absolute;
+        left: 10px;
+        top: 25px;
+    }
+    div.punkixel-earned {
+        font-size: 25px;
+        text-align:center;
+        position: absolute;
+        left: 750px;
+        top: 12px;
+        width:130px;
+    }
+    div.punkixel-pph {
+        font-size: 25px;
+        text-align:center;
+        position: absolute;
+        left: 750px;
+        top: 55px;
+        width:130px;
     }
 }

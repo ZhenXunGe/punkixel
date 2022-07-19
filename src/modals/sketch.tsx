@@ -5,11 +5,17 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { getWorld } from "../data/world";
 import { signalSketch } from "../dynamic/dynamicSlice";
 import { mainCategory, roadCategory } from "../sketch/sketch";
+import { SingleThumbnail } from "../components/Thumbnail";
 import { getSprite } from "../sprite/spriteSlice";
 import sketch_btn from '../images/home/sketch_btn.png';
 import CANCEL from '../images/modal/sketch/CANCEL.png';
 import CONFIRM from '../images/modal/sketch/CONFIRM.png';
 import SKETCH from '../images/modal/sketch/SKETCH.png';
+
+import {
+  selectPlayer,
+} from '../data/statusSlice';
+
 interface SketchProps {
   main: string;
   road: string;
@@ -21,12 +27,13 @@ export default function Sketch(prop: SketchProps) {
   const [show, setShow] = useState(false);
   const [road, setRoad] = useState(prop.road);
   const [main, setMain] = useState(prop.main);
+  const player = useAppSelector(selectPlayer)!;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   let ratio = 4;
   const dispatch = useAppDispatch();
-  const handleConfirm = () => {
+    const handleConfirm = (confirm: boolean) => {
     const spriteSketch = getSprite("sketch");
     /*
     for (var i = 0; i < getWorld().instances.length; i++) {
@@ -35,14 +42,17 @@ export default function Sketch(prop: SketchProps) {
       d.sketchWithStyle(prop.canvas.current!, spriteSketch, main, road);
     }
     */
-    let homeIndex = getWorld().getPlayer("solo")!.homeIndex;
+    let homeIndex = getWorld().getPlayer(player.id)!.homeIndex;
     let instance = getWorld().getInstanceByIndex(homeIndex);
     instance.info.basePPH = 200;
     let d = instance.drawer;
-    d.resetSketch();
-    d.sketchWithStyle(prop.canvas.current!, spriteSketch, main, road);
-    dispatch(signalSketch());
-    setShow(false);
+    if (confirm) {
+      setShow(false);
+    } else {
+      d.resetSketch();
+      d.sketchWithStyle(prop.canvas.current!, spriteSketch, main, road);
+      dispatch(signalSketch());
+    }
   };
   return (
 
@@ -57,7 +67,7 @@ export default function Sketch(prop: SketchProps) {
             <button className="closeBtn" onClick={handleClose}></button>
             <div className="sketch_area">
               <div className="sketch_header">
-
+                <SingleThumbnail></SingleThumbnail>
               </div>
               <div className="sketch_drop">
                 <DropdownButton className="mainTheme" title={main}>
@@ -82,8 +92,8 @@ export default function Sketch(prop: SketchProps) {
             </div>
             <div className="footerSketch">
               <img onClick={handleClose} className="cancel" src={CANCEL} />
-              <img onClick={handleConfirm} className="sketch2" src={SKETCH} />
-              <img onClick={handleConfirm} className="confirm" src={CONFIRM} />
+              <img onClick={() => handleConfirm(false)} className="sketch2" src={SKETCH} />
+              <img onClick={() => handleConfirm(true)} className="confirm" src={CONFIRM} />
             </div>
           </Container>
         </Modal.Body>

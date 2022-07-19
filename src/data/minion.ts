@@ -52,7 +52,7 @@ function randomModifier(t:MinionType): Array<BulletModifier> {
 }
 
 
-export function randomMinion(owner:string, world:World): Minion {
+export function randomMinion(owner:string): Minion {
   let minionType = minionTypeList[Math.floor(Math.random()*3)];
   let id = "minion-" + Math.ceil(Math.random() * 100000);
   let frequency = Math.ceil(Math.random()*30 + 5);
@@ -71,6 +71,5 @@ export function randomMinion(owner:string, world:World): Minion {
       style: Math.floor(Math.random()*4),
       type: minionType//minionTypeList[Math.floor(Math.random()*3)]
     };
-  world.registerMinion(m);
   return m;
 }

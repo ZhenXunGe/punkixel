@@ -1,4 +1,4 @@
-import {connectToDatabase, registerPlayer, getPlayer, registerMinion} from "./db";
+import {connectToDatabase, registerPlayer, getPlayer, registerMinion, getMinion} from "./db";
 
 const init_accounts = [
 "0xda4596337e991f4ab478203bf05ac1af1cb2281c",
@@ -19,9 +19,11 @@ async function init() {
         await connectToDatabase(true);
         for(var account of init_accounts) {
           await registerPlayer(account);
-          await registerMinion(account, 0);
+          let mid = await registerMinion(account, 0);
           let player = await getPlayer(account);
           console.log("new player registered:", player);
+          let minion = await getMinion(mid);
+          console.log("new minion registed:", minion);
         }
     } catch(error) {
         console.error("Database operation failed", error);

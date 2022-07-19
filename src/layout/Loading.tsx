@@ -135,7 +135,11 @@ export function Loading() {
       setDelta(delta + 1);
     };
   }, [timeClock]);
-  useEffect(()=>{dispatch(loadWorld())},[])
+  useEffect(()=>{
+    if(account) {
+      dispatch(loadWorld(account.address))
+    }
+  },[account])
   return (<div className="loading">
     {
       import_progress_images.map((url, i) => {

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Button, Container, ListGroup, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-// import { MinionSelector } from "../components/Inventory";
 import { selectUpcomingAlien } from "../../dynamic/dynamicSlice";
 import './style.scss';
 import { getSprite } from "../../sprite/spriteSlice";

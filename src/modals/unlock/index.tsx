@@ -5,11 +5,15 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { Minion, randomMinion } from "../../data/minion";
 import { getBulletFrame, getMinionFrame } from '../../sprite/spriteSlice';
 import { getWorld } from "../../data/world";
+
+import {
+  selectPlayer,
+} from '../../data/statusSlice';
+
 import Unlock_ from "../../images/protectors/Unlock.png";
 import "./style.scss";
 
 interface UnlockProps {
-  uid: string;
   index: number;
   avator: string;
 }
@@ -26,6 +30,7 @@ interface MinionInfoProps {
   position: number;
   minion: Minion | null;
   topic: string;
+  btnClass: string;
 }
 
 
@@ -55,7 +60,7 @@ export function MinionInfoBox(props: MinionInfoProps) {
                   </ul>
                 </div>
               <div className="info-right">
-                <div onClick={props.handleConfirm} className="unlock"></div>
+                <div onClick={props.handleConfirm} className={props.btnClass}></div>
               </div>
             </div>
           </Container>
@@ -68,9 +73,11 @@ export function Unlock(prop: UnlockProps) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  let m = randomMinion("solo", getWorld());
+  const player = useAppSelector(selectPlayer)!;
+  let m = randomMinion(player.id);
   const handleConfirm = () => {
-    getWorld().spentPunkxiel("solo", 1000);
+    getWorld().spentPunkxiel(player.id, 1000);
+    getWorld().registerMinion(m);
     getWorld().unlockMinion(m, prop.index);
     setShow(false);
   }
@@ -79,7 +86,10 @@ export function Unlock(prop: UnlockProps) {
       <div className='action' onClick={() => handleShow()}>
         <img src={Unlock_}></img>
       </div>
-      <MinionInfoBox show={show} handleClose={handleClose} handleConfirm={handleConfirm} position={0} minion={m} topic="Unlock a minion to join your force"></MinionInfoBox>
+      <MinionInfoBox show={show} handleClose={handleClose}
+            handleConfirm={handleConfirm} position={0} minion={m}
+            btnClass="unlock"
+            topic="Unlock a minion to join your force"></MinionInfoBox>
     </>
   );
 }
@@ -88,9 +98,11 @@ export function Reroll(prop: InfoProps) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  let m = prop.minion;
+  const player = useAppSelector(selectPlayer)!;
+  let m = randomMinion(player.id);
   const handleConfirm = () => {
-    getWorld().spentPunkxiel("solo", 1000);
+    getWorld().spentPunkxiel(player.id, 1000);
+    getWorld().registerMinion(m);
     getWorld().rerollMinion(m, prop.index);
     setShow(false);
   }
@@ -98,7 +110,10 @@ export function Reroll(prop: InfoProps) {
     <>
       <div className='inventory-pick' onClick={() => handleShow()}>
       </div>
-      <MinionInfoBox show={show} handleClose={handleClose} handleConfirm={handleConfirm} position={0} minion={m} topic={`${m.id} is ready to take order)`}></MinionInfoBox>
+      <MinionInfoBox show={show} handleClose={handleClose} handleConfirm={handleConfirm}
+            position={0} minion={m}
+            btnClass="reroll"
+            topic={`${m.id} is ready to take order)`}></MinionInfoBox>
     </>
   );
 }

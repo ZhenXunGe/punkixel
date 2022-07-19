@@ -1,7 +1,7 @@
 import { Drawer, individualWidth, Painter } from "./draw";
-import { EmptyInstance, Instance } from "./instance";
+import { EmptyInstance, Instance, InstanceInfo } from "./instance";
 import { Minion, randomMinion } from "./minion";
-import { Player } from "./player";
+import { Player, createTestPlayer } from "./player";
 import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette, amber_dilation_palette, lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette } from "./palette";
 import background from "../images/sky.jpg";
 
@@ -49,8 +49,19 @@ export class RestEndpoint {
   }
 }
 
-const punkixelEndpoint = new RestEndpoint("http://47.242.199.74:4000", "punkixel", "punkixel");
+const punkixelEndpoint = new RestEndpoint("http://localhost:4000/punkixel/", "punkixel", "punkixel");
 
+
+interface InstanceRank {
+  owner:string,
+  pph:number,
+  reward:number,
+}
+
+export interface RankInfo {
+  instances: Array<InstanceRank>;
+  current: number;
+}
 
 export class World {
   cursor: number;
@@ -77,8 +88,8 @@ export class World {
   updateInstancePPH(idx:number, delta:number) {
     this.instances[idx].info.pph += delta;
   }
-  loadInstance () {
-    this.instances = BuildTestInstances(() => { return this.cursor });
+  loadInstance (instances: Array<Instance>) {
+    this.instances = instances;
   }
   rend(painter: Painter, p_start: number, p_end: number, cursor: number) {
     //console.log("start:", p_start, "end", p_end,"pos", cursor);
@@ -117,6 +128,7 @@ export class World {
 
   registerMinion(m: Minion) {
     this.minions.set(m.id, m);
+    console.log("Register minion:", m.id, m);
   }
   getMinion(id: string): Minion {
     return this.minions.get(id)!;
@@ -136,7 +148,7 @@ export class World {
     this.minions.set(m.id, n);
   }
 
-  /* Place a minion in certain block. 
+  /* Place a minion in certain block.
    * This operation will clear the contribution of the minion in its current block.
    */
   placeMinion(mId: string, viewIndex: number) {
@@ -147,6 +159,17 @@ export class World {
 
   unlockMinion(minion: Minion, index: number) {
     let owner = minion.owner;
+    console.log("unlockMinion, owner is:", owner);
+    let player = this.players.get(owner)!;
+    let inventory = [...player.inventory];
+    inventory[index] = minion.id;
+    console.log("inventory is:", inventory);
+    let update = { ...player, inventory: inventory };
+    this.players.set(player.id, update);
+  }
+
+  rerollMinion(minion: Minion, index: number) {
+    let owner = minion.owner;
     let player = this.players.get(owner)!;
     let inventory = [...player.inventory];
     inventory[index] = minion.id;
@@ -154,52 +177,38 @@ export class World {
     this.players.set(player.id, update);
   }
 
-  rerollMinion(minion: Minion, index: number) {
-    let minionNew = randomMinion(minion.owner, getWorld());
-    let owner = minion.owner;
-    let player = this.players.get(owner)!;
-    let inventory = [...player.inventory];
-    inventory[index] = minionNew.id;
-    let update = { ...player, inventory: inventory };
-    this.players.set(player.id, update);
-  }
-
   claimRewardPunkxiel(owner: string, reward: number) {
-    if (owner == "solo") {
-      let player = this.players.get(owner)!;
-      console.log("updating rewords....");
-      let update = { ...player, punkxiel: player.punkxiel + reward };
-      this.players.set(player.id, update);
-    }
+    let player = this.players.get(owner)!;
+    let instance = this.getInstanceByIndex(player.homeIndex);
+    let info = instance.info;
+    console.log("updating rewords....");
+    let update = { ...player, punkxiel: player.punkxiel + reward };
+    this.players.set(player.id, update);
+    info.reward += reward;
   }
 
   claimDrop(owner: string, drops: Array<string>) {
-    if (owner == "solo") {
-      let player = this.players.get(owner)!;
-      let palettes = [...player.palettes];
-      for (var drop of drops) {
-        let paletteIndex = fromDrop(drop);
-        let palette = getPalette(fromDrop(drop));
-        let category = (paletteIndex - paletteIndex % 16) / 16;
-        let ps: ColorCategory = {
-          ...palettes[category],
-          palettes: [...palettes[category].palettes, palette]
-        }
-        palettes[category] = ps;
-        console.log(`palette ${palette.name} added`);
+    let player = this.players.get(owner)!;
+    let palettes = [...player.palettes];
+    for (var drop of drops) {
+      let paletteIndex = fromDrop(drop);
+      let palette = getPalette(fromDrop(drop));
+      let category = (paletteIndex - paletteIndex % 16) / 16;
+      let ps: ColorCategory = {
+        ...palettes[category],
+        palettes: [...palettes[category].palettes, palette]
       }
-      let update = { ...player, palettes: palettes };
-      this.players.set(player.id, update);
+      palettes[category] = ps;
+      console.log(`palette ${palette.name} added`);
     }
+    let update = { ...player, palettes: palettes };
+    this.players.set(player.id, update);
   }
 
   spentPunkxiel(sender: string, cost: number) {
-    console.log("spent punkxiel");
-    if (sender == "solo") {
-      let player = this.players.get(sender)!;
-      let update = { ...player, punkxiel: player.punkxiel - cost };
-      this.players.set(player.id, update);
-    }
+    let player = this.players.get(sender)!;
+    let update = { ...player, punkxiel: player.punkxiel - cost };
+    this.players.set(player.id, update);
   }
 
   // claimDrop(owner: string, drops: Array<string>) {
@@ -222,14 +231,21 @@ export class World {
   //   }
   // }
 
-  // spentPunkxiel(sender: string, cost:number) {
-  //   if (sender == "solo") {
-  //     let player = this.players.get(sender)!;
-  //     console.log("updating rewords....");
-  //     let update = {...player, punkxiel: player.punkxiel - cost};
-  //     this.players.set(player.id, update);
-  //   }
-  // }
+  async getTopRank() :Promise<RankInfo> {
+    let instances = world.instances.sort((a:Instance, b:Instance) => {
+      return (a.info.reward - b.info.reward);
+    });
+    let instanceInfos:Array<InstanceRank> = [];
+    for (var i=0;i<instances.length && i<=5;i++) {
+      instanceInfos.push({
+        owner: instances[i].info.owner,
+        reward: instances[i].info.reward,
+        pph: instances[i].info.pph,
+      });
+    }
+    return {current:0, instances:instanceInfos}
+  }
+
 }
 
 const world = new World(0);
@@ -238,40 +254,31 @@ export function getWorld() {
   return world;
 }
 
-export async function initializeWorld(local:boolean) {
+
+/*
+ * Testing code for initialize world
+ *
+ * */
+
+
+export async function initializeWorld(account: string) {
   try {
-    let test = await punkixelEndpoint.invokeRequest("GET", "world", null);
+    let instances:Array<InstanceInfo> = await punkixelEndpoint.invokeRequest("GET", "instances", null);
+    let players = await punkixelEndpoint.invokeRequest("GET", "players", null);
+    let minions = await punkixelEndpoint.invokeRequest("GET", "minions", null);
+    for (var player of players) {
+      world.registerPlayer(player);
+    }
+    let p = world.getPlayer(account);
+    if (p == null) {
+      world.registerPlayer(createTestPlayer(account, players.length));
+      instances.push(EmptyInstance("temp-instance", world, account));
+    }
+    for (var minion of minions) {
+      world.registerMinion(minion);
+    }
+    world.loadInstance(BuildInstances(instances, () => { return world.cursor }));
   } catch (e) {
-    console.log(e);
-    console.log("can not connect to the server, we are in offlane testing mode");
-    world.loadInstance();
-    let player = {
-      id: "solo",
-      energy: 50,
-      punkxiel: 10000,
-      ranking: 99,
-      pph: 0,
-      voucher: 1,
-      palettes: [{
-        name: "basic",
-        palettes: basic_palettes,
-      },
-      {
-        name: "spin",
-        palettes: [
-          liquid_green_palette,
-          liquid_blue_palette,]
-      },
-      {
-        name: "dilation",
-        palettes:
-          [lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette, amber_dilation_palette],
-      }
-      ],
-      inventory: [randomMinion("solo", world).id, randomMinion("solo", world).id, null, null, null],
-      homeIndex: 1,
-    };
-    world.registerPlayer(player);
     return 1;
   }
   return 0;
@@ -282,17 +289,14 @@ export async function initializeWorld(local:boolean) {
 
 
 
-function BuildTestInstances(
+function BuildInstances(
+  instances: Array<InstanceInfo>,
   cursor: () => number,
 ) {
   let instance_list = new Array<Instance>();
-  for (var i = 0; i < 5; i++) {
-    let instance = EmptyInstance(`instance_${i}`, world);
-    if (i == 1) {
-      instance.owner = "solo";
-    }
-    let d = new Drawer(instance.content, i * individualWidth, cursor);
-    instance_list.push(new Instance(d, instance));
+  for (var i = 0; i < instances.length; i++) {
+    let d = new Drawer(instances[i].content, i * individualWidth, cursor);
+    instance_list.push(new Instance(d, instances[i]));
   }
   return instance_list;
 }

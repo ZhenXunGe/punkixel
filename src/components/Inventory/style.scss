@@ -16,7 +16,6 @@
         .action {
             padding-top:5px;
             .inventory-pick {
-                
                 clear:left;
                 cursor: pointer;
                 float:left;
@@ -28,12 +27,15 @@
                 height:46px;
             }
             .inventory-pick:hover {
-	background: rgba(251, 241, 221, 0.13);
+            	background: rgba(251, 241, 221, 0.13);
             }
             img {
                 float:right;
                 clear:right;
                 margin-bottom:8px;
+                &:hover {
+                    cursor:pointer;
+                }
             }
         }
     }

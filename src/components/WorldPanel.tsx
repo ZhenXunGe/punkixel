@@ -157,7 +157,8 @@ export function WorldPanel(props: WorldPanelProp) {
     </div>
       <MinionInfoBox show={show} handleClose={handleClose}
             handleConfirm={handleClose} position={0}
-              minion={minion} topic={`Owned by: ${minion?.owner} [contribution: ${minion?.contribution}]`}></MinionInfoBox>
+            btnClass="disable"
+            minion={minion} topic={`Owned by: ${minion?.owner} [contribution: ${minion?.contribution}]`}></MinionInfoBox>
     </>
   );
 }

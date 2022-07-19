@@ -422,7 +422,7 @@
         .sketch_area {
             .sketch_header {
                 margin-top: 9px;
-                margin-left: 49px;
+                margin-left: 50px;
                 width: 750px;
                 height: 198px;
                 // background-color: #ffd200;
@@ -430,6 +430,12 @@
                 color: white;
                 text-align: center;
                 background-image: url('../images/modal/sketch/header.png');
+                .thumbnail-single {
+                  height:100px;
+                  width:250px;
+                  margin-left:12px;
+                  padding-top:33px;
+                }
             }
 
             .sketch_drop {

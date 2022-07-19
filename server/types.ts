@@ -61,6 +61,19 @@ export interface InstanceInfo {
     owner: string;
     ratio: number;
     pph: number;
+    reward: number;
     basePPH: number;
     sketched: boolean;
+}
+
+export interface Alien {
+  sprite: string;
+  alienId: number;
+  name: string;
+  status: "run" | "dizzle";
+  pos: number;
+  dizzle: number;
+  speed: number;
+  drop: Array<string>;
+  favourate: string;
 }

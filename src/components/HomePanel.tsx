@@ -137,7 +137,7 @@ export function HomePanel(props:HomePanelProp) {
     if (action === "paint") {
       var x = Math.floor(left/ratio) + offsetX;
       var y = Math.floor((400 - top)/ratio) + offsetY;
-      console.log(left, top, x, y, offsetX, offsetY);
+      //console.log(left, top, x, y, offsetX, offsetY);
       let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
       let [delta, cost] = drawer.pushPixelDelta(getCorIndex(x,y), pickedDye);
       dispatch(signalSketch());
@@ -184,7 +184,7 @@ export function HomePanel(props:HomePanelProp) {
     setMouseTop(top);
     let yy = offsetY + Math.floor(400/ratio);
     let xx = offsetX + Math.floor(1000/ratio);
-    console.log(offsetX, offsetY, xx, yy);
+    //console.log(offsetX, offsetY, xx, yy);
     if (left < 50 && offsetX > 0) {
       setAction("left");
     } else if (left > 950 && xx < 250) {

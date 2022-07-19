@@ -14,6 +14,7 @@ export interface InstanceInfo {
     owner: string;
     ratio: number;
     pph: number;
+    reward: number;
     basePPH: number;
     sketched: boolean;
 }
@@ -99,7 +100,7 @@ export class Instance {
     }
   }
 
-  export function EmptyInstance(id: string, world:World): InstanceInfo {
+  export function EmptyInstance(id: string, world:World, account:string): InstanceInfo {
     let content = [
       new Array(individualHeight * individualWidth),
       new Array(individualHeight * individualWidth),
@@ -110,15 +111,20 @@ export class Instance {
         content[1][i] = 0;
         content[2][i] = 0;
     }
+    let m1 = randomMinion(account);
+    world.registerMinion(m1);
+    let m2 = randomMinion(account);
+    world.registerMinion(m2);
     let instance = {
       content: content,
-      minions: [randomMinion("other", world).id, randomMinion("other", world).id, randomMinion("other", world).id],
+      minions: [m1.id, m2.id],
       drops:[],
       id:id,
       ratio:0.4,
       owner:"other",
       background: 0,
       pph: 0,
+      reward:0,
       basePPH: 0,
       sketched: false,
     };

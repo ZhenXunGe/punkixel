@@ -75,7 +75,7 @@ export function SingleItemBtn(m: single) {
   if (m.mId === null) {
     // let ufo = sprites.getFrame("default", 0).src;
     return (
-        <Unlock avator={unknown} uid="solo" index={m.index} ></Unlock>
+        <Unlock avator={unknown} index={m.index} ></Unlock>
     );
   } else {
     let minion = getWorld().getMinion(m.mId)!;
@@ -97,10 +97,6 @@ export function SingleItemBtn(m: single) {
   }
 }
 
-interface MinionSelector {
-  setminion: (m: string) => void;
-}
-
 interface SingleSelect {
   setminion: (m: string) => void;
   mId: string;
@@ -117,36 +113,19 @@ export function SingleListItem(m: SingleSelect) {
 }
 
 
-export function MinionSelector(s: MinionSelector) {
-  const player = useAppSelector(selectPlayer)!;
-  const inventory = player.inventory;
-  const [current, setCurrent] = useState("none");
-  console.log('selector',inventory)
-  const setMinion = (mid: string) => {
-    setCurrent(mid);
-    s.setminion(mid);
-  }
-  return (<ListGroup className="minion-selector" defaultActiveKey={"#" + current}>
-    {inventory.filter((m) => m !== null).map((m, i) => {
-      return <SingleListItem setminion={setMinion} mId={m!} key={m!}></SingleListItem>
-    })}
-  </ListGroup>)
-}
-
 export default function Inventory() {
-  const dispatch = useAppDispatch();
   const player = useAppSelector(selectPlayer)!;
-  const inventory = player.inventory;
+  //const inventory = player.inventory;
   return (
     <div className="inventory">
     <div className="inventory-content">
-      {inventory.map((m, i) => {
+      {player.inventory.map((m, i) => {
         return <SingleItem mId={m} index={i} key={m == null ? `inventory-minion-${i}` : m}></SingleItem>
       })}
     </div>
     <img className="inventory-cover" src={hover4} ></img>
     <div className="inventory-btn">
-    {inventory.map((m, i) => {
+    {player.inventory.map((m, i) => {
         return <SingleItemBtn mId={m} index={i} key={`btn-inventory-minion-${i}`}></SingleItemBtn>
       })
     }

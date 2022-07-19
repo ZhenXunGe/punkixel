@@ -64,9 +64,10 @@ function createInstance(id:string, owner: string): InstanceInfo{
     drops:[],
     id:id,
     ratio:0.4,
-    owner:"other",
+    owner: owner,
     background: 0,
     pph: 0,
+    reward: 0,
     basePPH: 0,
     sketched: false,
   };
@@ -150,12 +151,13 @@ export async function updatePlayer(id:string, player:Player) {
   await dbClient.players!.updateOne({id: id }, { $set: player });
 }
 
-export async function registerMinion(owner: string, slot:number) {
+export async function registerMinion(owner: string, slot:number): Promise<string> {
   let minion = createMinion(owner);
   let player = await getPlayer(owner);
   player.inventory[slot] = minion.id;
   await dbClient.minions!.insertOne(minion);
   updatePlayer(owner, player);
+  return minion.id;
 }
 
 export async function registerPlayer(id: string) {
@@ -197,17 +199,64 @@ export async function allInstances() {
 
 }
 
+export async function getInstanceByIndex(index: number) {
+
+  let query = await dbClient.instances!.find({}).limit(10);
+  let instances:any = [];
+  await query.forEach((q) => instances.push(q));
+  /* FIXME: TODO, getInstance by Index */
+  return instances[0];
+
+}
+
 export async function allPlayers() {
   let query =  await dbClient.players!.find({});
   let players:any = [];
   await query.forEach((q) => players.push(q));
   return players;
-
 }
 
 export async function allMinions() {
-  let query = dbClient.minions!.find({});
+  let query = await dbClient.minions!.find({});
   let minions:any = [];
   await query.forEach((q) => minions.push(q));
   return minions;
+}
+
+export async function getMinion(mid: string): Promise<Minion> {
+  let query = await dbClient.minions!.findOne({id:mid});
+  console.log (query);
+  return query as unknown as Minion;
+}
+
+export async function updateMinion(mid: string, minion: Minion) {
+  await dbClient.minions!.updateOne({id: mid }, { $set: minion});
+}
+
+export async function claimDrop(owner: string, drops:string[]) {
+  return;
+}
+
+export async function claimRewardPunkixel(owner: string, amount:number) {
+  let player = await getPlayer(owner);
+  player.punkxiel += amount;
+  updatePlayer(owner, player);
+}
+
+export async function incMinionContribute(mid: string, contribute: number) {
+  let minion = await getMinion(mid);
+  minion.contribution += contribute;
+  updateMinion(mid, minion);
+  return;
+}
+
+export async function clearMinionContribute(mid: string) {
+  let minion = await getMinion(mid);
+  minion.contribution = 0;
+  updateMinion(mid, minion);
+  return;
+}
+
+export async function loadWorld() {
+  return null;
 }

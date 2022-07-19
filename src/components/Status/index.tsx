@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   selectEnergy,
   selectPunkixel,
-  selectRanking,
+  selectRank,
   selectContribution,
   selectReward,
   selectPPH,
@@ -20,7 +20,7 @@ export function Status () {
   const timeClock = useAppSelector(selectTimeClock);
     const energy = useAppSelector(selectEnergy);
     const punkixel = useAppSelector(selectPunkixel);
-    const ranking = useAppSelector(selectRanking);
+    const ranking = useAppSelector(selectRank);
     const pph = useAppSelector(selectPPH);
     const player = useAppSelector(selectPlayer)!;
     const voucher = player.voucher;
@@ -36,7 +36,7 @@ export function Status () {
         <li>{viewIndex}</li>
         <li>{energy}</li>
         <li>{punkixel}</li>
-        <li>{ranking}</li>
+        <li>{ranking.current}</li>
         <li>{voucher}</li>
         <li>{contribution}</li>
         <li>{reward}</li>

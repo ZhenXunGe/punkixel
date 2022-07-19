@@ -10,6 +10,10 @@ import { getWorld } from '../../data/world';
 import FRAME from '../../images/layout/frame.png';
 import './style.scss';
 import { selectPanel } from '../../layout/layoutSlice';
+import {
+    selectPlayer,
+} from '../../data/statusSlice';
+
 function ThumbnailInternal() {
 
   let ratio = 1;
@@ -62,4 +66,36 @@ export function Thumbnail() {
   } else {
     return (<></>);
   }
+}
+
+export function SingleThumbnail() {
+  const canvasRef = useRef<any>();
+  const timeClock = useAppSelector(selectTimeClock);
+  const player = useAppSelector(selectPlayer)!;
+  const homeIndex = player.homeIndex;
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const context = canvas.getContext('2d')
+    const image = context.getImageData(0, 0, canvas.width, canvas.height)
+    let painter = buildPainter(image, {
+            ratio:1,
+            offsetX:0,
+            offsetY:0,
+            canvasHeight:100,
+            canvasWidth:250,
+    }, timeClock);
+    let drawer = getWorld().getInstanceByIndex(homeIndex).drawer;
+    drawer.draw(painter,homeIndex*individualWidth);
+    context.putImageData(image,0,0);
+  })
+
+  return (
+    <div className="thumbnail-single">
+      <canvas height="100" width="250" ref={canvasRef} key="thumbnail-single-canvas">
+      Drawer Drawer
+      </canvas>
+    </div>
+  );
+
 }

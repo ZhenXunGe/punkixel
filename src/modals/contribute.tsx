@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Button, Container, ListGroup, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectPlayer } from "../data/statusSlice";
-// import { MinionSelector } from "../components/Inventory";
 import { addEvent, selectTimeClock, selectViewIndex, signalPlaceMinion, signalDynamic } from "../dynamic/dynamicSlice";
 import { ProtectingEvent } from "../dynamic/event";
 import { getWorld } from "../data/world";
@@ -28,7 +27,6 @@ function SingleListItem(m: SingleSelect) {
   if (minion.location === null) {
     return (
       <li className={`${m.mId === m.current?'selected':'' }`} onClick={() => {m.setminion(m.mId);}}
-      //  href={"#" + minion.id}
       > <img src={ufo}></img>
         <span>{minion.id} is now idling. [speed: {minion.power}]</span>
       </li>);
@@ -48,7 +46,6 @@ interface MinionSelector {
 
 
 function MinionSelector(s: MinionSelector) {
-  const pageNumber = 3;
   const [current, setCurrent] = useState("none");
   const available = s.inventory.filter((m) => m !== null).map((x:string|null)=>{return x!;});
   const setMinion = (mid: string) => {
@@ -57,9 +54,7 @@ function MinionSelector(s: MinionSelector) {
   };
   return (
     <div>
-    <ul className="minions"
-    // defaultActiveKey={"#" + current}
-    >
+    <ul className="minions">
       {available.map((m, i) => {
         if( i >= s.pos*3 && i <= s.pos*3 + 2 && i <= available.length){
         return <SingleListItem current={current} setminion={setMinion} mId={m} key={m}></SingleListItem>
@@ -79,16 +74,13 @@ export default function Contribute() {
   const dispatch = useAppDispatch();
   const viewIndex = useAppSelector(selectViewIndex);
   const player = useAppSelector(selectPlayer)!;
-  const inventory = player.inventory;
   const [startPos, setStartPos] = useState<number>(0);
-  const timeClock = useAppSelector(selectTimeClock);
 
-  const available = inventory.filter((m) => m !== null);
+  const available = player.inventory.filter((m) => m !== null);
   const availableSize = available.length;
 
   const handleConfirm = () => {
-    console.log({ mId: minionId!, viewIndex: viewIndex })
-    getWorld().spentPunkxiel("solo", 100);
+    getWorld().spentPunkxiel(player.id, 100);
     dispatch(updateInventory({bol:true}));
     dispatch(signalPlaceMinion({ mId: minionId!, viewIndex: viewIndex }));
     dispatch(addEvent(ProtectingEvent("GruPlayer 1", getWorld().getInstance(viewIndex), getWorld().getMinion(minionId!))));
@@ -112,9 +104,7 @@ export default function Contribute() {
                 <div className="headerTitle">
                   <img src={header} ></img>
                 </div>
-                {/* <ul className="minions"> */}
-                <MinionSelector  setminion={setMinionId} pos={startPos} inventory={inventory}></MinionSelector>
-                {/* </ul> */}
+                <MinionSelector  setminion={setMinionId} pos={startPos} inventory={player.inventory}></MinionSelector>
               </div>
             </div>
             <PageScroller show={availableSize > 3 || true} onPageChange={setStartPos} rangeStart={0} rangeEnd={Math.floor(availableSize/3)} pos={startPos}></PageScroller>

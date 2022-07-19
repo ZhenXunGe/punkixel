@@ -1,7 +1,10 @@
 import express, { Request, Response } from "express";
 import { connectToDatabase, allInstances, allPlayers, allMinions} from './db';
 
+import cors from "cors";
+
 const app = express();
+app.use(cors());
 const punkixelRouter = express.Router();
 punkixelRouter.use(express.json());
 punkixelRouter.get("/info/", async (req: Request, res: Response) => {
