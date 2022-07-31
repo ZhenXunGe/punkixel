@@ -25,7 +25,7 @@ import {
 } from '../dynamic/dynamicSlice';
 import { getWorld, getBackground } from '../data/world';
 import { drawWeather, drawMesh, drawReaction } from '../data/weather';
-import { AdviceEvent } from '../dynamic/event';
+import { AdviceEventRender } from '../dynamic/event';
 import { HandlerProxy } from '../layout/handlerProxy';
 
 
@@ -78,11 +78,11 @@ export function DrawerBoard(props: DrawerBoardProp) {
     let instance = getWorld().getInstance(homeIndex);
     let artistAdvice = instance.artistAdvice();
     if(artistAdvice!==null) {
-      dispatch(addEvent(AdviceEvent("Artist Advise", artistAdvice!.brief, artistAdvice!.description)));
+      dispatch(addEvent(AdviceEventRender("Artist Advise", artistAdvice!.brief, artistAdvice!.description)));
     }
     let defendingAdvice = instance.defendingAdvice();
     if(defendingAdvice!==null) {
-      dispatch(addEvent(AdviceEvent("Defending Advise", defendingAdvice!.brief, defendingAdvice!.description)));
+      dispatch(addEvent(AdviceEventRender("Defending Advise", defendingAdvice!.brief, defendingAdvice!.description)));
     }
   }, [])
 

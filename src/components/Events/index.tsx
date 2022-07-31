@@ -4,7 +4,8 @@ import dyeavator from "../../images/buttons/dyebottle.png";
 import { selectAlien, selectEvents } from '../../dynamic/dynamicSlice';
 import { EventInfo } from '../../dynamic/event';
 import { getSprite, getMinionFrame } from '../../sprite/spriteSlice';
-import { Minion } from '../../data/minion';
+import { Minion } from '../../../server/types';
+import { makeEventRender } from '../../dynamic/event';
 
 export function AlienAvator() {
   const alien = useAppSelector(selectAlien);
@@ -35,7 +36,7 @@ export function Events() {
     <div className ="guest-info">
     {events.slice(0,3).map((e,i) =>
         <div key={`event-${i}`} className="event">
-          <EventInfo event={e}></EventInfo>
+          <EventInfo event={makeEventRender(e)}></EventInfo>
            {/* {e.time} */}
         </div>
     )}

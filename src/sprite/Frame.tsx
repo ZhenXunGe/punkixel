@@ -6,14 +6,11 @@ import {
   signalBulletsUpdate,
   signalAlien,
   switchView,
-  addEvent,
   selectAlien,
   selectViewIndex,
 } from '../dynamic/dynamicSlice';
 import { Sprite } from './sprite';
-import { getWorld } from '../data/world';
 import { getDynamicInfo, DynamicMinion, spawnBullet } from '../dynamic/dynamicSlice';
-import { AlienEvent } from '../dynamic/event';
 import { getSprite } from './spriteSlice';
 
 interface IProps {
@@ -45,7 +42,6 @@ export default function Frame(prop: IProps) {
     if (viewIndex != idx) {
       dispatch(switchView(idx));
       dynamic.resetBullets([]);
-      dispatch(addEvent(AlienEvent(alien, getWorld().getInstanceByIndex(idx))));
     }
 
 

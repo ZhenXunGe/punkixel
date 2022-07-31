@@ -53,7 +53,7 @@ export interface Minion {
 }
 
 export interface InstanceInfo {
-    id: string;
+    index: number;
     content: Array<Array<DyeIndex>>;
     background: number;
     minions: Array<string>;
@@ -68,7 +68,7 @@ export interface InstanceInfo {
 
 export interface Alien {
   sprite: string;
-  alienId: number;
+  id: string;
   name: string;
   status: "run" | "dizzle";
   pos: number;
@@ -76,4 +76,84 @@ export interface Alien {
   speed: number;
   drop: Array<string>;
   favourate: string;
+}
+
+export type SourceObjectType = "minion" | "alien" | "player" | "instance";
+
+export interface SourceObject {
+  objType: SourceObjectType;
+  objId: string;
+  amount: number;
+}
+
+function newSource(typ: SourceObjectType, id: string, n=0): SourceObject {
+  return {
+    objType: typ,
+    objId: id,
+    amount: n,
+  }
+}
+
+export interface SysEvent {
+    id: number;
+    tx: number;
+    time: number;
+    source: Array<SourceObject>;
+}
+
+const EventAdvice = 0x01;
+const EventAlienEnter = 0x10;
+const EventAlienKnock = 0x20;
+const EventAlienDrop = 0x30;
+const EventMinionProtecting = 0x11;
+
+export function alienEventEnter(monster: Alien, instance: InstanceInfo): SysEvent {
+    return {
+        id: EventAlienEnter,
+        tx: 0,
+        time: Date.now(),
+        source: [newSource("alien", monster.id), newSource("instance", instance.index.toString())],
+    }
+}
+
+interface MinionRewardInfo {
+    minion: Minion;
+    amount: number;
+}
+export interface RewardInfo {
+    reserve: number;
+    rewards: Array<MinionRewardInfo>;
+}
+
+export function rewardEvent(account: string, instance: InstanceInfo, rewards: Array<SourceObject>): SysEvent {
+    let r = rewards;
+    r.unshift(newSource("player", account));
+    r.unshift(newSource("instance", instance.index.toString()));
+    return {
+        id: EventAlienKnock,
+        tx: 0,
+        time: Date.now(),
+        source: r,
+    };
+}
+
+export function protectEvent(account: string, instance: InstanceInfo, minion:Minion): SysEvent {
+    return {
+        id: EventMinionProtecting,
+        tx: 0,
+        time: Date.now(),
+        source: [newSource("player", account)],
+    };
+}
+
+export function dropEvent(account: string, instance: InstanceInfo, drops: Array<SourceObject>): SysEvent {
+    let r = drops;
+    r.unshift(newSource("instance", instance.index.toString()));
+    r.unshift(newSource("player", account));
+    return {
+        id: EventAlienDrop,
+        tx: 0,
+        time: Date.now(),
+        source: r
+    }
 }

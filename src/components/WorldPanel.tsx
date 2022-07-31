@@ -17,7 +17,7 @@ import {
   getDynamicInfo,
 } from '../dynamic/dynamicSlice';
 import { getWorld, getBackground } from '../data/world';
-import { Minion } from "../data/minion";
+import { Minion } from "../../server/types";
 
 
 import { getSprite } from '../sprite/spriteSlice';

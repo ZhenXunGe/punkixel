@@ -4,7 +4,11 @@ const MongoClient = require("mongodb").MongoClient;
 const DB_CONN_STRING="mongodb://localhost:27017/"
 const DB_NAME="punkixel"
 import * as mongoDB from "mongodb";
-import {individualWidth, individualHeight, Minion, InstanceInfo, BulletModifier, MinionType, Player} from "./types";
+import {individualWidth, individualHeight,
+        Minion, InstanceInfo, BulletModifier,
+        Alien,
+        MinionType, Player, SysEvent} from "./types";
+import {getRandomInt} from "./generator";
 
 const content_size = individualWidth * individualHeight;
 
@@ -12,6 +16,8 @@ interface PunkixelCollections {
   players?: mongoDB.Collection,
   instances?: mongoDB.Collection,
   minions?: mongoDB.Collection,
+  events?: mongoDB.Collection,
+  aliens?: mongoDB.Collection,
   client?: mongoDB.MongoClient,
 }
 
@@ -33,21 +39,30 @@ async function getOrCreateCollection(db:mongoDB.Db, cname: string, index?: any):
 export async function connectToDatabase (reset:boolean) {
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(DB_CONN_STRING);
   await client.connect();
+  console.log("connecting database ...");
   const db: mongoDB.Db = client.db(DB_NAME);
   if (reset) {
-    db.dropCollection("instances");
-    db.dropCollection("players");
-    db.dropCollection("minions");
+    try {
+      await db.dropCollection("instances");
+      await db.dropCollection("players");
+      await db.dropCollection("minions");
+      await db.dropCollection("events");
+      await db.dropCollection("aliens");
+    } catch {
+      console.log("ignore error when drop collections!");
+    }
   }
   dbClient = {
       instances: await getOrCreateCollection(db, "instances"),
       players: await getOrCreateCollection(db, "players"),
       minions: await getOrCreateCollection(db, "minions"),
+      events: await getOrCreateCollection(db, "events"),
+      aliens: await getOrCreateCollection(db, "aliens"),
       client: client,
   }
 }
 
-function createInstance(id:string, owner: string): InstanceInfo{
+function createInstance(owner: string): InstanceInfo{
   let content = [
     new Array(individualHeight * individualWidth),
     new Array(individualHeight * individualWidth),
@@ -62,7 +77,7 @@ function createInstance(id:string, owner: string): InstanceInfo{
     content: content,
     minions: [],
     drops:[],
-    id:id,
+    index:-1,
     ratio:0.4,
     owner: owner,
     background: 0,
@@ -74,17 +89,47 @@ function createInstance(id:string, owner: string): InstanceInfo{
   return instance;
 }
 
+export async function registerEvent(event: SysEvent) {
+  let index = await dbClient.events!.count();
+  event.id = index;
+  return await dbClient.events!.insertOne(event);
+}
+
 export async function getInstance(id:string): Promise<InstanceInfo> {
   const instance = (await dbClient.instances!.findOne({id: id})) as unknown as InstanceInfo;
   return instance;
 }
 
-export async function registerInstance(id: string, owner: string) {
-  let instance = createInstance(id, owner);
-  return await dbClient.instances!.insertOne(instance);
+export async function registerAlien(alien: Alien) {
+  let index = await dbClient.aliens!.count();
+  alien.id = index.toString();
+  console.log("register alien:", alien, index);
+  return await dbClient.aliens!.insertOne(alien);
+}
+
+export async function getAlien(id: string): Promise<Alien> {
+  const alien = (await dbClient.aliens!.findOne({id: id})) as unknown as Alien;
+  return alien;
+}
+
+export async function pickRandomAlien(): Promise<Alien> {
+  let index = await dbClient.aliens!.count();
+  let id = getRandomInt(0, index).toString();
+  console.log("pick alien:", id);
+  const alien = (await dbClient.aliens!.findOne({id: id})) as unknown as Alien;
+  return alien;
 }
 
 
+
+
+
+export async function registerInstance(id: string, owner: string) {
+  let index = await dbClient.instances!.count();
+  let instance = createInstance(owner);
+  instance.index = index;
+  return await dbClient.instances!.insertOne(instance);
+}
 
 const majorModifiers: Array<BulletModifier> = ["missle", "bomb", "bullet"];
 const minorModifiers: Array<BulletModifier> = ["freeze", "explode"];
@@ -161,7 +206,7 @@ export async function registerMinion(owner: string, slot:number): Promise<string
 }
 
 export async function registerPlayer(id: string) {
-  let index = dbClient.instances!.count;
+  let index = await dbClient.instances!.count();
   let player = {
     id: id,
     energy: 50,
@@ -200,24 +245,24 @@ export async function allInstances() {
 }
 
 export async function getInstanceByIndex(index: number) {
+  console.log("getting instance", index);
+  let query = await dbClient.instances!.findOne({index: index});
+  return query as unknown as InstanceInfo;
+}
 
-  let query = await dbClient.instances!.find({}).limit(10);
-  let instances:any = [];
-  await query.forEach((q) => instances.push(q));
-  /* FIXME: TODO, getInstance by Index */
-  return instances[0];
-
+export async function updateInstance(instance: InstanceInfo) {
+  await dbClient.instances!.updateOne({index: instance.index}, { $set: instance});
 }
 
 export async function allPlayers() {
-  let query =  await dbClient.players!.find({});
+  let query =  dbClient.players!.find({});
   let players:any = [];
   await query.forEach((q) => players.push(q));
   return players;
 }
 
 export async function allMinions() {
-  let query = await dbClient.minions!.find({});
+  let query = dbClient.minions!.find({});
   let minions:any = [];
   await query.forEach((q) => minions.push(q));
   return minions;
@@ -225,12 +270,22 @@ export async function allMinions() {
 
 export async function getMinion(mid: string): Promise<Minion> {
   let query = await dbClient.minions!.findOne({id:mid});
-  console.log (query);
   return query as unknown as Minion;
 }
 
-export async function updateMinion(mid: string, minion: Minion) {
-  await dbClient.minions!.updateOne({id: mid }, { $set: minion});
+export async function updateMinion(minion: Minion) {
+  await dbClient.minions!.updateOne({id: minion.id}, { $set: minion});
+}
+
+
+export async function protectInstance(minion:Minion, instance: InstanceInfo) {
+  if (minion.location != null) {
+     throw new Error("Minion is not idle");
+  }
+  instance.minions.push(minion.id);
+  minion.location = instance.index;
+  await updateMinion(minion);
+  await updateInstance(instance);
 }
 
 export async function claimDrop(owner: string, drops:string[]) {
@@ -246,17 +301,20 @@ export async function claimRewardPunkixel(owner: string, amount:number) {
 export async function incMinionContribute(mid: string, contribute: number) {
   let minion = await getMinion(mid);
   minion.contribution += contribute;
-  updateMinion(mid, minion);
+  updateMinion(minion);
   return;
 }
 
 export async function clearMinionContribute(mid: string) {
   let minion = await getMinion(mid);
   minion.contribution = 0;
-  updateMinion(mid, minion);
+  updateMinion(minion);
   return;
 }
 
 export async function loadWorld() {
-  return null;
+  let totalInstance:number = await dbClient.instances!.count();
+  return {
+    totalInstance: totalInstance
+  }
 }

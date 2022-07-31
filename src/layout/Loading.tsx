@@ -122,7 +122,7 @@ export function Loading() {
   const [r, setR] = useState(0);
   const [progress, setProgress] = useState(0);
   useEffect(() => {
-    if (account) {
+    if (account && wloaded) {
       let r = delta / 50;
       if (r > 1) {
         r = 1;

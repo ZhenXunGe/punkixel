@@ -1,14 +1,4 @@
-export interface Alien {
-  sprite: string;
-  alienId: number;
-  name: string;
-  status: "run" | "dizzle";
-  pos: number;
-  dizzle: number;
-  speed: number;
-  drop: Array<string>;
-  favourate: string;
-}
+import { Alien } from "../../server/types";
 
 function capFirst(name:string) {
   return name.charAt(0).toUpperCase() + name.slice(1);
@@ -71,7 +61,21 @@ return name;
 export function randomAlien():Alien {
   return {
     sprite: `monster-${Math.floor(Math.random()*3)}`,
-    alienId: Math.ceil(Math.random()*10000),
+    id: Math.ceil(Math.random()*10000).toString(),
+    name: generateName(),
+    status: "run",
+    pos: 0,
+    dizzle: 0,
+    drop: ["#dye10"],
+    speed: getRandomInt(20, 50),
+    favourate: "night view",
+  }
+}
+
+export async function getAlien(): Promise<Alien> {
+  return {
+    sprite: `monster-${Math.floor(Math.random()*3)}`,
+    id: Math.ceil(Math.random()*10000).toString(),
     name: generateName(),
     status: "run",
     pos: 0,

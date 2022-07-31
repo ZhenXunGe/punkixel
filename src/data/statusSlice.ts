@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { WritableDraft } from 'immer/dist/types/types-external';
 import { RootState } from '../app/store';
-import { Player } from './player';
+import { Player } from '../../server/types';
 import { getWorld, initializeWorld, RankInfo } from './world';
 import { InstanceInfo } from '../data/instance';
 
@@ -59,10 +59,9 @@ export const loadRank = createAsyncThunk(
 );
 
 
-
-
 function updateState(state: WritableDraft<StatusState>) {
-  let player = getWorld().getPlayer(state.player!.id);
+  let world = getWorld();
+  let player = world.getPlayer(state.player!.id);
   state.player = player;
   let instance = getWorld().getInstanceByIndex(player.homeIndex);
   state.pph = instance.info.pph + instance.info.basePPH;

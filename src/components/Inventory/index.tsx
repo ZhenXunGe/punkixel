@@ -1,7 +1,7 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectPlayer } from '../../data/statusSlice';
-import { Minion } from "../../data/minion";
+import { Minion } from "../../../server/types";
 import { ListGroup } from 'react-bootstrap';
 import { getWorld } from '../../data/world';
 import { Reroll, Unlock } from '../../modals/unlock';

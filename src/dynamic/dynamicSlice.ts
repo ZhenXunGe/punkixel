@@ -1,15 +1,16 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { Alien, randomAlien } from '../data/alien';
+import { randomAlien } from '../data/alien';
 import { individualWidth } from '../data/draw';
-import { Minion, MinionType } from '../data/minion';
+import { Minion, MinionType, Alien } from '../../server/types';
 import { getWorld } from '../data/world';
 import { Sprite } from '../sprite/sprite';
 import { getSprite } from '../sprite/spriteSlice';
-import { DropEvent, Event, RewardEvent }  from './event';
 import { InstanceInfo } from '../data/instance';
 import { Reaction } from '../data/weather';
 import { BombBullet, BulletInfo, StraightBullet, TrackBullet } from "./bullet";
+import { DynamicState } from "../../server/simulate";
+import { punkixelEndpoint } from "../data/endpoint";
 
 function generateBulletPos(t:MinionType) {
   if(t==="ufo") {
@@ -128,31 +129,57 @@ export function getDynamicInfo(): DynamicInfo {
 }
 
 
-export interface DynamicState {
-    timeClock: number;
-    events: Array<Event>;
-    alien: Alien;
-    upcomingAlien: Alien;
-    viewIndex: number;
+export interface SketchState {
     sketchSignal: number;
     sketchDynamic: number;
-    damage: number;
     reaction: Reaction | null;
     cursor: string;
 }
 
-const initialState: DynamicState = {
-  timeClock: 0,
-  events:[],
-  alien: randomAlien(),
-  upcomingAlien: randomAlien(),
-  viewIndex: 0,
+const initialSketchState: SketchState = {
   sketchSignal: 0,
   sketchDynamic: 0,
-  damage:0,
   reaction: null,
   cursor: "cursorDefault",
-};
+}
+
+export interface DynamicGameState {
+    dynamic: DynamicState;
+    sketch: SketchState;
+}
+
+interface SimulateState {
+  dynamicState: DynamicState;
+}
+
+const initialState: DynamicGameState = {
+    dynamic: {
+      timeClock:0,
+      events:[],
+      alien: randomAlien(),
+      upcomingAlien: randomAlien(),
+      viewIndex:0,
+      totalInstance: 0,
+      damage: 0,
+    },
+    sketch: initialSketchState,
+}
+
+
+async function syncDynamic () {
+    let info: SimulateState = await punkixelEndpoint.invokeRequest("GET", "info", null);
+    return info;
+}
+
+export const loadDynamic = createAsyncThunk(
+  'dynamic/updateDynamicState',
+  async (thunkApi) => {
+    let r = await syncDynamic();
+    console.log("dynamic initialized");
+    return r;
+  }
+);
+
 
 function timeout(ms:number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -161,7 +188,6 @@ function timeout(ms:number) {
 export const updateTimeClockAsync = createAsyncThunk(
     'dynamic/updateTimeClockAsync',
     async (timerId:number, thunkAPI) => {
-      await timeout(1000);
       return 1;
     }
 )
@@ -171,16 +197,16 @@ export const dynamicSlice = createSlice({
   initialState,
   reducers: {
     addEvent: (state, d) => {
-      state.events.unshift(d.payload);
+      state.dynamic.events.unshift(d.payload);
     },
     setCursor: (state, d) => {
-      state.cursor = d.payload;
+      state.sketch.cursor = d.payload;
     },
     signalSketch: (state) => {
-      state.sketchSignal ++;
+      state.sketch.sketchSignal ++;
     },
     signalDynamic: (state) => {
-      state.sketchDynamic ++;
+      state.sketch.sketchDynamic ++;
     },
 
     signalBulletsUpdate: (state, d) => {
@@ -193,17 +219,17 @@ export const dynamicSlice = createSlice({
         let [done, hit] = b.approach(cor[0], cor[1]);
         if (hit) {
           getWorld().incMinionContribute(b.source, b.power);
-          state.damage += b.power;
-          if (state.damage > 200) {
-            state.alien.status = "dizzle";
-            let alienSprite:Sprite = getSprite(state.alien.sprite);
-            alienSprite.currentTrigger = state.timeClock;
-            state.alien.dizzle = 12;
-            state.damage = 0;
-            let instance = getWorld().getInstanceByIndex(state.viewIndex);
-            let rewardinfo = instance.calculateRewards(100, state.alien.drop);
-            state.events.unshift(RewardEvent(state.alien.name, instance, rewardinfo));
-            state.events.unshift(DropEvent(state.alien.name, instance, state.alien.drop));
+          state.dynamic.damage += b.power;
+          if (state.dynamic.damage > 200) {
+            state.dynamic.alien.status = "dizzle";
+            let alienSprite:Sprite = getSprite(state.dynamic.alien.sprite);
+            alienSprite.currentTrigger = state.dynamic.timeClock;
+            state.dynamic.alien.dizzle = 12;
+            state.dynamic.damage = 0;
+            let instance = getWorld().getInstanceByIndex(state.dynamic.viewIndex);
+            let rewardinfo = instance.calculateRewards(100, state.dynamic.alien.drop);
+            //state.dynamic.events.unshift(RewardEvent(state.dynamic.alien.name, instance, rewardinfo));
+            //state.dynamic.events.unshift(DropEvent(state.dynamic.alien.name, instance, state.dynamic.alien.drop));
           }
         }
         if (!done) {
@@ -213,30 +239,31 @@ export const dynamicSlice = createSlice({
       dynamicInfo.resetBullets(cs);
     },
     signalAlien: (state) => {
-      let status = state.alien.status;
+      let status = state.dynamic.alien.status;
       if (status == "run") {
-        state.alien.pos += 1;
-        if (state.alien.pos >= individualWidth * getWorld().instances.length) {
-          state.alien = state.upcomingAlien;
-          state.upcomingAlien = randomAlien();
+        state.dynamic.alien.pos += 1;
+        if (state.dynamic.alien.pos >= individualWidth * getWorld().instances.length) {
+          /* TODO update dynamic */
+          state.dynamic.alien = state.dynamic.upcomingAlien;
+          state.dynamic.upcomingAlien = randomAlien();
         }
       }
       if (status == "dizzle") {
-        state.alien.dizzle -= 1;
-        if (state.alien.dizzle == 0) {
-          state.alien.status = "run";
+        state.dynamic.alien.dizzle -= 1;
+        if (state.dynamic.alien.dizzle == 0) {
+          state.dynamic.alien.status = "run";
         }
       }
     },
     switchView: (state, d) => {
-      state.viewIndex = d.payload;
-      let instance = getWorld().getInstanceByIndex(state.viewIndex);
+      state.dynamic.viewIndex = d.payload;
+      let instance = getWorld().getInstanceByIndex(state.dynamic.viewIndex);
       getDynamicInfo().loadInstance(instance.info);
       getWorld().flipWeather();
     },
 
     setReaction: (state, d) => {
-      state.reaction = d.payload;
+      state.sketch.reaction = d.payload;
     },
     signalPlaceMinion: (state, d) => {
       let viewIndex = d.payload.viewIndex;
@@ -248,26 +275,31 @@ export const dynamicSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(updateTimeClockAsync.fulfilled, (meta: DynamicState, c) => {
-        meta.timeClock += 1;
-        if(meta.reaction) {
-          if (meta.reaction.current < meta.reaction.duration) {
-            meta.reaction = {...meta.reaction, current: meta.reaction.current+1};
+      .addCase(updateTimeClockAsync.fulfilled, (meta: DynamicGameState, c) => {
+        meta.dynamic.timeClock += 1;
+        if(meta.sketch.reaction) {
+          if (meta.sketch.reaction.current < meta.sketch.reaction.duration) {
+            meta.sketch.reaction = {...meta.sketch.reaction, current: meta.sketch.reaction.current+1};
           } else {
-            meta.reaction = null;
+            meta.sketch.reaction = null;
           }
         }
       })
+      .addCase(loadDynamic.fulfilled, (meta: DynamicGameState, c) => {
+        let ds: SimulateState = c.payload;
+        meta.dynamic = ds.dynamicState;
+      })
+
   },
 });
 export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch, signalDynamic, signalPlaceMinion, setReaction, setCursor} = dynamicSlice.actions;
-export const selectTimeClock = (state: RootState) => state.dynamic.timeClock;
-export const selectEvents = (state: RootState) => state.dynamic.events;
-export const selectAlien = (state: RootState) => state.dynamic.alien;
-export const selectUpcomingAlien = (state: RootState) => state.dynamic.upcomingAlien;
-export const selectViewIndex = (state: RootState) => state.dynamic.viewIndex;
-export const selectSketchSignal = (state: RootState) => state.dynamic.sketchSignal;
-export const selectDynamicSignal = (state: RootState) => state.dynamic.sketchDynamic;
-export const selectReaction = (state: RootState) => state.dynamic.reaction;
-export const selectCursor = (state: RootState) => state.dynamic.cursor;
+export const selectTimeClock = (state: RootState) => state.dynamic.dynamic.timeClock;
+export const selectEvents = (state: RootState) => state.dynamic.dynamic.events;
+export const selectAlien = (state: RootState) => state.dynamic.dynamic.alien;
+export const selectUpcomingAlien = (state: RootState) => state.dynamic.dynamic.upcomingAlien;
+export const selectViewIndex = (state: RootState) => state.dynamic.dynamic.viewIndex;
+export const selectSketchSignal = (state: RootState) => state.dynamic.sketch.sketchSignal;
+export const selectDynamicSignal = (state: RootState) => state.dynamic.sketch.sketchDynamic;
+export const selectReaction = (state: RootState) => state.dynamic.sketch.reaction;
+export const selectCursor = (state: RootState) => state.dynamic.sketch.cursor;
 export default dynamicSlice.reducer;

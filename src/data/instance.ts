@@ -1,5 +1,4 @@
 import { Drawer } from "./draw";
-import { Minion, randomMinion } from "./minion";
 import { DyeIndex } from "./palette";
 import { getWorld, World } from "./world";
 const individualWidth:number = 250;
@@ -99,35 +98,3 @@ export class Instance {
       }
     }
   }
-
-  export function EmptyInstance(id: string, world:World, account:string): InstanceInfo {
-    let content = [
-      new Array(individualHeight * individualWidth),
-      new Array(individualHeight * individualWidth),
-      new Array(individualHeight * individualWidth)
-    ];
-    for (var i=0; i<content_size; i++) {
-        content[0][i] = 0;
-        content[1][i] = 0;
-        content[2][i] = 0;
-    }
-    let m1 = randomMinion(account);
-    world.registerMinion(m1);
-    let m2 = randomMinion(account);
-    world.registerMinion(m2);
-    let instance = {
-      content: content,
-      minions: [m1.id, m2.id],
-      drops:[],
-      id:id,
-      ratio:0.4,
-      owner:"other",
-      background: 0,
-      pph: 0,
-      reward:0,
-      basePPH: 0,
-      sketched: false,
-    };
-    return instance;
-  }
-

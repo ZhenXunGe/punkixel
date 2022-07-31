@@ -1,56 +1,14 @@
 import { Drawer, individualWidth, Painter } from "./draw";
-import { EmptyInstance, Instance, InstanceInfo } from "./instance";
-import { Minion, randomMinion } from "./minion";
-import { Player, createTestPlayer } from "./player";
-import { basic_palettes, ColorCategory, fromDrop, getPalette, liquid_blue_palette, liquid_green_palette, amber_dilation_palette, lightblue_dilation_palette, red_dilation_palette, pink_dilation_palette } from "./palette";
+import { Instance, InstanceInfo } from "./instance";
+import { Player, Alien, Minion} from "../../server/types";
+import { ColorCategory, fromDrop, getPalette } from "./palette";
+import { punkixelEndpoint } from "./endpoint";
 import background from "../images/sky.jpg";
 
 export function getBackground(index: number) {
   let backs = [background];
   return backs[index];
 }
-
-const axios = require('axios').default;
-
-export class RestEndpoint {
-  constructor(public endpoint: string, public username: string, public useraddress: string) { };
-  async prepareRequest(method: "GET" | "POST", url: string, body: JSON | null) {
-    if (method === 'GET') {
-      console.log(this.endpoint + url);
-      try {
-        let response = await axios.get(this.endpoint + url, body ? { params: body! } : {});
-        return response.data;
-      } catch (e: any) {
-        console.log(e);
-        throw Error("rest post failure");
-      }
-    } else {
-      try {
-        let response = await axios.post(this.endpoint + url, body ? body! : {});
-        return response.data;
-      } catch (e: any) {
-        console.log(e);
-        throw Error("rest post failure");
-      }
-    }
-  }
-
-  async getJSONResponse(json: any) {
-    if (json["success"] !== true) {
-      console.log(json);
-      throw new Error("Request response error:" + json["error"]);
-    }
-    return json["result"];
-  }
-
-  async invokeRequest(method: "GET"|"POST", url: string, body: JSON | null) {
-    let response = await this.prepareRequest(method, url, body);
-    return await this.getJSONResponse(response);
-  }
-}
-
-const punkixelEndpoint = new RestEndpoint("http://localhost:4000/punkixel/", "punkixel", "punkixel");
-
 
 interface InstanceRank {
   owner:string,
@@ -69,11 +27,13 @@ export class World {
   instances: Array<Instance>;
   minions: Map<string, Minion>;
   players: Map<string, Player>;
+  aliens: Map<string, Alien>;
   timestamp: number;
   constructor(cor: number) {
     this.cursor = cor;
     this.minions = new Map<string, Minion>();
     this.players = new Map<string, Player>();
+    this.aliens = new Map<string, Alien>();
     this.instances = [];
     this.weather = "normal";
     this.timestamp = new Date().getMilliseconds();
@@ -133,6 +93,15 @@ export class World {
   getMinion(id: string): Minion {
     return this.minions.get(id)!;
   }
+
+  registerAlien (a: Alien) {
+    this.aliens.set(a.id, a);
+    console.log("Register alien:", a.id, a);
+  }
+  getAlien(id: string): Alien{
+    return this.aliens.get(id)!;
+  }
+
 
   /* Each time a bullet hit alien, the contribution of the owner of the bullet is increased */
   incMinionContribute(id: string, power: number) {
@@ -278,10 +247,10 @@ export async function initializeWorld(account: string) {
       world.registerMinion(minion);
     }
     world.loadInstance(BuildInstances(instances, () => { return world.cursor }));
-  } catch (e) {
     return 1;
+  } catch (e) {
+    return 0;
   }
-  return 0;
 }
 
 

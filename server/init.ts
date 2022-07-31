@@ -1,4 +1,9 @@
-import {connectToDatabase, registerPlayer, getPlayer, registerMinion, getMinion} from "./db";
+import {connectToDatabase, registerPlayer, getPlayer, registerMinion, getMinion,
+        getInstanceByIndex, protectInstance, registerAlien,
+} from "./db";
+
+import {Simulator, createDynamicState}  from "./simulate";
+import {randomAlien} from "./generator";
 
 const init_accounts = [
 "0xda4596337e991f4ab478203bf05ac1af1cb2281c",
@@ -13,22 +18,34 @@ const init_accounts = [
 "0xa27f5da4f98402be464e4bbe6f7b431b4c332e45",
 ]
 
-
-async function init() {
+export async function init(reset: boolean) {
     try {
-        await connectToDatabase(true);
+        await connectToDatabase(reset);
+        console.log("database connected...");
         for(var account of init_accounts) {
           await registerPlayer(account);
           let mid = await registerMinion(account, 0);
           let player = await getPlayer(account);
-          console.log("new player registered:", player);
+          console.log("new player registered:", player, player.homeIndex);
           let minion = await getMinion(mid);
           console.log("new minion registed:", minion);
+          let instance = await getInstanceByIndex(player.homeIndex);
+          console.log("instance before protected:", instance);
+          await protectInstance(minion, instance);
+          instance = await getInstanceByIndex(player.homeIndex);
+          console.log("instance protected:", instance);
         }
+        for (var i=0; i<10; i++) {
+          let alien = randomAlien();
+          await registerAlien(alien);
+        }
+        let dynamicState = await createDynamicState();
+        let simulator = new Simulator(dynamicState);
+        await simulator.init();
+        setInterval(()=>simulator.step(), 1000);
+        return simulator;
     } catch(error) {
         console.error("Database operation failed", error);
         process.exit();
     }
 }
-
-init().then(() => {process.exit()});
