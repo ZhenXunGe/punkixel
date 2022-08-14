@@ -2,11 +2,10 @@ import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { randomAlien } from '../data/alien';
 import { individualWidth } from '../data/draw';
-import { Minion, MinionType, Alien } from '../../server/types';
+import { Minion, MinionType, Alien, InstanceInfo, Player, SysEvent } from '../server/types';
 import { getWorld } from '../data/world';
 import { Sprite } from '../sprite/sprite';
 import { getSprite } from '../sprite/spriteSlice';
-import { InstanceInfo } from '../data/instance';
 import { Reaction } from '../data/weather';
 import { BombBullet, BulletInfo, StraightBullet, TrackBullet } from "./bullet";
 import { DynamicState } from "../../server/simulate";
@@ -119,6 +118,21 @@ class DynamicInfo {
 }
 
 var dynamicInfo: DynamicInfo | null = null;
+var eventCount: number = 0;
+
+function switchViewInner(index: number) {
+    let world = getWorld();
+    let instance = world.getInstanceByIndex(index);
+    getDynamicInfo().loadInstance(instance.info);
+}
+
+async function syncDynamic (account: string) {
+    console.log("sync simulate state...");
+    let info: SimulateState = await punkixelEndpoint.invokeRequest("GET", `info/${account}/${eventCount}`, null);
+    eventCount = info.totalEvents;
+    console.log("sync simulate state done!", eventCount);
+    return info;
+}
 
 export function getDynamicInfo(): DynamicInfo {
   if (dynamicInfo === null) {
@@ -146,16 +160,26 @@ const initialSketchState: SketchState = {
 export interface DynamicGameState {
     dynamic: DynamicState;
     sketch: SketchState;
+    events: Array<SysEvent>;
+}
+
+interface DynamicInfoType {
+  bullets: Array<BulletInfo>;
+  minions: Array<DynamicMinion>;
 }
 
 interface SimulateState {
   dynamicState: DynamicState;
+  dynamicInfo: DynamicInfoType;
+  instance: InstanceInfo;
+  totalEvents: number;
+  events: Array<SysEvent>;
+  player: Player;
 }
 
 const initialState: DynamicGameState = {
     dynamic: {
       timeClock:0,
-      events:[],
       alien: randomAlien(),
       upcomingAlien: randomAlien(),
       viewIndex:0,
@@ -163,19 +187,14 @@ const initialState: DynamicGameState = {
       damage: 0,
     },
     sketch: initialSketchState,
+    events: [],
 }
 
 
-async function syncDynamic () {
-    let info: SimulateState = await punkixelEndpoint.invokeRequest("GET", "info", null);
-    return info;
-}
-
-export const loadDynamic = createAsyncThunk(
+export const updateDynamic = createAsyncThunk(
   'dynamic/updateDynamicState',
-  async (thunkApi) => {
-    let r = await syncDynamic();
-    console.log("dynamic initialized");
+  async (account:string, thunkApi) => {
+    let r = await syncDynamic(account);
     return r;
   }
 );
@@ -196,9 +215,6 @@ export const dynamicSlice = createSlice({
   name: 'dynamic',
   initialState,
   reducers: {
-    addEvent: (state, d) => {
-      state.dynamic.events.unshift(d.payload);
-    },
     setCursor: (state, d) => {
       state.sketch.cursor = d.payload;
     },
@@ -226,10 +242,6 @@ export const dynamicSlice = createSlice({
             alienSprite.currentTrigger = state.dynamic.timeClock;
             state.dynamic.alien.dizzle = 12;
             state.dynamic.damage = 0;
-            let instance = getWorld().getInstanceByIndex(state.dynamic.viewIndex);
-            let rewardinfo = instance.calculateRewards(100, state.dynamic.alien.drop);
-            //state.dynamic.events.unshift(RewardEvent(state.dynamic.alien.name, instance, rewardinfo));
-            //state.dynamic.events.unshift(DropEvent(state.dynamic.alien.name, instance, state.dynamic.alien.drop));
           }
         }
         if (!done) {
@@ -257,21 +269,14 @@ export const dynamicSlice = createSlice({
     },
     switchView: (state, d) => {
       state.dynamic.viewIndex = d.payload;
-      let instance = getWorld().getInstanceByIndex(state.dynamic.viewIndex);
-      getDynamicInfo().loadInstance(instance.info);
+      switchViewInner(state.dynamic.viewIndex);
       getWorld().flipWeather();
     },
 
     setReaction: (state, d) => {
       state.sketch.reaction = d.payload;
     },
-    signalPlaceMinion: (state, d) => {
-      let viewIndex = d.payload.viewIndex;
-      let instance = getWorld().getInstanceByIndex(viewIndex);
-      getWorld().placeMinion(d.payload.mId, viewIndex);
-      instance.info.minions.push(d.payload.mId);
-      getDynamicInfo().loadInstance(instance.info);
-    }
+
   },
   extraReducers: (builder) => {
     builder
@@ -285,16 +290,33 @@ export const dynamicSlice = createSlice({
           }
         }
       })
-      .addCase(loadDynamic.fulfilled, (meta: DynamicGameState, c) => {
+      .addCase(updateDynamic.fulfilled, (meta: DynamicGameState, c) => {
+        let previousIndex = meta.dynamic.viewIndex;
         let ds: SimulateState = c.payload;
         meta.dynamic = ds.dynamicState;
+        if (dynamicInfo) {
+          dynamicInfo!.minions = ds.dynamicInfo.minions;
+        };
+        for (var e of ds.events) {
+          meta.events.unshift(e);
+        }
+        for (var m of ds.dynamicInfo.minions) {
+          getWorld().updateMinion(m.minion);
+        }
+        let instance = ds.instance;
+        getWorld().updateInstance(instance);
+        getWorld().updatePlayer(ds.player);
+        if (ds.dynamicState.viewIndex !== previousIndex) {
+          console.log("switchView:", previousIndex, meta.dynamic.viewIndex);
+          switchViewInner(meta.dynamic.viewIndex);
+        }
       })
 
   },
 });
-export const {signalBulletsUpdate, signalAlien, switchView, addEvent, signalSketch, signalDynamic, signalPlaceMinion, setReaction, setCursor} = dynamicSlice.actions;
+export const {signalBulletsUpdate, signalAlien, switchView, signalSketch, signalDynamic, setReaction, setCursor} = dynamicSlice.actions;
 export const selectTimeClock = (state: RootState) => state.dynamic.dynamic.timeClock;
-export const selectEvents = (state: RootState) => state.dynamic.dynamic.events;
+export const selectEvents = (state: RootState) => state.dynamic.events;
 export const selectAlien = (state: RootState) => state.dynamic.dynamic.alien;
 export const selectUpcomingAlien = (state: RootState) => state.dynamic.dynamic.upcomingAlien;
 export const selectViewIndex = (state: RootState) => state.dynamic.dynamic.viewIndex;

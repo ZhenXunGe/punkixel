@@ -11,7 +11,7 @@ import {
   selectDye,
   pickColor,
 } from '../../data/statusSlice';
-import { ofDyeIndex, toDyeColor, toDyeIndex } from '../../data/palette';
+import { ofDyeIndex, getPalette, toDyeColor, toDyeIndex } from '../../data/palette';
 import Sketch from "../../modals/sketch";
 import { DrawerConfig } from '../Tool';
 
@@ -26,6 +26,7 @@ export function ToolBarDye(props: DrawerConfig) {
   const pickedDye = useAppSelector(selectDye);
   const [show, setShow] = useState(false);
   const [alertContext, setAlertContext] = useState("");
+  const [palette, setPalette] = useState(getPalette(palettes[pickedCategory].palettes[pickedPalette]));
   return (
     <div className="tool-bar">
 
@@ -35,7 +36,7 @@ export function ToolBarDye(props: DrawerConfig) {
             <div className='select_board'>
 
               <div className='dropdown'>
-                <div className='btn_left'>{palettes[pickedCategory].name} / {palettes[pickedCategory].palettes[pickedPalette].name}</div>
+                <div className='btn_left'>{palettes[pickedCategory].name} / {getPalette(palettes[pickedCategory].palettes[pickedPalette]).name}</div>
                 <div className='btn_right' id="dropdown-custom-1" onClick={() => {
                   setShow(true);
                 }} />
@@ -44,8 +45,8 @@ export function ToolBarDye(props: DrawerConfig) {
               <div className='select_right'>
                 <div className='select_right_inline'>
                   {
-                    palettes[pickedCategory].palettes[pickedPalette].dye.map((d, idx) => {
-                      let palette = palettes[pickedCategory].palettes[pickedPalette];
+                    getPalette(palettes[pickedCategory].palettes[pickedPalette]).dye.map((d, idx) => {
+                      let palette = getPalette(palettes[pickedCategory].palettes[pickedPalette]);
                       return (
                         <li key={`${pickedPalette}-${idx}`}
                             className={`${d.color == ofDyeIndex(pickedDye).color && pickedBottle == idx ? 'selected' : ''}`}
@@ -73,7 +74,7 @@ export function ToolBarDye(props: DrawerConfig) {
                 </div>
               </div>
               <div className='pixel'>
-                <li id='PPH'>{palettes[pickedCategory].palettes[pickedPalette].pph}</li>
+                <li id='PPH'>{getPalette(palettes[pickedCategory].palettes[pickedPalette]).pph}</li>
               </div>
             </div>
 

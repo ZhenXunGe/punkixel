@@ -3,7 +3,7 @@ import { WritableDraft } from 'immer/dist/types/types-external';
 import { RootState } from '../app/store';
 import { Player } from '../../server/types';
 import { getWorld, initializeWorld, RankInfo } from './world';
-import { InstanceInfo } from '../data/instance';
+import { InstanceInfo } from '../server/types';
 
 
 export interface StatusState {

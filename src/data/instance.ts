@@ -1,22 +1,10 @@
 import { Drawer } from "./draw";
 import { DyeIndex } from "./palette";
 import { getWorld, World } from "./world";
+import { InstanceInfo } from "../server/types";
 const individualWidth:number = 250;
 const individualHeight:number = 100;
 const content_size = individualWidth * individualHeight;
-export interface InstanceInfo {
-    id: string;
-    content: Array<Array<DyeIndex>>;
-    background: number;
-    minions: Array<string>;
-    drops: Array<number>;
-    owner: string;
-    ratio: number;
-    pph: number;
-    reward: number;
-    basePPH: number;
-    sketched: boolean;
-}
 
 export class Instance {
     drawer: Drawer;

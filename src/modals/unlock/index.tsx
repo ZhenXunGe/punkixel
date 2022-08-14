@@ -1,8 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useState } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { Container, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { Minion, randomMinion } from "../../data/minion";
+import { Minion } from "../../server/types";
+import { createMinion } from "../../server/generator";
 import { getBulletFrame, getMinionFrame } from '../../sprite/spriteSlice';
 import { getWorld } from "../../data/world";
 
@@ -11,6 +13,8 @@ import {
 } from '../../data/statusSlice';
 
 import Unlock_ from "../../images/protectors/Unlock.png";
+import UNKNOWN_ICON from "../../images/protectors/unknown.png";
+
 import "./style.scss";
 
 interface UnlockProps {
@@ -26,7 +30,7 @@ interface InfoProps {
 interface MinionInfoProps {
   show: boolean;
   handleClose: ()=> void;
-  handleConfirm: ()=> void;
+  handleConfirm: () => Promise<Minion | null>;
   position: number;
   minion: Minion | null;
   topic: string;
@@ -35,8 +39,26 @@ interface MinionInfoProps {
 
 
 export function MinionInfoBox(props: MinionInfoProps) {
-  if (props.minion === null) { return(<></>);}
-  let ufo = getMinionFrame(props.minion).src;
+  let [minion, setMinion] = useState(props.minion);
+  let [icon, setIcon] = useState(UNKNOWN_ICON);
+  let [modifierIcon0, setModifierIcon0] = useState(UNKNOWN_ICON);
+  let [modifierIcon1, setModifierIcon1] = useState(UNKNOWN_ICON);
+  let [status, setStatus] = useState(0); //0 is normal, 1 is waiting, 2 is done
+
+  useEffect(() => {
+    if (props.minion) {
+      setIcon(getMinionFrame(props.minion).src)
+      setModifierIcon0(getBulletFrame(props.minion.modifier[0]).src);
+      setModifierIcon1(getBulletFrame(props.minion.modifier[1]).src);
+    };
+  }, [minion]);
+
+
+  function confirm() {
+    props.handleConfirm().then((m)=>{setMinion(m); setStatus(2);});
+    setStatus(1);
+  }
+
   return(
       <Modal show={props.show} aria-labelledby="contained-modal-title-vcenter" centered dialogClassName="modal-90w">
         <Modal.Body className="show-grid">
@@ -44,23 +66,29 @@ export function MinionInfoBox(props: MinionInfoProps) {
             <button className="closeBtn" onClick={props.handleClose}></button>
             <div className="unlock-area">
               <div className="info-left">
-                <img src={ufo}></img>
+                <img src={icon}></img>
                 <div className="advisor"></div>
               </div>
               <div className="minion_pro">
                   <div className="title"> {props.topic} </div>
                   <ul className="minion_proto">
-                    <li>{props.minion.power}</li>
-                    <li>{props.minion.frequency}</li>
-                    <li>{props.minion.contribution}</li>
+                    <li>{minion === null ? "???" : minion.power}</li>
+                    <li>{minion === null ? "???" : minion.frequency}</li>
+                    <li>{minion === null ? "???" : minion.contribution}</li>
                   </ul>
                   <ul className="minion_modifier">
-                    <li><img src={getBulletFrame(props.minion.modifier[0]).src}></img></li>
-                    <li><img src={getBulletFrame(props.minion.modifier[1]).src}></img></li>
+                    <li><img src={modifierIcon0}></img></li>
+                    <li><img src={modifierIcon1}></img></li>
                   </ul>
                 </div>
               <div className="info-right">
-                <div onClick={props.handleConfirm} className={props.btnClass}></div>
+                if (status === 0) {
+                    (<div onClick={confirm} className={props.btnClass}></div>)
+                } else if (status === 1) {
+                    (<div>loading...</div>)
+                } else {
+                    (<div onClick={props.handleClose} className={props.btnClass}></div>)
+                };
               </div>
             </div>
           </Container>
@@ -74,12 +102,11 @@ export function Unlock(prop: UnlockProps) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const player = useAppSelector(selectPlayer)!;
-  let m = randomMinion(player.id);
-  const handleConfirm = () => {
+  let m = createMinion(player.id);
+  const handleConfirm = async () => {
     getWorld().spentPunkxiel(player.id, 1000);
-    getWorld().registerMinion(m);
-    getWorld().unlockMinion(m, prop.index);
-    setShow(false);
+    let minion = await getWorld().unlockMinion(player.id, prop.index);
+    return minion;
   }
   return (
     <>
@@ -87,7 +114,7 @@ export function Unlock(prop: UnlockProps) {
         <img src={Unlock_}></img>
       </div>
       <MinionInfoBox show={show} handleClose={handleClose}
-            handleConfirm={handleConfirm} position={0} minion={m}
+            handleConfirm={handleConfirm} position={0} minion={null}
             btnClass="unlock"
             topic="Unlock a minion to join your force"></MinionInfoBox>
     </>
@@ -99,21 +126,19 @@ export function Reroll(prop: InfoProps) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const player = useAppSelector(selectPlayer)!;
-  let m = randomMinion(player.id);
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     getWorld().spentPunkxiel(player.id, 1000);
-    getWorld().registerMinion(m);
-    getWorld().rerollMinion(m, prop.index);
-    setShow(false);
+    let minion = await getWorld().rerollMinion(player.id, prop.index);
+    return minion;
   }
   return (
     <>
       <div className='inventory-pick' onClick={() => handleShow()}>
       </div>
       <MinionInfoBox show={show} handleClose={handleClose} handleConfirm={handleConfirm}
-            position={0} minion={m}
+            position={0} minion={prop.minion}
             btnClass="reroll"
-            topic={`${m.id} is ready to take order)`}></MinionInfoBox>
+            topic={`${prop.minion.id} is ready to take order)`}></MinionInfoBox>
     </>
   );
 }

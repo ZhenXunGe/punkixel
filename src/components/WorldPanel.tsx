@@ -156,7 +156,7 @@ export function WorldPanel(props: WorldPanelProp) {
       <div style={{left:pickFrameX, top:pickFrameY}}></div>
     </div>
       <MinionInfoBox show={show} handleClose={handleClose}
-            handleConfirm={handleClose} position={0}
+            handleConfirm={async () => {handleClose(); return minion!}} position={0}
             btnClass="disable"
             minion={minion} topic={`Owned by: ${minion?.owner} [contribution: ${minion?.contribution}]`}></MinionInfoBox>
     </>

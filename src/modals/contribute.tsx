@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Container, ListGroup, Modal } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectPlayer } from "../data/statusSlice";
-import { addEvent, selectTimeClock, selectViewIndex, signalPlaceMinion, signalDynamic } from "../dynamic/dynamicSlice";
+import { selectTimeClock, selectViewIndex } from "../dynamic/dynamicSlice";
 import { getWorld } from "../data/world";
 import header from "../images/modal/protect/header.png";
 import PROTECT from '../images/world/protect_btn.png';
@@ -13,6 +13,7 @@ import './style.scss';
 import { getMinionFrame} from "../sprite/spriteSlice";
 import {updateInventory} from '../data/statusSlice';
 import { PageScroller } from "./scroll";
+import React from "react";
 
 interface SingleSelect {
   current: string;
@@ -74,18 +75,18 @@ export default function Contribute() {
   const viewIndex = useAppSelector(selectViewIndex);
   const player = useAppSelector(selectPlayer)!;
   const [startPos, setStartPos] = useState<number>(0);
-
+  const [status, setStatus] = useState(0); //0 is normal, 1 is waiting, 2 is done
   const available = player.inventory.filter((m) => m !== null);
   const availableSize = available.length;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     getWorld().spentPunkxiel(player.id, 100);
-    dispatch(updateInventory({bol:true}));
-    dispatch(signalPlaceMinion({ mId: minionId!, viewIndex: viewIndex }));
-    //dispatch(addEvent(ProtectingEvent("GruPlayer 1", getWorld().getInstance(viewIndex), getWorld().getMinion(minionId!))));
+    setStatus(1);
+    await getWorld().placeMinion(minionId!, viewIndex);
+    setStatus(2);
     setShow(false);
-    dispatch(updateInventory({bol:false}));
-    dispatch(signalDynamic);
+    //dispatch(updateInventory({bol:false}));
+    //dispatch(signalDynamic);
   }
   return (
 

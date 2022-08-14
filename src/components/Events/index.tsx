@@ -4,7 +4,7 @@ import dyeavator from "../../images/buttons/dyebottle.png";
 import { selectAlien, selectEvents } from '../../dynamic/dynamicSlice';
 import { EventInfo } from '../../dynamic/event';
 import { getSprite, getMinionFrame } from '../../sprite/spriteSlice';
-import { Minion } from '../../../server/types';
+import { Minion } from '../../server/types';
 import { makeEventRender } from '../../dynamic/event';
 
 export function AlienAvator() {

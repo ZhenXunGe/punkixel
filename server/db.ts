@@ -4,13 +4,8 @@ const MongoClient = require("mongodb").MongoClient;
 const DB_CONN_STRING="mongodb://localhost:27017/"
 const DB_NAME="punkixel"
 import * as mongoDB from "mongodb";
-import {individualWidth, individualHeight,
-        Minion, InstanceInfo, BulletModifier,
-        Alien,
-        MinionType, Player, SysEvent} from "./types";
-import {getRandomInt} from "./generator";
-
-const content_size = individualWidth * individualHeight;
+import { Minion, InstanceInfo, Alien, Player, SysEvent} from "./types";
+import { getRandomInt, createMinion, createInstance, newPlayer, resetMinion } from "./generator";
 
 interface PunkixelCollections {
   players?: mongoDB.Collection,
@@ -62,37 +57,18 @@ export async function connectToDatabase (reset:boolean) {
   }
 }
 
-function createInstance(owner: string): InstanceInfo{
-  let content = [
-    new Array(individualHeight * individualWidth),
-    new Array(individualHeight * individualWidth),
-    new Array(individualHeight * individualWidth)
-  ];
-  for (var i=0; i<content_size; i++) {
-      content[0][i] = 0;
-      content[1][i] = 0;
-      content[2][i] = 0;
-  }
-  let instance = {
-    content: content,
-    minions: [],
-    drops:[],
-    index:-1,
-    ratio:0.4,
-    owner: owner,
-    background: 0,
-    pph: 0,
-    reward: 0,
-    basePPH: 0,
-    sketched: false,
-  };
-  return instance;
-}
-
 export async function registerEvent(event: SysEvent) {
   let index = await dbClient.events!.count();
   event.id = index;
   return await dbClient.events!.insertOne(event);
+}
+
+export async function fetchEvents(start: number): Promise<Array<SysEvent>> {
+  let index = dbClient.events!.find({});
+  let eles:Array<SysEvent> = [];
+  let r = await index.skip(start).toArray();
+  r.forEach((x) => eles.push(x as unknown as SysEvent));
+  return eles;
 }
 
 export async function getInstance(id:string): Promise<InstanceInfo> {
@@ -121,71 +97,12 @@ export async function pickRandomAlien(): Promise<Alien> {
 }
 
 
-
-
-
 export async function registerInstance(id: string, owner: string) {
   let index = await dbClient.instances!.count();
   let instance = createInstance(owner);
   instance.index = index;
   return await dbClient.instances!.insertOne(instance);
 }
-
-const majorModifiers: Array<BulletModifier> = ["missle", "bomb", "bullet"];
-const minorModifiers: Array<BulletModifier> = ["freeze", "explode"];
-const minionTypeList:MinionType[] = ["ufo", "airballoon", "land"];
-
-
-function randomInRange(from:number, to:number) {
-  return from + Math.floor(Math.random()*(to - from));
-}
-
-function generateRandomPos(t: MinionType) {
-  if(t==="ufo") {
-    return [randomInRange(0,900), 400 - randomInRange(300,350)];
-  } else if (t==="land") {
-    return [randomInRange(0,900), 400 - 70];
-  } else if (t==="airballoon") {
-    return [randomInRange(0,900), 400 - randomInRange(200,300)];
-  } else {
-    return [0,0];
-  }
-}
-
-function randomModifier(t:MinionType): Array<BulletModifier> {
-  let minorModifier = minorModifiers[Math.floor(Math.random()*2)];
-  if(t==="ufo") {
-    return [majorModifiers[0], minorModifier];
-  } else if (t==="airballoon") {
-    return [majorModifiers[1], minorModifier];
-  } else if (t==="land") {
-    return [majorModifiers[2], minorModifier];
-  }
-  return [];
-}
-
-export function createMinion(owner:string): Minion {
-  let minionType = minionTypeList[Math.floor(Math.random()*3)];
-  let id = "minion-" + Math.ceil(Math.random() * 100000);
-  let frequency = Math.ceil(Math.random()*30 + 5);
-  let power = Math.ceil(Math.random()*5 + 5);
-  let pos = generateRandomPos(minionType);
-  let m = {
-      x:pos[0],
-      y:pos[1],
-      frequency:frequency,
-      power:power,
-      location:null,
-      id:id,
-      owner:owner,
-      modifier: randomModifier(minionType),
-      contribution:0,
-      style: Math.floor(Math.random()*4),
-      type: minionType//minionTypeList[Math.floor(Math.random()*3)]
-    };
-  return m;
-}
-
 
 export async function getPlayer(id: string) {
   const player = (await dbClient.players!.findOne({id: id})) as unknown as Player;
@@ -201,43 +118,41 @@ export async function registerMinion(owner: string, slot:number): Promise<string
   let player = await getPlayer(owner);
   player.inventory[slot] = minion.id;
   await dbClient.minions!.insertOne(minion);
-  updatePlayer(owner, player);
+  console.log("db.ts register minion", player);
+  await updatePlayer(owner, player);
   return minion.id;
+}
+
+export async function rerollMinion(mid: string): Promise<Minion> {
+  let minion = await getMinion(mid);
+  minion = resetMinion(minion);
+  let loc = minion.location;
+  if (loc != null) {
+    let instance = await getInstanceByIndex(loc);
+    var index = instance.minions.indexOf(mid, 0);
+    if (index > -1) {
+      instance.minions.splice(index, 1);
+    }
+    updateInstance(instance);
+  }
+  minion.location = null;
+  await dbClient.minions!.updateOne({id:minion.id}, {$set: minion});
+  return minion;
 }
 
 export async function registerPlayer(id: string) {
   let index = await dbClient.instances!.count();
-  let player = {
-    id: id,
-    energy: 50,
-    punkxiel: 10000,
-    ranking: 99,
-    pph: 0,
-    voucher: 1,
-    palettes: [{
-      name: "basic",
-      palettes: [],
-    },
-    {
-      name: "spin",
-      palettes: []
-    },
-    {
-      name: "dilation",
-      palettes: [],
-    }
-    ],
-    inventory: [null, null, null, null, null],
-    homeIndex: index,
-  };
+  let player = newPlayer(id, index);
   await registerInstance(id, id);
   let ret = await dbClient.players!.insertOne(player);
+  let i = await dbClient.instances!.count();
+  console.log("total instance after register player:", i);
   return ret;
 }
 
 
 export async function allInstances() {
-  let query = await dbClient.instances!.find({}).limit(10);
+  let query = await dbClient.instances!.find({}).limit(100);
   let instances:any = [];
   await query.forEach((q) => instances.push(q));
   return instances;
@@ -278,7 +193,7 @@ export async function updateMinion(minion: Minion) {
 }
 
 
-export async function protectInstance(minion:Minion, instance: InstanceInfo) {
+export async function protectInstance(minion:Minion, instance: InstanceInfo): Promise<Minion> {
   if (minion.location != null) {
      throw new Error("Minion is not idle");
   }
@@ -286,9 +201,13 @@ export async function protectInstance(minion:Minion, instance: InstanceInfo) {
   minion.location = instance.index;
   await updateMinion(minion);
   await updateInstance(instance);
+  return minion
 }
 
-export async function claimDrop(owner: string, drops:string[]) {
+export async function claimDrop(owner: string, amount:number, drops:string[]) {
+  let player = await getPlayer(owner);
+  player.punkxiel += amount;
+  updatePlayer(owner, player);
   return;
 }
 
@@ -312,9 +231,16 @@ export async function clearMinionContribute(mid: string) {
   return;
 }
 
+export async function totalInstance() {
+  let totalInstance:number = await dbClient.instances!.count();
+  return totalInstance;
+}
+
 export async function loadWorld() {
   let totalInstance:number = await dbClient.instances!.count();
+  let totalEvents:number = await dbClient.events!.count();
   return {
-    totalInstance: totalInstance
+    totalInstance: totalInstance,
+    totalEvents: totalEvents,
   }
 }

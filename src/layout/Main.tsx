@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { LeftMenu } from './LeftMenu';
 import { RightPanel } from './RightPanel';
 import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded, spriteNumber, getSprite, setLoaded } from '../sprite/spriteSlice';
-import { selectCursor, selectTimeClock, setCursor, updateTimeClockAsync } from '../dynamic/dynamicSlice';
+import { selectCursor, updateDynamic, setCursor, updateTimeClockAsync } from '../dynamic/dynamicSlice';
 import { getWorld } from '../data/world';
 
 
@@ -26,6 +26,9 @@ import More from '../modals/more';
 import { Loading } from './Loading';
 import { HandlerProxy } from './handlerProxy';
 
+import {
+  selectL1Account,
+} from "../data/accountSlice";
 
 interface loadingStatus {
   totalSprites:number,
@@ -73,9 +76,17 @@ function HoverProxy(props: HoverProxyProps) {
 
 export function Main(prop: loadingStatus) {
   const dispatch = useAppDispatch();
+  let account = useAppSelector(selectL1Account);
   useEffect(() => {
-    setInterval(function () {dispatch(updateTimeClockAsync(0))}, 80);
-  }, []);
+    if(account) {
+      setInterval(function () {dispatch(updateTimeClockAsync(0))}, 80);
+      setInterval(function () {
+        if (getWorld().timestamp > 0) {
+          dispatch(updateDynamic(account!.address))
+        }
+      }, 2000);
+    }
+  }, [account]);
   const isloaded = useAppSelector(spriteIsLoaded);
 
   const total = useAppSelector(spriteNumber);

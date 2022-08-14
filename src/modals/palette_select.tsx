@@ -3,6 +3,7 @@ import { Container, Modal } from "react-bootstrap";
 import { useAppSelector } from "../app/hooks";
 import { selectPlayer } from "../data/statusSlice";
 import { PageScroller } from "./scroll";
+import { getPalette } from "../data/palette";
 interface IProps {
   show: boolean;
   onHide: () => void;
@@ -44,9 +45,11 @@ export function PaletteSelect(props: IProps) {
               </div>
               <div className="right">
                 <ul className="scroll">
-                  {palettes[pickedCategory].palettes.map((p, idx) => {
+                  {
+                    palettes[pickedCategory].palettes.map((p, idx) => {
                     if (idx >= pageNumber * pageSize && idx <= (pageNumber+1) * pageSize - 1) {
-                      return (<li className={`palette ${idx == pickedPalette ? 'selected' : ''}`} onClick={() => {
+                      return (
+                      <li className={`palette ${idx == pickedPalette ? 'selected' : ''}`} onClick={() => {
                         setPickedPalette(idx);
                       }}
                         onDoubleClick={() => {
@@ -54,11 +57,11 @@ export function PaletteSelect(props: IProps) {
                         }}
                       >
                         <div className="paletteItem">
-                          {p.name}
+                          {getPalette(p).name}
                         </div>
                         <ul>
-                          {palettes[pickedCategory].palettes[idx].dye.map((d, idx) => {
-                            let palette = palettes[pickedCategory].palettes[idx];
+                          {
+                            getPalette(p).dye.map((d, idx) => {
                             return (
                               <li>
                                 <span className={`dye-item`}
@@ -73,7 +76,8 @@ export function PaletteSelect(props: IProps) {
                                 </span>
                               </li>
                             )
-                          })}
+                            })
+                          }
                         </ul>
                       </li>)
                     }
@@ -82,14 +86,10 @@ export function PaletteSelect(props: IProps) {
                   }
                 </ul>
                 <PageScroller show={paletteLenth > 9} onPageChange={(n:number) => setPageNumber(n)} rangeStart={0} rangeEnd={Math.floor(paletteLenth/8)} pos={0}></PageScroller>
-
               </div>
             </div>
           </Container>
         </Modal.Body>
-        {/* <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer> */}
       </Modal>
     </>
   );

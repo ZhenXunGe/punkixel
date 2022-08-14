@@ -1,7 +1,14 @@
 import express, { Request, Response } from "express";
-import { connectToDatabase, allInstances, allPlayers, allMinions, getInstanceByIndex} from './db';
+import { SysEvent} from "./types";
+import { registerPlayer, allInstances,
+  allPlayers, allMinions,
+  loadWorld, fetchEvents,
+  getInstanceByIndex, registerMinion,
+  getPlayer, getMinion, rerollMinion,
+  totalInstance, protectInstance,
+} from './db';
 import { init } from "./init";
-import { Simulator, createDynamicState }  from "./simulate";
+import { Simulator }  from "./simulate";
 
 import cors from "cors";
 
@@ -13,9 +20,23 @@ punkixelRouter.use(express.json());
 
 var simulator: Simulator | null = null;
 
-punkixelRouter.get("/info/", async (req: Request, res: Response) => {
+punkixelRouter.get("/info/:playerid/:start", async (req: Request, res: Response) => {
   try {
-      res.status(200).send({"success": true, result: simulator?.info()});
+      let i = await loadWorld();
+      let start = parseInt(req.params.start);
+      let events: Array<SysEvent> = [];
+      let player = await getPlayer(req.params.playerid);
+      if (start > 0) {
+        events = await fetchEvents(parseInt(req.params.start));
+      }
+      let simuinfo = simulator?.info();
+      let info = {
+        ...simuinfo,
+        events: events,
+        player: player,
+        totalEvents: i.totalEvents,
+      }
+      res.status(200).send({"success": true, result: info});
   } catch (error:any) {
       res.status(500).send({"success": false, "error": error.message});
   }
@@ -39,6 +60,7 @@ punkixelRouter.get("/players/", async (req: Request, res: Response) => {
   }
 });
 
+
 punkixelRouter.get("/minions/", async (req: Request, res: Response) => {
   try {
     const instances = await allMinions();
@@ -48,10 +70,58 @@ punkixelRouter.get("/minions/", async (req: Request, res: Response) => {
   }
 });
 
+punkixelRouter.get("/minion/:minionId", async (req: Request, res: Response) => {
+  try {
+    const minion = await getMinion(req.params.minionId);
+    console.log(`req: get minion ${req.params.minionId}`);
+    res.status(200).send({ success: true, result: minion});
+  } catch (error: any) {
+    res.status(400).send({ "success": false, "error": error.message });
+  }
+});
+
+punkixelRouter.post('/minion/protect/', async (req:any, res:any) => {
+    console.log("req body:", req.body);
+    const instance = await getInstanceByIndex(parseInt(req.body.location));
+    const minion = await getMinion(req.body.minionid);
+    let m = await protectInstance(minion, instance);
+    simulator!.addMinion(minion.id);
+    console.log(`req: protect ${instance.index} ${minion.id}`);
+    res.status(200).send({ success: true, result: m});
+  });
+
 punkixelRouter.post('/protect/:instanceidx/', async (req:any, res:any) => {
     const instance = await getInstanceByIndex(req.params.instanceidx);
     res.status(200).send({ success: true, result: instance});
   });
+
+punkixelRouter.post('/unlock/:playerid/:slot', async (req:any, res:any) => {
+    const id = await registerMinion(req.params.playerid, parseInt(req.params.slot));
+    const player = await getPlayer(req.params.playerid);
+    console.log(`req: unlock minion ${req.params.playerid} ${req.params.slot} ${id}`, player);
+    res.status(200).send({ success: true, result: player});
+  });
+
+punkixelRouter.post('/reroll/:playerid/:slot', async (req:any, res:any) => {
+    const player = await getPlayer(req.params.playerid);
+    const mId = player.inventory[parseInt(req.params.slot)];
+    const minion = await rerollMinion(mId!);
+    console.log(`req: reroll minion ${req.params.playerid} ${req.params.slot}`, player);
+    res.status(200).send({ success: true, result: minion});
+  });
+
+punkixelRouter.post("/player/register/", async (req: Request, res: Response) => {
+  try {
+    await registerPlayer(req.body.playerid);
+    console.log(`register player: ${req.body.playerid}`);
+    let player = await getPlayer(req.body.playerid);
+    let nbInstance = await totalInstance();
+    simulator!.updateTotalInstance(nbInstance);
+    res.status(200).send({ success: true, result: player});
+  } catch (error: any) {
+    res.status(400).send({ "success": false, "error": error.message });
+  }
+});
 
 
 const port = 4000;

@@ -40,9 +40,10 @@ export async function init(reset: boolean) {
           await registerAlien(alien);
         }
         let dynamicState = await createDynamicState();
-        let simulator = new Simulator(dynamicState);
+        let instance = await getInstanceByIndex(0);
+        let simulator = new Simulator(dynamicState, instance);
         await simulator.init();
-        setInterval(()=>simulator.step(), 1000);
+        setInterval(()=>simulator.step(), 80);
         return simulator;
     } catch(error) {
         console.error("Database operation failed", error);

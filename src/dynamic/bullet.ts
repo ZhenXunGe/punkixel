@@ -1,4 +1,4 @@
-import { BulletModifier } from "../data/minion";
+import { BulletModifier } from "../server/types";
 import { Sprite } from "../sprite/sprite";
 import { getSprite } from "../sprite/spriteSlice";
 

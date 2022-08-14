@@ -1,15 +1,12 @@
-import { Alien } from "../../server/types";
-import { Instance } from "../data/instance";
 import PaletteInfo from "../modals/palette";
 import InfoBox from "../modals/info/index";
+import RewardBox from "../modals/reward/index";
 import './style.scss';
 import ARTIST_ADVISOR_AVATOR from '../images/modal/advisor/artistadvisor.png';
 import DEFIND_ADVISOR_AVATOR from '../images/modal/advisor/artistadvisor.png';
 import { AlienAvator, DyeAvator, MinionAvator } from "../components/Events";
-import { fromDrop } from "../data/palette";
-import RewardBox from "../modals/reward"
 import { getSprite } from "../sprite/spriteSlice";
-import { SysEvent } from "../../server/types";
+import { SysEvent } from "../server/types";
 import { getWorld } from "../data/world";
 
 export interface EventRender {
@@ -26,8 +23,8 @@ const EventMinionProtecting = 0x11;
 /* Advice Event will not be submitted to Server */
 export function AdviceEventRender(advisor: string, brief: string, advice: string): EventRender {
     let event = {
-        id: EventAdvice,
-        tx: 0,
+        id: 0,
+        tx: EventAdvice,
         time: Date.now(),
         source: [],
     };
@@ -49,7 +46,7 @@ export function AlienEventRender(event: SysEvent): EventRender {
     let monster = getWorld().getAlien(event.source[0].objId);
     let instance = getWorld().getInstance(parseInt(event.source[0].objId));
     const avatorurl = getSprite(monster.sprite).getFrame("run", 0).src;
-    const description = `Alien ${monster.name} has entered block ${instance.info.id}`;
+    const description = `Alien ${monster.name} has entered block ${event.source[0].objId}`;
     const info = () => {
             return (
                 <>
@@ -88,10 +85,11 @@ export function ProtectingEventRender(event: SysEvent): EventRender {
 }
 
 export function RewardEventRender(event: SysEvent): EventRender {
-    let account = event.source[0].objId;
-    let instanceId = event.source[1].objId;
+    let alienId = event.source[0].objId;
+    let account = event.source[1].objId;
+    let instanceId = event.source[2].objId;
     let instance = getWorld().getInstance(parseInt(instanceId));
-    const description = `Alien ${account} was knocked in ${instanceId}, 100 punkxiels dropped`;
+    const description = `Alien ${alienId} was knocked in ${instanceId}, 100 punkxiels dropped`;
     console.log("rewards length:", event.source);
     return {
         event: event,
@@ -100,7 +98,7 @@ export function RewardEventRender(event: SysEvent): EventRender {
             <>
             <AlienAvator></AlienAvator>
             <div className="dropEvent">{description}
-                <RewardBox info={instance}></RewardBox>
+               <RewardBox sources={event.source}></RewardBox>
             </div>
             </>);
         }
@@ -137,15 +135,16 @@ export function EventInfo(props: EventInfoProps) {
 }
 
 export function makeEventRender(event: SysEvent) {
-  if(event.id == EventAlienEnter) {
+  if(event.tx === EventAlienEnter) {
     return AlienEventRender(event);
-  } else if (event.id == EventAlienKnock) {
+  } else if (event.tx === EventAlienKnock) {
     return RewardEventRender(event);
-  } else if (event.id == EventAlienDrop) {
+  } else if (event.tx === EventAlienDrop) {
     return DropEventRender(event);
-  } else if (event.id == EventMinionProtecting) {
+  } else if (event.tx === EventMinionProtecting) {
     return ProtectingEventRender(event);
   } else {
-    throw Error("Unknown Event for Event Render");
+    console.log(event);
+    throw Error("Unknown Event for Event Render:" + event.id);
   }
 }

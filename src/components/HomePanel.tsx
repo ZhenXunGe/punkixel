@@ -16,7 +16,6 @@ import {
 } from '../data/statusSlice';
 
 import {
-  addEvent,
   selectSketchSignal,
   selectTimeClock,
   signalSketch,
@@ -78,11 +77,11 @@ export function DrawerBoard(props: DrawerBoardProp) {
     let instance = getWorld().getInstance(homeIndex);
     let artistAdvice = instance.artistAdvice();
     if(artistAdvice!==null) {
-      dispatch(addEvent(AdviceEventRender("Artist Advise", artistAdvice!.brief, artistAdvice!.description)));
+      //dispatch(addEvent(AdviceEventRender("Artist Advise", artistAdvice!.brief, artistAdvice!.description)));
     }
     let defendingAdvice = instance.defendingAdvice();
     if(defendingAdvice!==null) {
-      dispatch(addEvent(AdviceEventRender("Defending Advise", defendingAdvice!.brief, defendingAdvice!.description)));
+      //dispatch(addEvent(AdviceEventRender("Defending Advise", defendingAdvice!.brief, defendingAdvice!.description)));
     }
   }, [])
 

@@ -1,9 +1,18 @@
-import { Drawer, individualWidth, Painter } from "./draw";
-import { Instance, InstanceInfo } from "./instance";
-import { Player, Alien, Minion} from "../../server/types";
+import { Drawer, Painter } from "./draw";
+import { Instance } from "./instance";
+import { Player, Alien, Minion, InstanceInfo} from "../server/types";
 import { ColorCategory, fromDrop, getPalette } from "./palette";
 import { punkixelEndpoint } from "./endpoint";
+import { createInstance, newPlayer} from "../server/generator";
 import background from "../images/sky.jpg";
+import { DynamicState } from "../../server/simulate";
+import { individualWidth, individualHeight } from "../server/types";
+
+interface SimulateState {
+  dynamicState: DynamicState
+}
+
+const content_size = individualWidth * individualHeight;
 
 export function getBackground(index: number) {
   let backs = [background];
@@ -29,6 +38,7 @@ export class World {
   players: Map<string, Player>;
   aliens: Map<string, Alien>;
   timestamp: number;
+  syncTimestamp: number;
   constructor(cor: number) {
     this.cursor = cor;
     this.minions = new Map<string, Minion>();
@@ -36,7 +46,8 @@ export class World {
     this.aliens = new Map<string, Alien>();
     this.instances = [];
     this.weather = "normal";
-    this.timestamp = new Date().getMilliseconds();
+    this.timestamp = 0; //new Date().getMilliseconds();
+    this.syncTimestamp = 0;
   }
 
   getInstance(center_position: number) {
@@ -82,6 +93,10 @@ export class World {
     this.players.set(p.id, p);
   }
 
+  updatePlayer(p: Player) {
+    this.players.set(p.id, p);
+  }
+
   getPlayer(pid: string) {
     return this.players.get(pid)!;
   }
@@ -102,6 +117,16 @@ export class World {
     return this.aliens.get(id)!;
   }
 
+  updateInstance(instance: InstanceInfo) {
+    if (this.instances.length <= instance.index) {
+        this.instances[instance.index] = BuildInstance(instance, ()=>{return this.cursor;});
+    }
+  }
+
+  updateMinion(minion: Minion) {
+     this.minions.set(minion.id, minion);
+  }
+
 
   /* Each time a bullet hit alien, the contribution of the owner of the bullet is increased */
   incMinionContribute(id: string, power: number) {
@@ -120,30 +145,27 @@ export class World {
   /* Place a minion in certain block.
    * This operation will clear the contribution of the minion in its current block.
    */
-  placeMinion(mId: string, viewIndex: number) {
+  async placeMinion(mId: string, viewIndex: number) {
+    let minion: Minion = await punkixelEndpoint.invokeRequest("POST", `minion/protect/`, JSON.parse(`{"minionid":"${mId}", "location":${viewIndex}}`));
     let m = this.minions.get(mId)!;
-    let n = { ...m, location: viewIndex, contribution: 0 };
-    this.minions.set(m.id, n);
+    this.minions.set(m.id, minion);
   }
 
-  unlockMinion(minion: Minion, index: number) {
-    let owner = minion.owner;
+  async unlockMinion(owner: string, index: number):Promise<Minion> {
+    let player:Player = await punkixelEndpoint.invokeRequest("POST", `unlock/${owner}/${index}`, null);
+    let minionId = player.inventory[index];
+    let minion:Minion = await punkixelEndpoint.invokeRequest("GET", `minion/${minionId}`, null);
+    this.registerMinion(minion);
     console.log("unlockMinion, owner is:", owner);
-    let player = this.players.get(owner)!;
-    let inventory = [...player.inventory];
-    inventory[index] = minion.id;
-    console.log("inventory is:", inventory);
-    let update = { ...player, inventory: inventory };
-    this.players.set(player.id, update);
+    this.players.set(player.id, player);
+    return minion;
   }
 
-  rerollMinion(minion: Minion, index: number) {
-    let owner = minion.owner;
-    let player = this.players.get(owner)!;
-    let inventory = [...player.inventory];
-    inventory[index] = minion.id;
-    let update = { ...player, inventory: inventory };
-    this.players.set(player.id, update);
+  async rerollMinion(owner: string, index: number):Promise<Minion> {
+    let minion:Minion = await punkixelEndpoint.invokeRequest("POST", `reroll/${owner}/${index}`, null);
+    this.updateMinion(minion);
+    console.log("rerollMinion, owner is:", owner);
+    return minion;
   }
 
   claimRewardPunkxiel(owner: string, reward: number) {
@@ -163,11 +185,13 @@ export class World {
       let paletteIndex = fromDrop(drop);
       let palette = getPalette(fromDrop(drop));
       let category = (paletteIndex - paletteIndex % 16) / 16;
+      /*
       let ps: ColorCategory = {
         ...palettes[category],
         palettes: [...palettes[category].palettes, palette]
       }
       palettes[category] = ps;
+      */
       console.log(`palette ${palette.name} added`);
     }
     let update = { ...player, palettes: palettes };
@@ -202,8 +226,9 @@ export class World {
 
   async getTopRank() :Promise<RankInfo> {
     let instances = world.instances.sort((a:Instance, b:Instance) => {
-      return (a.info.reward - b.info.reward);
+      return (b.info.reward - a.info.reward);
     });
+    console.log("rank:", instances);
     let instanceInfos:Array<InstanceRank> = [];
     for (var i=0;i<instances.length && i<=5;i++) {
       instanceInfos.push({
@@ -240,15 +265,22 @@ export async function initializeWorld(account: string) {
     }
     let p = world.getPlayer(account);
     if (p == null) {
-      world.registerPlayer(createTestPlayer(account, players.length));
-      instances.push(EmptyInstance("temp-instance", world, account));
+      let l = players.length;
+      let player = await punkixelEndpoint.invokeRequest("POST", "player/register", JSON.parse(`{"playerid":"${account}"}`));
+      // Reload instances since new user available
+      instances = await punkixelEndpoint.invokeRequest("GET", "instances", null);
+      world.registerPlayer(player);
     }
     for (var minion of minions) {
       world.registerMinion(minion);
     }
     world.loadInstance(BuildInstances(instances, () => { return world.cursor }));
+    let info: SimulateState = await punkixelEndpoint.invokeRequest("GET", `info/${account}/0`, null);
+    world.timestamp = info.dynamicState.timeClock;
+    console.log("world initialized at simulate stamp:", world.timestamp);
     return 1;
   } catch (e) {
+    console.log(e);
     return 0;
   }
 }
@@ -256,7 +288,13 @@ export async function initializeWorld(account: string) {
 
 /* Testging purpose for standalone version */
 
-
+function BuildInstance(
+  instance: InstanceInfo,
+  cursor: () => number,
+) {
+  let d = new Drawer(instance.content, instance.index * individualWidth, cursor);
+  return new Instance(d, instance);
+}
 
 function BuildInstances(
   instances: Array<InstanceInfo>,

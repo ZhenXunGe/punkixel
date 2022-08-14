@@ -6,10 +6,26 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import PUNKXIEL from "../../images/modal/advisor/punkixel.png";
 import './style.scss';
 import { getMinionFrame } from "../../sprite/spriteSlice";
-import { RewardInfo } from "../../dynamic/event";
+import { RewardInfo, SourceObject } from "../../server/types";
 import { getWorld } from "../../data/world";
 interface RewardBoxProps {
-  info: RewardInfo;
+  sources: Array<SourceObject>;
+}
+
+export function extractRewardInfo(source: Array<SourceObject>) {
+  let reserve = source[2].amount;
+  let rewardInfo: RewardInfo = {
+    reserve: source[2].amount,
+    rewards: [],
+  };
+  for (var i=3; i<source.length; i++) {
+    let rewarditem = {
+      minion: getWorld().getMinion(source[i].objId),
+      amount: source[i].amount,
+    };
+    rewardInfo.rewards.push(rewarditem);
+  }
+  return rewardInfo;
 }
 
 export default function RewardBox(props: RewardBoxProps) {
@@ -17,6 +33,7 @@ export default function RewardBox(props: RewardBoxProps) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const rewardInfo = extractRewardInfo(props.sources);
 
   const handleConfirm = () => {
     setShow(false);
@@ -37,7 +54,7 @@ export default function RewardBox(props: RewardBoxProps) {
               <div className="info">
                 <div className="title">200 Punkxiels Dropped</div>
                 <ul className="skill">
-                  {props.info.rewards.map((m)=>{
+                  {rewardInfo.rewards.map((m)=>{
                     let minion = getWorld().getMinion(m.minion.id)!;
                     let ufo = getMinionFrame(minion).src;
                     return (<li key={`contributor-${m.minion.id}`}>

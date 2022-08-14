@@ -22,7 +22,7 @@ export interface Palette {
 
 export interface ColorCategory {
   name:string;
-  palettes: Array<Palette>;
+  palettes: Array<number>;
 }
 
 
@@ -125,13 +125,17 @@ export interface RewardInfo {
     rewards: Array<MinionRewardInfo>;
 }
 
-export function rewardEvent(account: string, instance: InstanceInfo, rewards: Array<SourceObject>): SysEvent {
-    let r = rewards;
-    r.unshift(newSource("player", account));
-    r.unshift(newSource("instance", instance.index.toString()));
+export function rewardEvent(alienId: string, instance: InstanceInfo, rewards: RewardInfo): SysEvent {
+    let r = [];
+    r.push(newSource("alien", alienId));
+    r.push(newSource("player", instance.owner, rewards.reserve));
+    r.push(newSource("instance", instance.index.toString()));
+    for (var m of rewards.rewards) {
+      r.push(newSource("minion", m.minion.id, m.amount));
+    }
     return {
-        id: EventAlienKnock,
-        tx: 0,
+        tx: EventAlienKnock,
+        id: 0,
         time: Date.now(),
         source: r,
     };
@@ -139,8 +143,8 @@ export function rewardEvent(account: string, instance: InstanceInfo, rewards: Ar
 
 export function protectEvent(account: string, instance: InstanceInfo, minion:Minion): SysEvent {
     return {
-        id: EventMinionProtecting,
-        tx: 0,
+        tx: EventMinionProtecting,
+        id: 0,
         time: Date.now(),
         source: [newSource("player", account)],
     };
@@ -151,8 +155,8 @@ export function dropEvent(account: string, instance: InstanceInfo, drops: Array<
     r.unshift(newSource("instance", instance.index.toString()));
     r.unshift(newSource("player", account));
     return {
-        id: EventAlienDrop,
-        tx: 0,
+        tx: EventAlienDrop,
+        id: 0,
         time: Date.now(),
         source: r
     }

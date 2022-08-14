@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { Sprite } from './sprite';
-import { Minion } from '../data/minion';
+import { Minion } from '../server/types';
 
 interface SpriteMap {
   [id:string]: Sprite;

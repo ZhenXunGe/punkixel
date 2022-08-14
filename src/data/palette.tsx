@@ -302,6 +302,7 @@ export function ofPaletteIndex(index: number):Palette {
 }
 
 export function getPalette(index: number):Palette {
+  console.log("getPalette", index);
   return ofPaletteIndex(index * 16);
 }
 
