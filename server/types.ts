@@ -1,6 +1,35 @@
 export type BulletModifier = "missle" | "bomb" | "bullet" | "freeze" | "explode";
 export type MinionType = "ufo" | "airballoon" | "land";
+
+/* index * paletteIndex, * category
+ * 8 * 16 * 16 = three hex number
+ * */
 export type DyeIndex = number;
+
+function decomposeDyeIndex(index: DyeIndex) {
+  let cindex = (index - index%256)/256;
+  let p = index%256;
+  let pindex = (p - p%16)/16;
+  let dyindex = p%16;
+  return [cindex, pindex, dyindex];
+}
+
+function padIndex(i:number) {
+  let c = i.toString(16);
+  return c;
+}
+
+export function decodeDyeIndex(code: string) {
+  let c = parseInt(code[0], 16);
+  let p = parseInt(code[1], 16);
+  let d = parseInt(code[2], 16);
+  return c*256 + p*16 + d;
+}
+
+export function compressDyeIndex(dyeIndex: DyeIndex) {
+  let [c, p, d] = decomposeDyeIndex(dyeIndex);
+  return `${padIndex(c)}${padIndex(p)}${padIndex(d)}`;
+}
 
 export const individualWidth:number = 250;
 export const individualHeight:number = 100;
@@ -36,7 +65,6 @@ export interface Player {
   homeIndex: number;
   inventory: Array<string | null>;
 }
-
 
 export interface Minion {
   owner: string; //owner block number
@@ -75,10 +103,11 @@ export interface Alien {
   dizzle: number;
   speed: number;
   drop: Array<string>;
+  knockDamage: number;
   favourate: string;
 }
 
-export type SourceObjectType = "minion" | "alien" | "player" | "instance";
+export type SourceObjectType = "minion" | "alien" | "player" | "instance" | "dye";
 
 export interface SourceObject {
   objType: SourceObjectType;
@@ -150,10 +179,12 @@ export function protectEvent(account: string, instance: InstanceInfo, minion:Min
     };
 }
 
-export function dropEvent(account: string, instance: InstanceInfo, drops: Array<SourceObject>): SysEvent {
-    let r = drops;
-    r.unshift(newSource("instance", instance.index.toString()));
-    r.unshift(newSource("player", account));
+export function dropEvent(alienId: string, instance: InstanceInfo, dye: number): SysEvent {
+    let r = [];
+    r.push(newSource("alien", alienId));
+    r.push(newSource("player", instance.owner, 0));
+    r.push(newSource("instance", instance.index.toString()));
+    r.push(newSource("dye", dye.toString()));
     return {
         tx: EventAlienDrop,
         id: 0,

@@ -3,7 +3,7 @@ import { Container, Modal } from "react-bootstrap";
 import { useAppSelector } from "../app/hooks";
 import { selectPlayer } from "../data/statusSlice";
 import { PageScroller } from "./scroll";
-import { getPalette } from "../data/palette";
+import { getPalette } from "../server/palette";
 interface IProps {
   show: boolean;
   onHide: () => void;

@@ -1,10 +1,13 @@
 const DBConfig = {"db": "mongodb://localhost:27017"};
 const MongoClient = require("mongodb").MongoClient;
-
 const DB_CONN_STRING="mongodb://localhost:27017/"
 const DB_NAME="punkixel"
 import * as mongoDB from "mongodb";
-import { Minion, InstanceInfo, Alien, Player, SysEvent} from "./types";
+import {
+  Minion, InstanceInfo, Alien, Player, SysEvent,
+  individualWidth, individualHeight,
+  decodeDyeIndex,
+} from "./types";
 import { getRandomInt, createMinion, createInstance, newPlayer, resetMinion } from "./generator";
 
 interface PunkixelCollections {
@@ -69,11 +72,6 @@ export async function fetchEvents(start: number): Promise<Array<SysEvent>> {
   let r = await index.skip(start).toArray();
   r.forEach((x) => eles.push(x as unknown as SysEvent));
   return eles;
-}
-
-export async function getInstance(id:string): Promise<InstanceInfo> {
-  const instance = (await dbClient.instances!.findOne({id: id})) as unknown as InstanceInfo;
-  return instance;
 }
 
 export async function registerAlien(alien: Alien) {
@@ -203,6 +201,27 @@ export async function protectInstance(minion:Minion, instance: InstanceInfo): Pr
   await updateInstance(instance);
   return minion
 }
+
+export async function drawInstance(instance: InstanceInfo, content:String ): Promise<InstanceInfo> {
+  let len = individualWidth * individualHeight;
+  for (var i=0; i<len;i++) {
+    let code = content.substr(i*3, 3);
+    instance.content[0][i] = decodeDyeIndex(code);
+  }
+  for (var i=0; i<len;i++) {
+    let code = content.substr(len*3 + i*3, 3);
+    instance.content[1][i] = decodeDyeIndex(code);
+  }
+  for (var i=0; i<len;i++) {
+    let code = content.substr(len*3*2 + i*3, 3);
+    instance.content[2][i] = decodeDyeIndex(code);
+  }
+  instance.sketched = true;
+  console.log ("draw instance:", instance.content.length, instance.content[0].length, instance.content[1].length, instance.content[2].length);
+  await updateInstance(instance);
+  return instance;
+}
+
 
 export async function claimDrop(owner: string, amount:number, drops:string[]) {
   let player = await getPlayer(owner);

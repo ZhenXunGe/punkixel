@@ -1,5 +1,5 @@
 import { Drawer } from "../data/draw";
-import { findColor, findGrayColor } from "../data/palette";
+import { findColor, findGrayColor } from "../server/palette";
 import { Sprite } from "../sprite/sprite";
 import build01 from "./resource/sketch-gray-01.png";
 import build02 from "./resource/sketch-gray-02.png";
@@ -51,7 +51,7 @@ export const clips = [
     buildfront01, buildfront02, buildfront03, buildfront04, buildfront05, buildfront06,
     buildfront07, buildfront08, buildfront09, buildfront10, buildfront11, buildfront12, buildfront13,
     buildfront14, buildfront15, buildfront16, buildfront17, buildfront18, buildfront19, buildfront20,
-    buildfront21, 
+    buildfront21,
   ] },
   { name: "road", src: [road01, road02, road03, road04] }
 ]

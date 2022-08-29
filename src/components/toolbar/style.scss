@@ -23,6 +23,46 @@
     right: 0px;
     left: 208px;
 
+    .dye-market {
+       background-image: url('../../images/market/group.png');
+       width:832px;
+       height: 79px;
+       div.category-basic-button {
+         display: inline-block;
+         margin-top:0px;
+         width:267px;
+         height:78px;
+         background-image: url('../../images/market/basic.png');
+         &:hover {
+           background-image: url('../../images/market/basic_hover.png');
+         }
+         cursor:pointer;
+       }
+
+       div.category-spin-button {
+         display: inline-block;
+         margin-top:0px;
+         width:267px;
+         height:78px;
+         background-image: url('../../images/market/spin.png');
+         &:hover {
+           background-image: url('../../images/market/spin_hover.png');
+         }
+         cursor:pointer;
+       }
+
+       div.category-radiation-button {
+         display: inline-block;
+         width:267px;
+         height:78px;
+         background-image: url('../../images/market/radiation.png');
+         &:hover {
+           background-image: url('../../images/market/radiation_hover.png');
+         }
+         cursor:pointer;
+       }
+    }
+
     ul {
         padding-left: 0px;
         padding-top: 5px;
@@ -69,7 +109,6 @@
             padding-left: 70px;
             background-image: url('../../images/home/toolbar.png');
 
-            
             div.select_board{
                 width: 630px;
                 margin-left:4px;
@@ -80,7 +119,6 @@
                     height: 44px;
                     width: 346px;
                     background-color: rgba(255, 255, 255, 0);
-                    
                     div.btn_left {
                         float: left;
                         display: inline-block;
@@ -93,7 +131,6 @@
                         background-color: rgba(255, 255, 255, 0);
                         background-image: url('../../images/home/select_board.png');
                     }
-    
                     div.btn_right {
                         display: inline-block;
                         position:relative;
@@ -116,7 +153,7 @@
                     // margin-top: -50px;
                     width: 280px;
                     .select_right_inline{
-                        // 
+                        //
                         float: left;
                         height: 31px;
                         li {
@@ -147,15 +184,13 @@
                                 // margin-top: 0px !important;
                                 // border: 1px solid $alieninfo_blue;
                                 img{
-                                    
                                     // margin-top: 3px;
                                     // margin-left: 2px;
                                     padding-bottom: 5px;
-                                } 
+                                }
                             }
                             // background-color: red;
                             // height: 50px !important;
-                            
                         }
                         li.selected {
                             .cover {
@@ -185,9 +220,6 @@
                     }
                 }
             }
-            
-            
-            
             div.pph{
                 margin-top: -20px;
                 margin-left: 620px;
@@ -274,6 +306,20 @@
     background-color: rgba(255, 255, 255, 0);
     border: none;
     cursor: url("../../images/cursors/cursor.png"), pointer;
+}
+
+.palette_purchase_btn{
+    // float: right;
+    // margin-top: 0px;
+    position: absolute;
+    right: 0px;
+    top: -51px;
+    background-image: url('../../images/market/buy.png');
+    background-color: rgba(255, 255, 255, 0);
+    width:206px;
+    height:138px;
+    border: none;
+    cursor: pointer;
 }
 
 .protect_btn {

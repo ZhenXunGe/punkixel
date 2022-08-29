@@ -1,7 +1,7 @@
-import { costOfDyeIndex, Dye, DyeIndex, IsNillDye, pphOfDyeIndex, dilationDistance } from "./palette";
+import { costOfDyeIndex, toDyeColor, IsNillDye, pphOfDyeIndex, dilationDistance } from "../server/palette";
+import { Dye, DyeIndex } from "../server/types";
 import { drawBuildings, sketchBuildings, drawRoad } from "../sketch/sketch";
 import { Sprite } from "../sprite/sprite";
-import { toDyeColor } from "../data/palette";
 
 /* Size of the individual home */
 export const individualWidth:number = 250;
@@ -186,6 +186,14 @@ export class Drawer {
         const ele = this.delta.pop();
         this.setPixel(ele!.index, ele!.old);
       };
+    }
+
+    encodeDelta() {
+      let update = [];
+      for (var p of this.delta) {
+        update.push({index: p.index, dye: p.new});
+      }
+      return update;
     }
 
     draw(paint: Painter, pos:number=0) {

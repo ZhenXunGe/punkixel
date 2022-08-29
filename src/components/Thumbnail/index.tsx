@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { toDyeColor } from '../../data/palette';
+import React, { useRef, useEffect } from 'react';
+import { useAppSelector } from '../../app/hooks';
 import {
   individualWidth,
   buildPainter,
@@ -13,19 +12,19 @@ import { selectPanel } from '../../layout/layoutSlice';
 import {
     selectPlayer,
 } from '../../data/statusSlice';
+import { dye_table } from '../../server/palette';
+import { Palette } from '../../server/types';
 
 function ThumbnailInternal() {
 
-  let ratio = 1;
-
-  const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
   const sketchSignal = useAppSelector(selectSketchSignal);
+  const player = useAppSelector(selectPlayer);
   const viewIndex = useAppSelector(selectViewIndex);
   const alien = useAppSelector(selectAlien);
   const timeClock = useAppSelector(selectTimeClock);
+  const panel = useAppSelector(selectPanel);
 
-  let offset = 0;
   useEffect(() => {
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
@@ -37,10 +36,15 @@ function ThumbnailInternal() {
             canvasHeight:100,
             canvasWidth:1000,
     }, timeClock);
-    let start = Math.floor(alien.pos/individualWidth) - 2
-    let end = start + 3;
-
-    getWorld().rend(painter, start, end, alien.pos-individualWidth*2);
+    if (panel === "world") {
+      let start = Math.floor(alien.pos/individualWidth) - 2
+      let end = start + 3;
+      getWorld().rend(painter, start, end, alien.pos-individualWidth*2);
+    } else if(panel === "home") {
+      let start = player?.homeIndex!-2;
+      let end = start + 3;
+      getWorld().rend(painter, start, end, player?.homeIndex!*individualWidth - 335);
+    }
     context.putImageData(image,0,0);
   }, [viewIndex, timeClock, sketchSignal])
 
@@ -59,10 +63,58 @@ function ThumbnailInternal() {
 
 }
 
+interface PaletteInternalProps {
+  palette: Palette;
+}
+
+function formatColor(color: Array<number>) {
+  return `#${color[0].toString(16)}${color[1].toString(16)}${color[2].toString(16)}`;
+}
+
+function PaletteInternal(props: PaletteInternalProps) {
+  return (
+    <>
+      <div className="column">
+         <div style={{backgroundColor: formatColor(props.palette.dye[0].color)}} ></div>
+         <div style={{backgroundColor: formatColor(props.palette.dye[1].color)}} ></div>
+         <div style={{backgroundColor: formatColor(props.palette.dye[2].color)}} ></div>
+         <div style={{backgroundColor: formatColor(props.palette.dye[3].color)}} ></div>
+      </div>
+      <div className="column">
+         <div style={{backgroundColor: formatColor(props.palette.dye[4].color)}} ></div>
+         <div style={{backgroundColor: formatColor(props.palette.dye[5].color)}} ></div>
+         <div style={{backgroundColor: formatColor(props.palette.dye[6].color)}} ></div>
+         <div style={{backgroundColor: formatColor(props.palette.dye[7].color)}} ></div>
+      </div>
+    </>
+  );
+}
+
+function MarketInternal() {
+  return (
+    <div className="thumbnail">
+      <div className="content">
+        <div className="thumbnail-market" key="thumbnail-market">
+           {dye_table[1].map((palette, i) =>{
+               console.log("palette", palette);
+               return (<PaletteInternal palette={palette} ></PaletteInternal>);
+           })}
+        </div>
+        <div className="market-cover">
+        </div>
+      </div>
+    </div>
+  );
+
+}
+
+
 export function Thumbnail() {
   const panel = useAppSelector(selectPanel);
   if (panel === "world" ||  panel === "home") {
     return (<ThumbnailInternal></ThumbnailInternal>);
+  } else if (panel === "market") {
+    return (<MarketInternal></MarketInternal>);
   } else {
     return (<></>);
   }

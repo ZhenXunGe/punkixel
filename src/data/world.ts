@@ -1,18 +1,15 @@
 import { Drawer, Painter } from "./draw";
 import { Instance } from "./instance";
 import { Player, Alien, Minion, InstanceInfo} from "../server/types";
-import { ColorCategory, fromDrop, getPalette } from "./palette";
 import { punkixelEndpoint } from "./endpoint";
-import { createInstance, newPlayer} from "../server/generator";
 import background from "../images/sky.jpg";
 import { DynamicState } from "../../server/simulate";
 import { individualWidth, individualHeight } from "../server/types";
+import { compressContent } from "../server/palette";
 
 interface SimulateState {
   dynamicState: DynamicState
 }
-
-const content_size = individualWidth * individualHeight;
 
 export function getBackground(index: number) {
   let backs = [background];
@@ -168,34 +165,13 @@ export class World {
     return minion;
   }
 
-  claimRewardPunkxiel(owner: string, reward: number) {
-    let player = this.players.get(owner)!;
-    let instance = this.getInstanceByIndex(player.homeIndex);
-    let info = instance.info;
-    console.log("updating rewords....");
-    let update = { ...player, punkxiel: player.punkxiel + reward };
-    this.players.set(player.id, update);
-    info.reward += reward;
-  }
-
-  claimDrop(owner: string, drops: Array<string>) {
-    let player = this.players.get(owner)!;
-    let palettes = [...player.palettes];
-    for (var drop of drops) {
-      let paletteIndex = fromDrop(drop);
-      let palette = getPalette(fromDrop(drop));
-      let category = (paletteIndex - paletteIndex % 16) / 16;
-      /*
-      let ps: ColorCategory = {
-        ...palettes[category],
-        palettes: [...palettes[category].palettes, palette]
-      }
-      palettes[category] = ps;
-      */
-      console.log(`palette ${palette.name} added`);
-    }
-    let update = { ...player, palettes: palettes };
-    this.players.set(player.id, update);
+  async drawInstance(owner: string, instance: InstanceInfo) {
+    let content = compressContent(instance.content);
+    console.log("draw instance:", content);
+    await punkixelEndpoint.invokeRequest("POST", `draw/${instance.index}/`, JSON.parse(JSON.stringify({
+        content: content
+    })));
+    console.log("syn instance content done!");
   }
 
   spentPunkxiel(sender: string, cost: number) {
@@ -271,6 +247,7 @@ export async function initializeWorld(account: string) {
       instances = await punkixelEndpoint.invokeRequest("GET", "instances", null);
       world.registerPlayer(player);
     }
+    console.log("player:", player);
     for (var minion of minions) {
       world.registerMinion(minion);
     }

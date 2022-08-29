@@ -8,7 +8,6 @@ import { InstanceInfo } from '../server/types';
 
 export interface StatusState {
     energy: number;
-    punkxiel: number;
     contribution: number;
     reward: number;
     pph: number,
@@ -20,7 +19,6 @@ export interface StatusState {
 
 const initialState: StatusState = {
     energy: 50,
-    punkxiel: 1000,
     contribution: 0,
     rank: {current:0, instances:[]},
     reward: 0,
@@ -116,7 +114,7 @@ export const { updatePPH, pickColor,
 } = statusSlice.actions;
 
 export const selectEnergy = (state: RootState) => state.status.energy;
-export const selectPunkixel= (state: RootState) => state.status.punkxiel;
+export const selectPunkixel= (state: RootState) => state.status.player!.punkxiel;
 export const selectRank = (state: RootState) => state.status.rank;
 export const selectPPH = (state: RootState) => state.status.pph;
 export const selectReward = (state: RootState) => state.status.reward;

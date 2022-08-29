@@ -8,10 +8,8 @@ import {
     individualHeight,
     buildPainter,
 } from "../data/draw"
-import { toDyeColor } from "../data/palette"
 
 import {
-  selectAlien,
   selectTimeClock,
   selectViewIndex,
   getDynamicInfo,
@@ -33,7 +31,6 @@ function WorldBoard (props: IProps) {
 
   let ratio = 4;
 
-  const dispatch = useAppDispatch();
   const canvasRef = useRef<any>();
   const backRef = useRef<any>();
   const weatherRef = useRef<any>();
@@ -50,8 +47,11 @@ function WorldBoard (props: IProps) {
     const context = canvas.getContext('2d');
     const image = context.getImageData(0, 0, individualWidth*ratio, individualHeight*ratio)
     let painter = buildPainter(image, {
-            ratio:4, offsetX:0, offsetY:0,
-            canvasHeight:400, canvasWidth: 1000,
+      ratio:ratio,
+      offsetX:0,
+      offsetY:0,
+      canvasHeight:400,
+      canvasWidth: 1000,
     }, timeClock);
     let drawer = getWorld().getInstance(viewIndex*individualWidth).drawer;
     drawer.draw(painter, viewIndex*individualWidth);

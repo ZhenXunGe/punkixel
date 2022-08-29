@@ -6,6 +6,7 @@ import { registerPlayer, allInstances,
   getInstanceByIndex, registerMinion,
   getPlayer, getMinion, rerollMinion,
   totalInstance, protectInstance,
+  drawInstance,
 } from './db';
 import { init } from "./init";
 import { Simulator }  from "./simulate";
@@ -15,7 +16,7 @@ import cors from "cors";
 const app = express();
 app.use(cors());
 const punkixelRouter = express.Router();
-punkixelRouter.use(express.json());
+punkixelRouter.use(express.json({limit:'2mb'}));
 
 
 var simulator: Simulator | null = null;
@@ -90,9 +91,12 @@ punkixelRouter.post('/minion/protect/', async (req:any, res:any) => {
     res.status(200).send({ success: true, result: m});
   });
 
-punkixelRouter.post('/protect/:instanceidx/', async (req:any, res:any) => {
-    const instance = await getInstanceByIndex(req.params.instanceidx);
-    res.status(200).send({ success: true, result: instance});
+punkixelRouter.post('/draw/:instanceidx/', async (req:any, res:any) => {
+    const instance = await getInstanceByIndex(parseInt(req.params.instanceidx));
+    console.log("get instance:", instance, req.params.instanceidx);
+    const data = req.body.content;
+    await drawInstance(instance, data);
+    res.status(200).send({ success: true, result: {}});
   });
 
 punkixelRouter.post('/unlock/:playerid/:slot', async (req:any, res:any) => {

@@ -69,7 +69,7 @@ interface BC {
 function ProgressBar(props: BC) {
   let account = useAppSelector(selectL1Account);
   if (account) {
-    console.log("connected", account);
+    //console.log("connected", account);
     return (
     <>
     <img key={`loading-cover`} src={COVER}></img>
@@ -104,7 +104,7 @@ function Connect() {
     </>
     );
   } else {
-    console.log("connected", account);
+    //console.log("connected", account);
     return (<></>);
   }
 

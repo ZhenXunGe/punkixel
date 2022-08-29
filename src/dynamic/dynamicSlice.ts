@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { randomAlien } from '../data/alien';
 import { individualWidth } from '../data/draw';
 import { Minion, MinionType, Alien, InstanceInfo, Player, SysEvent } from '../server/types';
 import { getWorld } from '../data/world';
@@ -8,7 +7,8 @@ import { Sprite } from '../sprite/sprite';
 import { getSprite } from '../sprite/spriteSlice';
 import { Reaction } from '../data/weather';
 import { BombBullet, BulletInfo, StraightBullet, TrackBullet } from "./bullet";
-import { DynamicState } from "../../server/simulate";
+import { DynamicState } from "../server/simulate";
+import { randomAlien } from "../server/generator";
 import { punkixelEndpoint } from "../data/endpoint";
 
 function generateBulletPos(t:MinionType) {
@@ -236,7 +236,7 @@ export const dynamicSlice = createSlice({
         if (hit) {
           getWorld().incMinionContribute(b.source, b.power);
           state.dynamic.damage += b.power;
-          if (state.dynamic.damage > 200) {
+          if (state.dynamic.damage > state.dynamic.alien.knockDamage) {
             state.dynamic.alien.status = "dizzle";
             let alienSprite:Sprite = getSprite(state.dynamic.alien.sprite);
             alienSprite.currentTrigger = state.dynamic.timeClock;

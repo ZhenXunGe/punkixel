@@ -1,10 +1,6 @@
 import { Drawer } from "./draw";
-import { DyeIndex } from "./palette";
 import { getWorld, World } from "./world";
 import { InstanceInfo } from "../server/types";
-const individualWidth:number = 250;
-const individualHeight:number = 100;
-const content_size = individualWidth * individualHeight;
 
 export class Instance {
     drawer: Drawer;
@@ -18,31 +14,6 @@ export class Instance {
     }
     addMinion(m: string) {
       this.info.minions.push(m);
-    }
-    calculateRewards(punkxiels:number, drops:string[]) {
-      let share = this.info.ratio * punkxiels;
-      let total_contribution = 0;
-      let rewards = [];
-      for (var x of this.info.minions) {
-        let minion = getWorld().getMinion(x);
-        total_contribution += minion.contribution;
-      };
-      for (var m of this.info.minions) {
-        let minion = getWorld().getMinion(m);
-        let owner = minion.owner;
-        let amount = Math.floor(share * minion.contribution / total_contribution);
-        getWorld().claimRewardPunkxiel(owner, amount);
-        rewards.push({minion: minion, amount:amount});
-      }
-      for (var m of this.info.minions) {
-        getWorld().clearMinionContribute(m);
-      }
-      let locOwner = this.info.owner;
-      getWorld().claimDrop(locOwner, drops);
-      return {
-        rewards: rewards,
-        reserve: Math.floor((1 - this.info.ratio) * punkxiels)
-      };
     }
     overView() {
       let dmg = 0;

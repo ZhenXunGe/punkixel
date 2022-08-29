@@ -1,24 +1,21 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import '../Component.scss';
-import { Button, DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { PaletteSelect } from '../../../src/modals/palette_select';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.scss';
-import { individualWidth } from "../../data/draw";
 import {
   selectPlayer,
   selectDye,
   pickColor,
 } from '../../data/statusSlice';
-import { ofDyeIndex, getPalette, toDyeColor, toDyeIndex } from '../../data/palette';
+import { ofDyeIndex, getPalette, toDyeIndex } from '../../server/palette';
 import Sketch from "../../modals/sketch";
 import { DrawerConfig } from '../Tool';
 
 export function ToolBarDye(props: DrawerConfig) {
   const player = useAppSelector(selectPlayer);
   const palettes = player!.palettes;
-  const homeIndex = player!.homeIndex;
   const dispatch = useAppDispatch();
   const [pickedCategory, setPickedCategory] = useState(0);
   const [pickedPalette, setPickedPalette] = useState(0);

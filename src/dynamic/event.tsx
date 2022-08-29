@@ -1,4 +1,4 @@
-import PaletteInfo from "../modals/palette";
+import { PaletteInfo } from "../modals/palette";
 import InfoBox from "../modals/info/index";
 import RewardBox from "../modals/reward/index";
 import './style.scss';
@@ -107,9 +107,11 @@ export function RewardEventRender(event: SysEvent): EventRender {
 
 
 export function DropEventRender(event: SysEvent): EventRender {
-    let dyeIndex = event.source[2].objId;
-    let instanceId = event.source[0].objId;
+    let alienId = event.source[0].objId;
+    let account = event.source[1].objId;
+    let instanceId = event.source[2].objId;
     let instance = getWorld().getInstance(parseInt(instanceId));
+    let dyeIndex = parseInt(event.source[3].objId);
     return {
         event: event,
         info: () => {
@@ -117,7 +119,8 @@ export function DropEventRender(event: SysEvent): EventRender {
                 <>
                 <DyeAvator dyeIndex={15}></DyeAvator>
                 <div className="dropEvent">
-                    <span>Dye&nbsp;</span>{event.source.slice(2).map((d: any) => <PaletteInfo paletteId={d} key={d}></PaletteInfo>)}
+                    <span>Dye&nbsp;</span>
+                    <PaletteInfo paletteIndex={dyeIndex} key={`dye-${dyeIndex}`}></PaletteInfo>
                     <span>&nbsp;dropped in {instanceId} and were collected by {instance.info.owner}</span>
                 </div>
                 </>

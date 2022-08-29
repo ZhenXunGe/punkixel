@@ -5,4 +5,12 @@ div.market-board {
     height: 400px;
     right: 0px;
     left: 198px;
+    .rgb-element {
+       width:180px;
+       height:250px;
+       float:left;
+       margin-left:45px;
+       margin-top:70px;
+       background-image:url("../../images/market/dimond.png");
+    }
 }
