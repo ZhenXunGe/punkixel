@@ -8,6 +8,7 @@ import More from '../../modals/more';
 
 export function AlienInfo() {
   const alien = useAppSelector(selectUpcomingAlien);
+  console.log("select Alien:", alien);
   const sketch = getSprite(alien.sprite).getFrame("run", 0);
   let h = (alien.knockDamage - alien.knockDamage % 100)/100;
   let m = alien.knockDamage%100;
@@ -22,7 +23,7 @@ export function AlienInfo() {
       <div className="alien-basic-info">
         <div className='skill'>
           <ul className='skills'>
-            <li>{h}.</li>
+            <li>{h}</li>
             <li>{m}</li>
             <li>{l}</li>
           </ul>
