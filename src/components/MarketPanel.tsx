@@ -5,7 +5,6 @@ interface MarketPanelProp {
   handlerProxy: HandlerProxy;
 }
 export function MarketPanel(props: MarketPanelProp) {
-  
   return (
     <>
     <Market></Market>

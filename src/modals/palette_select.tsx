@@ -16,8 +16,6 @@ interface IProps {
 export function PaletteSelect(props: IProps) {
   const player = useAppSelector(selectPlayer)!;
   const palettes = player.palettes;
-  // const [pickedCategory, setPickedCategory] = useState(0);
-  // const [pickedPalette, setPickedPalette] = useState(0);
   const pageSize = 8;
   var [pageNumber, setPageNumber] = useState(0);
   const { show, onHide, setPickedPalette, setPickedCategory, pickedCategory, pickedPalette } = props;

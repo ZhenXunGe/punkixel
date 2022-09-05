@@ -11,6 +11,18 @@ div.market-board {
        float:left;
        margin-left:45px;
        margin-top:70px;
-       background-image:url("../../images/market/dimond.png");
+       div.color {
+         margin:45px 0px 0px 45px;
+         width:98px;
+         height:98px;
+         transform:rotate(45deg);
+       }
+       div.cover {
+         position:absolute;
+         top:70px;
+         width:180px;
+         height:250px;
+         background-image:url("../../images/market/dimond.png");
+       }
     }
 }

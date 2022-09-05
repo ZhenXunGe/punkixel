@@ -22,8 +22,6 @@ export function ToolBarDye(props: DrawerConfig) {
   const [pickedBottle, setPickedBottle] = useState(0);
   const pickedDye = useAppSelector(selectDye);
   const [show, setShow] = useState(false);
-  const [alertContext, setAlertContext] = useState("");
-  const [palette, setPalette] = useState(getPalette(palettes[pickedCategory].palettes[pickedPalette]));
   return (
     <div className="tool-bar">
 
@@ -58,7 +56,7 @@ export function ToolBarDye(props: DrawerConfig) {
                           <div className="cover"
                             onClick={() => {
                               console.log("pickColor", pickedCategory, palette.idx, idx);
-                              dispatch(pickColor(toDyeIndex(pickedCategory+1, palette.idx, idx)))
+                              dispatch(pickColor(toDyeIndex(pickedCategory+1, palette.idx, idx)));
                               setPickedBottle(idx)
                             }
                             }></div>
