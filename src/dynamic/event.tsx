@@ -1,5 +1,6 @@
 import { PaletteInfo } from "../modals/palette";
 import InfoBox from "../modals/info/index";
+import { PlayerInfo } from "../modals/player/index";
 import RewardBox from "../modals/reward/index";
 import './style.scss';
 import ARTIST_ADVISOR_AVATOR from '../images/modal/advisor/artistadvisor.png';
@@ -121,7 +122,8 @@ export function DropEventRender(event: SysEvent): EventRender {
                 <div className="dropEvent">
                     <span>Dye&nbsp;</span>
                     <PaletteInfo paletteIndex={dyeIndex} key={`dye-${dyeIndex}`}></PaletteInfo>
-                    <span>&nbsp;dropped in {instanceId} and were collected by {instance.info.owner}</span>
+                    <span>&nbsp;dropped in {instanceId} and were collected by &nbsp;</span>
+                    <PlayerInfo avator={ARTIST_ADVISOR_AVATOR} hint={"details"}  playerId= {instance.info.owner}></PlayerInfo>
                 </div>
                 </>
             );

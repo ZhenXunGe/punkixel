@@ -245,6 +245,7 @@ export const basic_palettes = [
   yellow_palette,
   amber_palette,
   orange_palette,
+  gray_palette,
 ];
 
 function buildSpinPalette(name:string, palette:any, idx:number) {
@@ -679,6 +680,10 @@ export const dye_table :Array<Array<Palette>> = [
   liquid_palettes,
   dilation_palettes,
 ];
+
+export function getCategory(cindex: number):Array<Palette> {
+  return dye_table[cindex];
+}
 
 export function ofPaletteIndex(index: number):Palette {
   let cindex = (index - index%256)/256;

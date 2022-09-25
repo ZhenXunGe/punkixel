@@ -251,6 +251,10 @@
                         &.selected {
                             background-image: url('../images/modal/palette/palette_act.png');
                         }
+                        &.unavailable{
+                            background-image: url('../images/modal/palette/select_color_bw.png');
+                        }
+
                     }
                 }
             }

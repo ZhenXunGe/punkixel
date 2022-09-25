@@ -3,7 +3,7 @@ import { Container, Modal } from "react-bootstrap";
 import { useAppSelector } from "../app/hooks";
 import { selectPlayer } from "../data/statusSlice";
 import { PageScroller } from "./scroll";
-import { getPalette } from "../server/palette";
+import { getCategory, getPalette, toPaletteIndex } from "../server/palette";
 interface IProps {
   show: boolean;
   onHide: () => void;
@@ -13,13 +13,62 @@ interface IProps {
   pickedPalette: number;
 }
 
+interface PaletteItemProps {
+  index: number;
+}
+
 export function PaletteSelect(props: IProps) {
   const player = useAppSelector(selectPlayer)!;
   const palettes = player.palettes;
   const pageSize = 8;
   var [pageNumber, setPageNumber] = useState(0);
   const { show, onHide, setPickedPalette, setPickedCategory, pickedCategory, pickedPalette } = props;
-  var paletteLenth = palettes[pickedCategory].palettes.length;
+  var paletteLenth = palettes[pickedCategory-1].palettes.length;
+  function PaletteItem(props: PaletteItemProps) {
+    let owned = palettes[pickedCategory-1].palettes;
+    let pidx = toPaletteIndex(pickedCategory, props.index);
+    let available: boolean = owned.indexOf(pidx) !== -1;
+    let palette = getPalette(pidx);
+    let idx = props.index;
+    let className = "unavailable";
+    if(available) {
+      if (idx === pickedPalette) {
+         className = "selected";
+      } else {
+         className = "unselected";
+      }
+    }
+    return (
+      <li className={`palette ${className}`}
+          onClick={() => {
+            console.log("picked idx", idx);
+            if (available) {
+              setPickedPalette(idx);
+            }
+          }}
+          onDoubleClick={() => {
+             onHide();
+          }}>
+          <div className="paletteItem"> {palette.name} </div>
+          <ul>
+          {
+            palette.dye.map((d, idx) => {
+            return (
+              <li>
+                <span className={`dye-item`}
+                  style={{
+                    backgroundColor: `rgb(${d.color[0]}, ${d.color[1]}, ${d.color[2]})`,
+                  }}
+                  onClick={() => {}}
+                >
+                </span>
+              </li>
+            )
+            })
+          }
+       </ul>
+     </li>)
+  }
   return (
     <>
       <Modal show={show} aria-labelledby="contained-modal-title-vcenter" centered dialogClassName="modal-90w">
@@ -30,12 +79,12 @@ export function PaletteSelect(props: IProps) {
               <div className="left">
                 <ul>
                   {palettes.map((p, idx) =>
-                    <li className={`category ${idx == pickedCategory ? 'selected' : ''}`}
+                    <li className={`category ${(idx+1) == pickedCategory ? 'selected' : ''}`}
                       onClick={() => {
                         setPickedPalette(0);
-                        setPickedCategory(idx);
+                        setPickedCategory(idx+1);
                         setPageNumber(0);
-                        paletteLenth = palettes[pickedCategory].palettes.length;
+                        paletteLenth = palettes[pickedCategory-1].palettes.length;
                       }}
                     >{palettes[idx].name}</li>
                   )}
@@ -44,40 +93,9 @@ export function PaletteSelect(props: IProps) {
               <div className="right">
                 <ul className="scroll">
                   {
-                    palettes[pickedCategory].palettes.map((p, idx) => {
+                    getCategory(pickedCategory).map((p, idx) => {
                     if (idx >= pageNumber * pageSize && idx <= (pageNumber+1) * pageSize - 1) {
-                      return (
-                      <li className={`palette ${idx == pickedPalette ? 'selected' : ''}`} onClick={() => {
-                        setPickedPalette(idx);
-                      }}
-                        onDoubleClick={() => {
-                          onHide();
-                        }}
-                      >
-                        <div className="paletteItem">
-                          {getPalette(p).name}
-                        </div>
-                        <ul>
-                          {
-                            getPalette(p).dye.map((d, idx) => {
-                            return (
-                              <li>
-                                <span className={`dye-item`}
-                                  style={{
-                                    backgroundColor: `rgb(${d.color[0]}, ${d.color[1]}, ${d.color[2]})`,
-                                  }}
-                                  onClick={() => {
-
-                                  }
-                                  }
-                                >
-                                </span>
-                              </li>
-                            )
-                            })
-                          }
-                        </ul>
-                      </li>)
+                      return (<PaletteItem index={idx}></PaletteItem>)
                     }
                   }
                   )

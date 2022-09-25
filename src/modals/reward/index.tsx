@@ -65,7 +65,6 @@ export default function RewardBox(props: RewardBoxProps) {
                 </ul>
               </div>
               <div className="info-right">
-                <div onClick={handleConfirm} className="unlock"></div>
               </div>
             </div>
 

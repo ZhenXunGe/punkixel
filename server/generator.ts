@@ -209,9 +209,10 @@ export function randomPalette() {
 
 export function installPalette(player: Player, cidx:number, pidx: number) {
   let p = toPaletteIndex(cidx, pidx);
-  if (p in player.palettes[cidx].palettes) {
+  // Recall player.palettes[k] points to category (k+1)
+  if (p in player.palettes[cidx-1].palettes) {
     return;
   } else {
-    player.palettes[cidx].palettes.push(p);
+    player.palettes[cidx-1].palettes.push(p);
   }
 }

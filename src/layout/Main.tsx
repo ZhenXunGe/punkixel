@@ -20,11 +20,10 @@ import hover2 from "../images/layout/level_2.png";
 import hover3 from "../images/layout/level_3.png";
 
 
-import { getHandlerProxy, Hover } from './Hover';
+import { getHandlerProxy, Hover, HoverProxy} from './Hover';
 import './style.scss';
 import More from '../modals/more';
 import { Loading } from './Loading';
-import { HandlerProxy } from './handlerProxy';
 
 import {
   selectL1Account,
@@ -32,46 +31,6 @@ import {
 
 interface loadingStatus {
   totalSprites:number,
-}
-
-interface HoverProxyProps {
-  proxy: HandlerProxy,
-  ele: () => HTMLElement | null,
-
-}
-function HoverProxy(props: HoverProxyProps) {
-  const cursorClass = useAppSelector(selectCursor);
-  const dispatch = useAppDispatch();
-  //const ratio = useAppSelector(selectRatio);
-
-  return <div
-  onClick={(e)=> {
-    const ele = props.ele();
-    if (ele) {
-      props.proxy.clickHandler(e, ele);
-    } else {
-      console.log(ele);
-    }
-  }}
-  onMouseMove={(e)=>{
-    const ele = props.ele();
-    if (ele) {
-      let style = props.proxy.hoverHandler(e, ele);
-      dispatch(setCursor(style));
-      console.log(style);
-    } else {
-      return (ele);
-    }
-  }}
-  onWheel={(e)=> {
-    const ele = props.ele();
-    if (ele) {
-      props.proxy.scrollHandler(e, ele)
-    } else {
-      console.log("wheel");
-    }
-  }} className={`hover ${cursorClass}`}>
-  </div>
 }
 
 export function Main(prop: loadingStatus) {

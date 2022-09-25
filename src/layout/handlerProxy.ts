@@ -22,18 +22,34 @@ class sHandler {
 
 export class HandlerProxy {
   clickHandlerMap: Map<string, cHandler>;
+  mouseDownHandlerMap: Map<string, cHandler>;
+  mouseUpHandlerMap: Map<string, cHandler>;
   hoverHandlerMap: Map<string, cHandler>;
   scrollHandlerMap: Map<string, sHandler>;
 
   constructor() {
     this.clickHandlerMap = new Map<string, cHandler>();
     this.hoverHandlerMap = new Map<string, cHandler>();
+    this.mouseDownHandlerMap = new Map<string, cHandler>();
+    this.mouseUpHandlerMap = new Map<string, cHandler>();
     this.scrollHandlerMap = new Map<string, sHandler>();
   }
   registerClick(key: string, element: HTMLElement, handler: (left:number, top:number) => void) {
     const h = new cHandler(key, element.offsetTop, element.offsetLeft, element.offsetWidth, element.offsetHeight, handler, "cursorDefault");
     console.log(`event handler ${key} registered for element ${element.offsetTop}, ${element.offsetLeft}, ${element.offsetWidth}, ${element.offsetHeight}`);
     this.clickHandlerMap.set(key, h);
+  }
+
+  registerMouseDown(key: string, element: HTMLElement, handler: (left:number, top:number) => void) {
+    const h = new cHandler(key, element.offsetTop, element.offsetLeft, element.offsetWidth, element.offsetHeight, handler, "cursorDefault");
+    console.log(`event handler ${key} registered for element ${element.offsetTop}, ${element.offsetLeft}, ${element.offsetWidth}, ${element.offsetHeight}`);
+    this.mouseDownHandlerMap.set(key, h);
+  }
+
+  registerMouseUp(key: string, element: HTMLElement, handler: (left:number, top:number) => void) {
+    const h = new cHandler(key, element.offsetTop, element.offsetLeft, element.offsetWidth, element.offsetHeight, handler, "cursorDefault");
+    console.log(`event handler ${key} registered for element ${element.offsetTop}, ${element.offsetLeft}, ${element.offsetWidth}, ${element.offsetHeight}`);
+    this.mouseUpHandlerMap.set(key, h);
   }
 
   registerHover(key: string, element: HTMLElement, handler: (left:number, top:number) => void, style:string) {
@@ -47,8 +63,6 @@ export class HandlerProxy {
     console.log(`event handler ${key} registered for element ${element.offsetTop}, ${element.offsetLeft}, ${element.offsetWidth}, ${element.offsetHeight}`);
     this.scrollHandlerMap.set(key, h);
   }
-
-
 
 
   clickHandler(e: React.MouseEvent<HTMLElement>, hover:HTMLElement) {
@@ -65,6 +79,38 @@ export class HandlerProxy {
     });
     return cursorClass;
   }
+
+  mouseDownHandler(e: React.MouseEvent<HTMLElement>, hover:HTMLElement) {
+    let x = e.clientX - hover.offsetLeft;
+    let y = e.clientY - hover.offsetTop + hover.offsetHeight/2;
+    console.log(x,y, hover.offsetLeft, hover.offsetTop, e.clientX, e.clientY);
+    let cursorClass = "cursorDefault";
+    this.mouseDownHandlerMap.forEach((v, k) => {
+      if (v.withinRange(x,y)) {
+        let p = v.getPoint(x,y);
+        v.handler(p.left, p.top);
+        cursorClass = v.style;
+      }
+    });
+    return cursorClass;
+  }
+
+  mouseUpHandler(e: React.MouseEvent<HTMLElement>, hover:HTMLElement) {
+    let x = e.clientX - hover.offsetLeft;
+    let y = e.clientY - hover.offsetTop + hover.offsetHeight/2;
+    console.log(x,y, hover.offsetLeft, hover.offsetTop, e.clientX, e.clientY);
+    let cursorClass = "cursorDefault";
+    this.mouseUpHandlerMap.forEach((v, k) => {
+      if (v.withinRange(x,y)) {
+        let p = v.getPoint(x,y);
+        v.handler(p.left, p.top);
+        cursorClass = v.style;
+      }
+    });
+    return cursorClass;
+  }
+
+
 
   hoverHandler(e: React.MouseEvent<HTMLElement>, hover:HTMLElement) {
     let x = e.clientX - hover.offsetLeft;

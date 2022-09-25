@@ -62,8 +62,76 @@
          cursor:pointer;
        }
     }
+    ul.paint-mode {
+        width: 78px;
+        height: 38px;
+        float: right;
+        top:-40px;
+        position:relative;
+        margin-right: 155px;
+        background-image: url('../../images/home/box.png');
+        padding:0px;
+        li.active {
+            margin: 15px 0px 0px 20px;
+            display: block;
+            width: 35px;
+            height: 12px;
+        }
+        li.none {
+            display:none;
+        }
+        li.point {
+            background-image: url('../../images/home/dot.png');
+            background-repeat:no-repeat;
+        }
+        li.fill {
+            background-image: url('../../images/home/fill.png');
+            background-repeat:no-repeat;
+        }
+        li.line {
+            background-image: url('../../images/home/line.png');
+            background-repeat:no-repeat;
+        }
+        li.pen {
+            background-image: url('../../images/home/pen.png');
+            background-repeat:no-repeat;
+        }
+    }
 
-    ul {
+    ul.paint-mode:hover {
+        width: 68px;
+        height: 91px;
+        float: right;
+        top:-37px;
+        position:relative;
+        margin-right: 160px;
+        background-image: url('../../images/home/select_dot.png');
+        padding:0px;
+        li {
+            margin: 8px 0px 10px 13px;
+            display: block;
+            width: 35px;
+            height: 12px;
+        }
+        li.point {
+            background-image: url('../../images/home/dot.png');
+            background-repeat:no-repeat;
+        }
+        li.fill {
+            background-image: url('../../images/home/fill.png');
+            background-repeat:no-repeat;
+        }
+        li.line {
+            background-image: url('../../images/home/line.png');
+            background-repeat:no-repeat;
+        }
+        li.pen {
+            background-image: url('../../images/home/pen.png');
+            background-repeat:no-repeat;
+        }
+    }
+
+    ul.tool-bar-main {
         padding-left: 0px;
         padding-top: 5px;
         margin: 0px;

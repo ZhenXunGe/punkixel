@@ -10,11 +10,12 @@ export interface StatusState {
     energy: number;
     contribution: number;
     reward: number;
-    pph: number,
+    pph: number;
     player: Player | null;
     dyeFocus: number;
     synchronize: number;
-    rank: RankInfo,
+    mode: string;
+    rank: RankInfo;
 }
 
 const initialState: StatusState = {
@@ -25,6 +26,7 @@ const initialState: StatusState = {
     pph:0,
     player: null,
     dyeFocus: 0,
+    mode: "line",
     synchronize:0,
 };
 
@@ -86,6 +88,10 @@ export const statusSlice = createSlice({
       state.dyeFocus = d.payload;
     },
 
+    setPaintMode: (state, d) => {
+      state.mode = d.payload;
+    },
+
     updatePPH: (state, d) => {
       let delta = d.payload.delta;
       let player = state.player!;
@@ -110,7 +116,9 @@ export const statusSlice = createSlice({
 });
 
 export const { updatePPH, pickColor,
-    updateStatus,updateInventory,
+    updateStatus,
+    updateInventory,
+    setPaintMode
 } = statusSlice.actions;
 
 export const selectEnergy = (state: RootState) => state.status.energy;
@@ -119,6 +127,7 @@ export const selectRank = (state: RootState) => state.status.rank;
 export const selectPPH = (state: RootState) => state.status.pph;
 export const selectReward = (state: RootState) => state.status.reward;
 export const selectDye = (state: RootState) => state.status.dyeFocus;
+export const selectMode = (state: RootState) => state.status.mode;
 export const selectPlayer = (state: RootState) => state.status.player;
 export const selectContribution = (state: RootState) => state.status.contribution;
 export const worldLoaded = (state: RootState) => (state.status.synchronize > 0);

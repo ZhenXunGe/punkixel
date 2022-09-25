@@ -7,11 +7,13 @@ import {
     getCorIndex,
     DrawerBoardProp,
     buildPainter,
+    ofCorIndex,
 } from "../data/draw"
 
 import {
     selectDye,
     selectPlayer,
+    selectMode,
     updatePPH,
 } from '../data/statusSlice';
 
@@ -106,15 +108,21 @@ export function HomePanel(props:HomePanelProp) {
   const player = useAppSelector(selectPlayer)!;
   const homeIndex = player.homeIndex;
   const pickedDye = useAppSelector(selectDye);
+  const mode = useAppSelector(selectMode);
 
   const [ratio,setRatio]  = useState(4);
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
 
+  const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
+
   const [mouseLeft, setMouseLeft] = useState(0);
   const [mouseTop, setMouseTop] = useState(0);
 
   const [action, setAction] = useState("paint");
+
+  const [subMode, setSubMode] = useState("none");
 
   const safeSetOffsetX = (x:number) => {
     let xx = x + Math.floor(1000/ratio);
@@ -130,18 +138,15 @@ export function HomePanel(props:HomePanelProp) {
     }
   }
 
-
   const getRatio = () => {return ratio;};
-  function handlePaint(left:number, top:number) {
+
+  function handleClick(left:number, top:number) {
     if (action === "paint") {
-      var x = Math.floor(left/ratio) + offsetX;
-      var y = Math.floor((400 - top)/ratio) + offsetY;
-      //console.log(left, top, x, y, offsetX, offsetY);
-      let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
-      let [delta, cost] = drawer.pushPixelDelta(getCorIndex(x,y), pickedDye);
-      dispatch(signalSketch());
-      dispatch(setReaction({offsetLeft:left, offsetTop:top, duration:5, current:0, clip:"paint"}));
-      dispatch(updatePPH({delta:delta, cost:cost}));
+      if (mode === "point") {
+        handlePoint(left, top);
+      } else if (mode === "fill") {
+        handleFill(left, top);
+      }
     } else if (action === "left") {
       safeSetOffsetX(offsetX-1);
     } else if (action === "right") {
@@ -151,6 +156,129 @@ export function HomePanel(props:HomePanelProp) {
     } else if (action === "bottom") {
       safeSetOffsetY(offsetY+1);
     }
+  }
+
+  function handlePoint(left:number, top:number) {
+    var x = Math.floor(left/ratio) + offsetX;
+    var y = Math.floor((400 - top)/ratio) + offsetY;
+    //console.log(left, top, x, y, offsetX, offsetY);
+    let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
+    let [delta, cost] = drawer.pushPixelDelta(getCorIndex(x,y), pickedDye);
+    dispatch(signalSketch());
+    dispatch(updatePPH({delta:delta, cost:cost}));
+  }
+
+  function getFillPoints(x:number, y:number, dyeindex:number) {
+    let index = getCorIndex(x,y);
+    let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
+    let collected: Array<number> = [index];
+    let extended:Array<number> = [];
+    let scaned:Array<number> = [];
+    let push_collected = (idx: number) => {
+      if (scaned.indexOf(idx) === -1) {
+        collected.push(idx);
+      }
+    }
+    let count = 0;
+    while (collected.length >=0 && count <10) {
+      count ++;
+      let idx = collected.pop()!;
+      let d = drawer.getPixel(idx);
+      console.log("idx, d", idx, d);
+      scaned.push(idx);
+      if (d !== dyeindex) {
+        continue;
+      }
+      extended.push(idx);
+      let [x,y] = ofCorIndex(idx);
+      if (x>0) {
+          push_collected(getCorIndex(x-1, y));
+      }
+      if (y>0) {
+          push_collected(getCorIndex(x, y-1));
+      }
+      if (x<individualWidth-1) {
+          push_collected(getCorIndex(x+1, y));
+      }
+      if (y<individualHeight-1) {
+          push_collected(getCorIndex(x, y+1));
+      }
+    }
+    return extended;
+  }
+
+  function handleFill(left: number, top: number) {
+    var x = Math.floor(left/ratio) + offsetX;
+    var y = Math.floor((400 - top)/ratio) + offsetY;
+
+    let index = getCorIndex(x,y);
+    let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
+    let d = drawer.getPixel(index);
+    let cost = 0;
+    let delta = 0;
+    if (mode === "fill") {
+      let points:Array<number> = getFillPoints(x, y, d);
+      for (var point of points) {
+        let [d, c] = drawer.pushPixelDelta(point, pickedDye);
+        delta += d;
+        cost += c;
+      }
+      dispatch(signalSketch());
+      dispatch(updatePPH({delta:delta, cost:cost}));
+      console.log("fill");
+    }
+  }
+
+  function handleMouseDown(left: number, top:number) {
+    console.log("mouse down", left, top);
+    var x = Math.floor(left/ratio) + offsetX;
+    var y = Math.floor((400 - top)/ratio) + offsetY;
+    setStartX(x);
+    setStartY(y);
+    setSubMode("progress");
+    console.log("mouse down", x, y);
+  }
+
+  function getPassPoints(startX:number, startY:number, endX:number, endY:number) {
+    let deltaX = Math.abs(startX - endX);
+    let deltaY = Math.abs(startY - endY);
+    let points:Array<Array<number>> = [];
+    if (deltaX > deltaY) {
+      for (var i=0; i< deltaX; i++) {
+         let x = startX + i * Math.sign(endX- startX);
+         let y = startY + Math.floor(i * deltaY/deltaX) * Math.sign(endY - startY);
+         points.push([x,y]);
+      }
+    } else {
+      for (var i=0; i< deltaY; i++) {
+         let x = startX + Math.floor(i * deltaX/deltaY) * Math.sign(endX - startX);
+         let y = startY + i * Math.sign(endY - startY);
+         points.push([x,y]);
+      }
+    }
+    console.log("deltaX", deltaX, "deltaY", deltaY);
+    return points;
+  }
+
+  function handleMouseUp(left: number, top:number) {
+    console.log("mouse up", startX, startY);
+    if (mode === "line") {
+      var endX = Math.floor(left/ratio) + offsetX;
+      var endY = Math.floor((400 - top)/ratio) + offsetY;
+      let points = getPassPoints(startX, startY, endX, endY);
+      let delta = 0;
+      let cost = 0;
+      let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
+      for (var point of points) {
+        let [d, c] = drawer.pushPixelDelta(getCorIndex(point[0],point[1]), pickedDye);
+        delta += d;
+        cost += c;
+      }
+      dispatch(signalSketch());
+      dispatch(updatePPH({delta:delta, cost:cost}));
+    }
+    dispatch(setReaction({offsetLeft:left, offsetTop:top, duration:5, current:0, clip:"paint"}));
+    setSubMode("none");
   }
 
   function scrollEvent(shrink: boolean) {
@@ -178,42 +306,59 @@ export function HomePanel(props:HomePanelProp) {
     console.log("ratio is:", ratio);
   }
 
-  function moveEvent(left: number, top:number) {
+  function continuePaint(left:number, top:number) {
+    if (mode === "pen" && subMode === "progress") {
+      handlePoint(left, top);
+    }
+  }
+
+  function handleMouseMove(left: number, top:number) {
+    // set position for scroll
     setMouseLeft(left);
     setMouseTop(top);
+
     let yy = offsetY + Math.floor(400/ratio);
     let xx = offsetX + Math.floor(1000/ratio);
     //console.log(offsetX, offsetY, xx, yy);
-    if (left < 50 && offsetX > 0) {
-      setAction("left");
-    } else if (left > 950 && xx < 250) {
-      setAction("right");
-    } else if (top<50 && yy < 100) {
-      setAction("top");
-    } else if (top>350 && offsetY > 0) {
-      setAction("bottom");
+
+    if (action === "paint" && mode == "pen" && subMode !== "none") {
+      continuePaint(left, top)
+      //Some painting action has not be finished
     } else {
-      setAction("paint");
+      if (left < 50 && offsetX > 0) {
+        setAction("left");
+      } else if (left > 950 && xx < 250) {
+        setAction("right");
+      } else if (top<50 && yy < 100) {
+        setAction("top");
+      } else if (top>350 && offsetY > 0) {
+        setAction("bottom");
+      } else {
+        setAction("paint");
+      }
     }
   }
+
+
   const boardRef = React.createRef<HTMLDivElement>();
   React.useEffect(()=>{
     console.log("boardRef changed");
     if (boardRef.current) {
-      props.handlerProxy.registerClick("frame", boardRef.current!, (left, top)=>{handlePaint(left, top);});
-      props.handlerProxy.registerHover("frame", boardRef.current!, (left, top)=>{moveEvent(left, top)}, `cursor-${action}`);
+      props.handlerProxy.registerClick("frame", boardRef.current!, (left, top)=>{handleClick(left, top);});
+      props.handlerProxy.registerHover("frame", boardRef.current!, (left, top)=>{handleMouseMove(left, top)}, `cursor-${action}`);
+      props.handlerProxy.registerMouseDown("frame", boardRef.current!, (left, top)=>{handleMouseDown(left, top)});
+      props.handlerProxy.registerMouseUp("frame", boardRef.current!, (left, top)=>{handleMouseUp(left, top)});
       props.handlerProxy.registerScroll("frame", boardRef.current!, (direction)=>{scrollEvent(direction);});
     }
-  },[boardRef.current, ratio, pickedDye, action, offsetX, offsetY]);
+  },[boardRef.current, ratio, pickedDye, action, offsetX, offsetY, startX, startY, mode, subMode]);
   React.useEffect(()=>{
-    console.log("ratio changed", ratio);
     return ()=>{
-      console.log("ratio end1", ratio);
-      }
+      //console.log("ratio end1", ratio);
+    }
   },[ratio]);
   React.useEffect(()=>{
     return ()=>{
-    console.log("ratio end", ratio);
+      //console.log("ratio end", ratio);
     }
   },[]);
   return (

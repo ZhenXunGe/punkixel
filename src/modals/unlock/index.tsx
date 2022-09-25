@@ -82,13 +82,9 @@ export function MinionInfoBox(props: MinionInfoProps) {
                   </ul>
                 </div>
               <div className="info-right">
-                if (status === 0) {
-                    (<div onClick={confirm} className={props.btnClass}></div>)
-                } else if (status === 1) {
-                    (<div>loading...</div>)
-                } else {
-                    (<div onClick={props.handleClose} className={props.btnClass}></div>)
-                };
+                { (status === 0) && <div onClick={confirm} className={props.btnClass}></div> }
+                { (status === 1) && <div>loading...</div> }
+                { (status === 2) && <div onClick={props.handleClose} className={props.btnClass}></div> }
               </div>
             </div>
           </Container>
@@ -138,7 +134,7 @@ export function Reroll(prop: InfoProps) {
       <MinionInfoBox show={show} handleClose={handleClose} handleConfirm={handleConfirm}
             position={0} minion={prop.minion}
             btnClass="reroll"
-            topic={`${prop.minion.id} is ready to take order)`}></MinionInfoBox>
+            topic={`${prop.minion.id} is idling)`}></MinionInfoBox>
     </>
   );
 }
