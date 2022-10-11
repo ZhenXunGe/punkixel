@@ -35,7 +35,7 @@ export function ToolBarWeapon() {
   }, [dynamic])
   return (
     <div className="tool-bar" key={dynamic}>
-      <ul>
+      <ul className="tool-bar-main">
         <li>
           <ul className="inline-brick world">
             <div className='minionList'>

@@ -167,6 +167,15 @@ export class Drawer {
       return this.pixels[frontLayer][idx];
     }
 
+    getStackedPixel(idx: number) {
+      let d = this.pixels[frontLayer][idx];
+      if (d === 0) {
+        return this.pixels[sketchLayer][idx];
+      } else {
+        return d;
+      }
+    }
+
     pushPixelDelta(idx: number, dye:DyeIndex) {
       let old_pph = pphOfDyeIndex(this.getPixel(idx));
       this.delta.push({

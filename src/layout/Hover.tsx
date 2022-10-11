@@ -58,7 +58,6 @@ export function HoverProxy(props: HoverProxyProps) {
     if (ele) {
       let style = props.proxy.hoverHandler(e, ele);
       dispatch(setCursor(style));
-      console.log(style);
     } else {
       return (ele);
     }

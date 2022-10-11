@@ -8,7 +8,7 @@ import More from '../../modals/more';
 
 export function AlienInfo() {
   const alien = useAppSelector(selectUpcomingAlien);
-  console.log("select Alien:", alien);
+  //console.log("select Alien:", alien);
   const sketch = getSprite(alien.sprite).getFrame("run", 0);
   let h = (alien.knockDamage - alien.knockDamage % 100)/100;
   let m = alien.knockDamage%100;

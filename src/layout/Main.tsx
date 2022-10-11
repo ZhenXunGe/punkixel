@@ -1,5 +1,6 @@
 import React, { createRef, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
+import Dialog from './Dialog';
 import { LeftMenu } from './LeftMenu';
 import { RightPanel } from './RightPanel';
 import { spriteIsLoaded, spriteNeedLoaded, spriteLoaded, spriteNumber, getSprite, setLoaded } from '../sprite/spriteSlice';
@@ -74,6 +75,7 @@ export function Main(prop: loadingStatus) {
       <Status></Status>
       <Events></Events>
       <More></More>
+      <Dialog></Dialog>
       <Tool></Tool>
       </div>
     )

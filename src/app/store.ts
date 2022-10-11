@@ -19,7 +19,8 @@ export const store = configureStore({
         ignoredPaths: [
             'account.l1Account.web3',
             'status.world',
-            'dynamic.events'
+            'dynamic.events',
+            'panel.dialog',
         ],
       },
     }),

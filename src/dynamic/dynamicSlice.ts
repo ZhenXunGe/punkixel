@@ -307,7 +307,7 @@ export const dynamicSlice = createSlice({
         getWorld().updateInstance(instance);
         getWorld().updatePlayer(ds.player);
         if (ds.dynamicState.viewIndex !== previousIndex) {
-          console.log("switchView:", previousIndex, meta.dynamic.viewIndex);
+          //console.log("switchView:", previousIndex, meta.dynamic.viewIndex);
           switchViewInner(meta.dynamic.viewIndex);
         }
       })

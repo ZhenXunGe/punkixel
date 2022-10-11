@@ -105,3 +105,38 @@ div.loading {
   }
 
 }
+
+div.dialog-hint {
+  .north {
+    position:absolute;
+    top:-50px;
+    left: 450px;
+    width:100px;
+    height:100px;
+    background-image: url("../images/cursors/arrow1.png");
+  }
+  .south {
+    position:absolute;
+    top:-50px;
+    left: 500px;
+    width:100px;
+    height:100px;
+    background-image: url("../images/cursors/arrow1.png");
+  }
+  .west {
+    position:absolute;
+    top: 250px;
+    left: 500px;
+    width:100px;
+    height:100px;
+    background-image: url("../images/cursors/arrow2.png");
+  }
+  .north-east {
+    position:absolute;
+    top:-50px;
+    left: 880px;
+    width:100px;
+    height:100px;
+    background-image: url("../images/cursors/arrow1.png");
+  }
+}

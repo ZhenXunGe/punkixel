@@ -76,15 +76,6 @@ export function DrawerBoard(props: DrawerBoardProp) {
   }, [timeClock])
 
   useEffect(() => {
-    let instance = getWorld().getInstance(homeIndex);
-    let artistAdvice = instance.artistAdvice();
-    if(artistAdvice!==null) {
-      //dispatch(addEvent(AdviceEventRender("Artist Advise", artistAdvice!.brief, artistAdvice!.description)));
-    }
-    let defendingAdvice = instance.defendingAdvice();
-    if(defendingAdvice!==null) {
-      //dispatch(addEvent(AdviceEventRender("Defending Advise", defendingAdvice!.brief, defendingAdvice!.description)));
-    }
   }, [])
 
 
@@ -175,16 +166,15 @@ export function HomePanel(props:HomePanelProp) {
     let extended:Array<number> = [];
     let scaned:Array<number> = [];
     let push_collected = (idx: number) => {
-      if (scaned.indexOf(idx) === -1) {
+      if (scaned.indexOf(idx) === -1
+              && extended.indexOf(idx) === -1
+              && collected.indexOf(idx) === -1) {
         collected.push(idx);
       }
     }
-    let count = 0;
-    while (collected.length >=0 && count <10) {
-      count ++;
+    while (collected.length > 0) {
       let idx = collected.pop()!;
-      let d = drawer.getPixel(idx);
-      console.log("idx, d", idx, d);
+      let d = drawer.getStackedPixel(idx);
       scaned.push(idx);
       if (d !== dyeindex) {
         continue;
@@ -213,7 +203,7 @@ export function HomePanel(props:HomePanelProp) {
 
     let index = getCorIndex(x,y);
     let drawer = getWorld().getInstance(homeIndex*individualWidth).drawer;
-    let d = drawer.getPixel(index);
+    let d = drawer.getStackedPixel(index);
     let cost = 0;
     let delta = 0;
     if (mode === "fill") {
@@ -342,7 +332,6 @@ export function HomePanel(props:HomePanelProp) {
 
   const boardRef = React.createRef<HTMLDivElement>();
   React.useEffect(()=>{
-    console.log("boardRef changed");
     if (boardRef.current) {
       props.handlerProxy.registerClick("frame", boardRef.current!, (left, top)=>{handleClick(left, top);});
       props.handlerProxy.registerHover("frame", boardRef.current!, (left, top)=>{handleMouseMove(left, top)}, `cursor-${action}`);
