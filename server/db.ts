@@ -233,6 +233,7 @@ export async function claimDrop(owner: string, amount:number, drops:string[]) {
 export async function claimRewardPunkixel(owner: string, amount:number) {
   let player = await getPlayer(owner);
   player.punkxiel += amount;
+  player.total += amount;
   updatePlayer(owner, player);
 }
 

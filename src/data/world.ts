@@ -59,24 +59,28 @@ export class World {
   loadInstance (instances: Array<Instance>) {
     this.instances = instances;
   }
-  rend(painter: Painter, p_start: number, p_end: number, cursor: number) {
+  rend(painter: Painter, p_start: number, span: number, cursor: number) {
     //console.log("start:", p_start, "end", p_end,"pos", cursor);
-    for (var i = p_start; i <= p_end; i++) {
-      if (i >= 0 && i < this.instances.length) {
-        let ins = this.getInstance(i * individualWidth);
-        ins.setDry(false);
-        ins.drawer.draw(painter, cursor);
+    var start = p_start;
+    var ins = null;
+    console.log("render ...");
+    var c = cursor;
+    for (var i = 0; i < span; i++) {
+      start = p_start + i;
+      if (start >= 0 && start < this.instances.length) {
+        ins = this.getInstanceByIndex(start);
       }
-      if (i<0) {
-        let ins = this.getInstanceByIndex(i+this.instances.length);
-        ins.setDry(false);
-        ins.drawer.draw(painter, cursor + this.instances.length * individualWidth);
+      if (start<0) {
+        ins = this.getInstanceByIndex(start+this.instances.length);
+        c = cursor + this.instances.length * individualWidth;
       }
-      if (i>=this.instances.length) {
-        let ins = this.getInstanceByIndex(i-this.instances.length);
-        ins.setDry(false);
-        ins.drawer.draw(painter, cursor - this.instances.length * individualWidth);
+      if (start>=this.instances.length) {
+        ins = this.getInstanceByIndex(start-this.instances.length);
+        c = cursor - this.instances.length * individualWidth;
       }
+      ins!.setDry(false);
+      console.log("offset", ins!.drawer.offset - c, ins!.info.index);
+      ins!.drawer.draw(painter, c);
     }
   }
 
@@ -201,19 +205,21 @@ export class World {
   // }
 
   async getTopRank() :Promise<RankInfo> {
-    let instances = world.instances.sort((a:Instance, b:Instance) => {
-      return (b.info.reward - a.info.reward);
-    });
-    console.log("rank:", instances);
+    let instances = world.instances;
     let instanceInfos:Array<InstanceRank> = [];
-    for (var i=0;i<instances.length && i<=5;i++) {
+    for (var i=0;i<instances.length;i++) {
       instanceInfos.push({
         owner: instances[i].info.owner,
         reward: instances[i].info.reward,
         pph: instances[i].info.pph,
       });
     }
-    return {current:0, instances:instanceInfos}
+    instanceInfos.sort((a, b) => {
+      return (b.reward - a.reward);
+    });
+    console.log("rank:", instances);
+
+    return {current:0, instances:instanceInfos.slice(0,6)}
   }
 
 }

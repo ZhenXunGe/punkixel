@@ -119,12 +119,14 @@ export function Unlock(prop: UnlockProps) {
 
 export function Reroll(prop: InfoProps) {
   const [show, setShow] = useState(false);
+  const [minion, setMinion] = useState(prop.minion);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const player = useAppSelector(selectPlayer)!;
   const handleConfirm = async () => {
     getWorld().spentPunkxiel(player.id, 1000);
     let minion = await getWorld().rerollMinion(player.id, prop.index);
+    setMinion(minion);
     return minion;
   }
   return (
@@ -132,9 +134,9 @@ export function Reroll(prop: InfoProps) {
       <div className='inventory-pick' onClick={() => handleShow()}>
       </div>
       <MinionInfoBox show={show} handleClose={handleClose} handleConfirm={handleConfirm}
-            position={0} minion={prop.minion}
+            position={0} minion={minion}
             btnClass="reroll"
-            topic={`${prop.minion.id} is idling)`}></MinionInfoBox>
+            topic={`${prop.minion.id} is idling`}></MinionInfoBox>
     </>
   );
 }

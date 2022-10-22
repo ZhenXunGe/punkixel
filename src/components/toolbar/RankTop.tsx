@@ -25,7 +25,7 @@ export function RankTop() {
         <SingleThumbnail></SingleThumbnail>
         <img src={FRAME}></img>
         <div className="address"> {addressAbbreviation(player.id, 4)} </div>
-        <div className="punkixel-earned"> {current.info.reward} </div>
+        <div className="punkixel-earned"> {current.info.reward + player.total} </div>
         <div className="punkixel-pph"> {current.info.pph} </div>
       </div>
     </div>

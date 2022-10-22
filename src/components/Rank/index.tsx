@@ -14,6 +14,10 @@ import {
   selectPlayer,
   selectRank,
 } from '../../data/statusSlice';
+
+import {
+  getWorld
+} from '../../data/world';
 const ranktitles = [rank1,rank2,rank3,rank4,rank5];
 interface RankPanelProp {
   handlerProxy: HandlerProxy;
@@ -31,12 +35,13 @@ export function RankPanel(props: RankPanelProp) {
     <>
     <div className="rank-board" key="main-board">
       {rank.instances.map((ins, i) => {
+        let playerTotal = getWorld().getPlayer(ins.owner).total
         if (i==0) {return <></>}
         else {
         return(<div className="rank-item">
           <img src={ranktitles[i-1]}></img>
           <div className="address"> {addressAbbreviation(ins.owner, 8)} </div>
-          <div className="punkixel-earned"> {ins.reward}</div>
+          <div className="punkixel-earned"> {ins.reward + playerTotal}</div>
           <div className="punkixel-pph"> {ins.pph} </div>
         </div>);
         }

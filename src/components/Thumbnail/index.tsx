@@ -37,11 +37,12 @@ function ThumbnailInternal() {
     if (panel === "world") {
       let start = Math.floor(alien.pos/individualWidth) - 2
       let end = start + 3;
-      getWorld().rend(painter, start, end, alien.pos-individualWidth*2);
+      getWorld().rend(painter, start, 4, alien.pos-individualWidth*2);
     } else if(panel === "home") {
       let start = player?.homeIndex!-2;
-      let end = start + 3;
-      getWorld().rend(painter, start, end, player?.homeIndex!*individualWidth - 335);
+      console.log("start:", start);
+      //getWorld().rend(painter, start, end, player?.homeIndex!*individualWidth - 335);
+      getWorld().rend(painter, start, 4, player?.homeIndex!*individualWidth - 375);
     }
     context.putImageData(image,0,0);
   }, [viewIndex, timeClock, sketchSignal])

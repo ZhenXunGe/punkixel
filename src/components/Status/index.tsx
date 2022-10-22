@@ -23,7 +23,7 @@ export function Status () {
     const ranking = useAppSelector(selectRank);
     const pph = useAppSelector(selectPPH);
     const player = useAppSelector(selectPlayer)!;
-    const voucher = player.voucher;
+    const total = player.total;
     const contribution = useAppSelector(selectContribution);
     const reward = useAppSelector(selectReward);
     const viewIndex = useAppSelector(selectViewIndex);
@@ -37,7 +37,7 @@ export function Status () {
         <li>{energy}</li>
         <li>{punkixel}</li>
         <li>{ranking.current}</li>
-        <li>{voucher}</li>
+        <li>{total}</li>
         <li>{contribution}</li>
         <li>{reward}</li>
         <li>{pph}</li>

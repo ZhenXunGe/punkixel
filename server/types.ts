@@ -60,7 +60,7 @@ export interface Player {
   energy: number;
   punkxiel: number;
   ranking: number;
-  voucher: number;
+  total: number; //total earned punkxiel
   palettes: Array<ColorCategory>;
   homeIndex: number;
   inventory: Array<string | null>;
