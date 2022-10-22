@@ -63,7 +63,6 @@ export class World {
     //console.log("start:", p_start, "end", p_end,"pos", cursor);
     var start = p_start;
     var ins = null;
-    console.log("render ...");
     var c = cursor;
     for (var i = 0; i < span; i++) {
       start = p_start + i;
@@ -79,7 +78,6 @@ export class World {
         c = cursor - this.instances.length * individualWidth;
       }
       ins!.setDry(false);
-      console.log("offset", ins!.drawer.offset - c, ins!.info.index);
       ins!.drawer.draw(painter, c);
     }
   }

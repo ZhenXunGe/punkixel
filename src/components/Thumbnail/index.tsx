@@ -40,7 +40,6 @@ function ThumbnailInternal() {
       getWorld().rend(painter, start, 4, alien.pos-individualWidth*2);
     } else if(panel === "home") {
       let start = player?.homeIndex!-2;
-      console.log("start:", start);
       //getWorld().rend(painter, start, end, player?.homeIndex!*individualWidth - 335);
       getWorld().rend(painter, start, 4, player?.homeIndex!*individualWidth - 375);
     }
